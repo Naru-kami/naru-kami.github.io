@@ -7,6 +7,25 @@
     </head>
     <body>
         <h1>Statistics for Genshin Impacts wishing system</h1>
+        <div id="goal_selector">
+            <select id="goal">
+                <option value="custom">Custom goal</option>
+                <option value="0" selected="">Any 5* focus unit</option>
+                <option value="1">All focus units</option>
+                <option value="2">Specific red 5* focus unit</option>
+                <option value="3">Any red 5* focus unit</option>
+                <option value="4" disabled="">The red 4* focus unit</option>
+                <option value="5">Specific blue 5* focus unit</option>
+                <option value="6">Any blue 5* focus unit</option>
+                <option value="7" disabled="">The blue 4* focus unit</option>
+                <option value="8">Specific green 5* focus unit</option>
+                <option value="9">Any green 5* focus unit</option>
+                <option value="10" disabled="">The green 4* focus unit</option>
+                <option value="11">Specific colorless 5* focus unit</option>
+                <option value="12">Any colorless 5* focus unit</option>
+                <option value="13" disabled="">The colorless 4* focus unit</option>
+            </select>
+        </div>
         <div id="results" class="no-select">
             <svg id="graph" viewBox="0 0 100 60" xmlns="http://www.w3.org/2000/svg">
                 <path id="graph_line" d="" xmlns="http://www.w3.org/2000/svg"></path>

@@ -1,13 +1,19 @@
-h1  {
-    color: #000040;
-    font-size: 20px;
-    margin-bottom: .3em;
-    text-align: center;
-    text-decoration: underline;
-  }
-#graph   {
-    color: #000;
-    font-size: 14px;
-    margin-bottom: .2em;
-    text-align: center;
+body{
+  margin:40px auto;
+  max-width:650px;
+  line-height:1.6;
+  font-size:18px;
+  color:#444;
+  padding:0 10px
+}
+
+h1,h2,h3 {
+  line-height:1.2
+}
+
+.no-select {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
