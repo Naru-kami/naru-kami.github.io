@@ -41,5 +41,3 @@ function wishing(wanted) {
     }
     return pulls, starglitters, pulls - Math.floor(starglitters / 5) + 2;
 }
-
-print(wishing(1));
