@@ -33,3 +33,12 @@ input.small_number {
 #goal {
   width: 12em;
 }
+
+#graph {
+  border: 1px solid black;
+  cursor: pointer;
+}
+
+#content > div {
+  padding: 0.5em 0;
+}
