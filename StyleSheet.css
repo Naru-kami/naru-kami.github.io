@@ -1,32 +1,13 @@
 h1  {
-    color: #009;
-    font-size: 1em;
+    color: #000040;
+    font-size: 20px;
     margin-bottom: .3em;
     text-align: center;
     text-decoration: underline;
   }
-  
-  table {
-    margin: .3em;
-    width: 290px;
-  }
-  
-  th {
-    padding: .2em;
-  }
-  
-  td {
-    background-color: #ffc;
-    border: 1px solid #900;
-    padding-left: .5em;
-    padding-right: .5em;
-  }
-  
-  #trHeader {
-    color: #900;
-    text-decoration: underline;
-  }
-  
-  .centerCell {
+svg   {
+    color: #000;
+    font-size: 14px;
+    margin-bottom: .2em;
     text-align: center;
-  }
+}
