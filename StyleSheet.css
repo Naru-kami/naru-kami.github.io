@@ -29,3 +29,7 @@ input.small_number {
 .padleft {
   margin-left: 0.5em;
 }
+
+#goal {
+  width: 12em;
+}
