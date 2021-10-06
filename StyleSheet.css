@@ -39,6 +39,12 @@ input.small_number {
   cursor: pointer;
 }
 
+#graph_line {
+  fill: none;
+  stroke: black;
+  stroke-width: 0.5px;
+}
+
 #content > div {
   padding: 0.5em 0;
 }
