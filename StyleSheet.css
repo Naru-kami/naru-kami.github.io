@@ -17,3 +17,15 @@ h1,h2,h3 {
   -ms-user-select: none;
   user-select: none;
 }
+
+header {
+  text-align: end;
+}
+
+input.small_number {
+  width: 3em;
+}
+
+.padleft {
+  margin-left: 0.5em;
+}
