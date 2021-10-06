@@ -5,7 +5,7 @@ h1  {
     text-align: center;
     text-decoration: underline;
   }
-svg   {
+#graph   {
     color: #000;
     font-size: 14px;
     margin-bottom: .2em;
