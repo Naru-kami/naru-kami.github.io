@@ -1,4 +1,4 @@
-function wishing(wanted){
+function wishing(wanted) {
     var _rate5 = 0.006;
     var _rate4 = 0.051;
     var _pity5 = 73;
@@ -13,7 +13,6 @@ function wishing(wanted){
     var counter5 = 1;
     var counter4 = 1;
 
-    while (promoted < wanted){
     while (promoted < wanted) {
         pulls += 1;
         prob5 = _rate5 + Math.min(1, Math.max(0, (counter5 - _pity5) * 10 * _rate5));
@@ -21,17 +20,17 @@ function wishing(wanted){
 
         var x = Math.random();
 
-        if (x < prob5){
+        if (x < prob5) {
             if (x <= prob5/2 || gc == 1){
                 gc = 0;
                 promoted += 1;
-            } else{
+            } else {
                 gc += 1;
             }
             counter5 = 1;
             counter4 += 1;
             starglitters += (10 * (wanted - g)) / wanted;
-        } else if ( x < prob4 + prob5){
+        } else if ( x < prob4 + prob5) {
             counter5 += 1;
             counter4 = 1;
             starglitters += 2;
@@ -42,3 +41,5 @@ function wishing(wanted){
     }
     return pulls, starglitters, pulls - Math.floor(starglitters / 5) + 2;
 }
+
+print(wishing(1));
