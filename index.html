@@ -12,23 +12,34 @@
     <header>Statistics for Genshin Impacts wishing system</header>
     <header>"Still Work in Progress"</header>
     <div id="content">
-        <div id="Banner Type">
-            <select id="goal">
-                <option value="0" selected="">Character Banner</option>
-                <option value="1">Weapon Banner</option>
-            </select>
+        <div id="selection">
+            <div id="Banner Type">
+                <select id="goal">
+                    <option value="0" selected="">Character Banner</option>
+                    <option value="1">Weapon Banner</option>
+                </select>
+            </div>
+            <div id="focus count">
+                <label for="focus_count">5☆ goal:</label>
+                <input id="focus_count" type="number" class="small_number" value="1" min="0" required="true">
+            </div>
+            <div>
+                <label for="pity_count">Pity count towards 5☆:</label>
+                <input id="pity_count" type="number" class="small_number" value="1" min="1" max="90" required="true">
+                <input type="checkbox" class="form-check-input" id="g_pity">
+                <label class="form-check-label" for="g_pity">Guaranteed pity?</label>
+            </div>
+            <div id="button">
+                <button type="button" class="btn btn-primary mt-2" onclick="">Simulate</button>
+            </div>
         </div>
-        <div id="focus count">
-            <label for="focus_count">Count:</label>
-            <input id="focus_count" type="number" class="small_number" value="1" min="0" required="true">
-        </div>
-        </div>
-        <div id="results" class="no-select">
-            <svg id="graph" viewBox="0 0 1920 1080" xmlns="http://www.w3.org/2000/svg">
+        <div id="results" class="no-select" style="text-align:center">
+            <svg id="graph" viewBox="0 0 1000 562.5" width="704" height="396" xmlns="http://www.w3.org/2000/svg">
                 <path id="graph_line" d="" xmlns="http://www.w3.org/2000/svg"></path>
                 <g id="graph_highlights" xmlns="http://www.w3.org/2000/svg"></g>
             </svg>
         </div>
+    </div>
 </body>
 
 </html>

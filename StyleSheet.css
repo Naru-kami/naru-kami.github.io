@@ -27,10 +27,6 @@ input.small_number {
   width: 3em;
 }
 
-.padleft {
-  margin-left: 0.5em;
-}
-
 #goal {
   width: 12em;
 }
@@ -48,4 +44,8 @@ input.small_number {
 
 #content > div {
   padding: 0.5em 0;
+}
+
+input[type=checkbox] {
+  transform: scale(1.2);
 }
