@@ -6,6 +6,16 @@
     <title>Summoning Statistics</title>
     <link href="StyleSheet.css" rel="stylesheet">
     <link rel="icon" sizes="128x128" type="image/x-icon" href="favicon.ico">
+    <script type="text/javascript">
+        function showMe (box) {
+
+        var chbox = document.getElementById("sg_use");
+        var vis = "none";
+        if(chbox.checked == true){
+        vis = "block";
+        }
+        document.getElementById(box).style.display = vis;
+        }</script>
 </head>
 
 <body>
@@ -25,9 +35,35 @@
             </div>
             <div>
                 <label for="pity_count">Pity count towards 5☆:</label>
-                <input id="pity_count" type="number" class="small_number" value="1" min="1" max="90" required="true">
+                <input id="pity_count" type="number" class="large_number" value="1" min="1" max="90" required="true">
                 <input type="checkbox" class="form-check-input" id="g_pity">
                 <label class="form-check-label" for="g_pity">Guaranteed pity?</label>
+            </div>
+            <div>
+                <label for="sg_use">Immediately use Starglitter?</label>
+                <input id="sg_use" type="checkbox" class="form-check-input" onclick="showMe('starglitter')">
+                <div id="starglitter" style="display: none;">
+                    <hr/>
+                    <div>
+                        <label for="sg_count">Current Starglitter count</label>
+                        <input id="sg_count" value="0" min="0" type="number" class="large_number"></input>
+                    </div>
+                    <label>Enter constellations for your characters:</label>
+                    <div>
+                        <label for="5s_c">5☆:</label>
+                        <input id="5s_c" type="number" class="small_number" value="-1" min="-1" max="6">
+                        <label for="4s1">&nbsp;&nbsp;&nbsp;First 4☆:</label>
+                        <input id="4s1" type="number" class="small_number" value="-1" min="-1" max="6">
+                        <label for="4s2">&nbsp;&nbsp;&nbsp;Second 4☆:</label>
+                        <input id="4s2" type="number" class="small_number" value="-1" min="-1" max="6">
+                        <label for="4s3">&nbsp;&nbsp;&nbsp;Third 4☆:</label>
+                        <input id="4s3" type="number" class="small_number" value="-1" min="-1" max="6">
+                    </div>
+                    <div id="const_note">
+                        <label for="const_note"><em>Note: constellation "-1" means not owning the character</em></label>
+                    </div>
+                    <hr/>
+                </div>
             </div>
             <div id="button">
                 <button type="button" class="btn btn-primary mt-2" onclick="">Simulate</button>
