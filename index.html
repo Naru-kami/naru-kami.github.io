@@ -16,6 +16,9 @@
         }
         document.getElementById(box).style.display = vis;
         }</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js" integrity="sha512-b3xr4frvDIeyC3gqR1/iOi6T+m3pLlQyXNuvn5FiRrrKiMUJK3du2QqZbCywH6JxS5EOfW0DY0M6WwdXFbCBLQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">    
 </head>
 
 <body>
@@ -42,7 +45,7 @@
             <div>
                 <label for="sg_use">Immediately use Starglitter?</label>
                 <input id="sg_use" type="checkbox" class="form-check-input" onclick="showMe('starglitter')">
-                <div id="starglitter" style="display: none;">
+                <div id="starglitter" style="display: block;">
                     <hr/>
                     <div>
                         <label for="sg_count">Current Starglitter count</label>
@@ -60,7 +63,7 @@
                         <input id="4s3" type="number" class="small_number" value="-1" min="-1" max="6">
                     </div>
                     <div id="const_note">
-                        <label for="const_note"><em>Note: constellation "-1" means not owning the character</em></label>
+                        <label for="const_note">&nbsp;&nbsp;&nbsp;&nbsp;<em>Note: constellation "-1" means not owning the character</em></label>
                     </div>
                     <hr/>
                 </div>
@@ -69,12 +72,47 @@
                 <button type="button" class="btn btn-primary mt-2" onclick="">Simulate</button>
             </div>
         </div>
-        <div id="results" class="no-select" style="text-align:center">
+
+        <div class="container">
+            <canvas id="myChart"></canvas>
+        </div>
+        <script>
+            let myChart = document.getElementById("myChart").getContext("2d");
+
+
+
+            let simulChart = new Chart(myChart, {
+                type:"line",
+                data:{
+                    labels:[0,23,54,120,233,351,1049],
+                    datasets:[{
+                        label: "test data",
+                        data: [0,10,25,50,75,90,99.9],
+                        fill : true,
+                        tension : 0.2,
+                        borderColor: "rgba(23,114,203,0.6)",
+                        fillColor: "rgba(151,205,187,1)"
+                    }]
+                },
+                options:{
+                    plugins:{
+                        title:{
+                            display: true,
+                            text: "result",
+                            padding: {
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+        
+        <!--<div id="results" class="no-select" style="text-align:center">
             <svg id="graph" viewBox="0 0 1000 562.5" width="704" height="396" xmlns="http://www.w3.org/2000/svg">
                 <path id="graph_line" d="" xmlns="http://www.w3.org/2000/svg"></path>
                 <g id="graph_highlights" xmlns="http://www.w3.org/2000/svg"></g>
             </svg>
-        </div>
+        </div>-->
     </div>
 </body>
 

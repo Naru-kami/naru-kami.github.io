@@ -1,10 +1,12 @@
 body{
   margin:40px auto;
-  max-width:720px;
+  max-width:1080px;
   line-height:1.6;
   font-size:18px;
   color:#444;
-  padding:0 10px
+  padding:0 10px;
+  align-items: center;
+  
 }
 
 h1,h2,h3 {
@@ -25,17 +27,19 @@ header {
 
 input.small_number {
   width: 2.25em;
+  height: 1.2em;
 }
 
 input.large_number {
   width: 3em;
+  height: 1.2em;
 }
 
 #goal {
-  width: 12em;
+  width: 10em;
 }
 
-#graph {
+/*#graph {
   border: 1px solid black;
   cursor: pointer;
 }
@@ -44,7 +48,7 @@ input.large_number {
   fill: none;
   stroke: black;
   stroke-width: 0.5px;
-}
+}*/
 
 #content > div {
   padding: 0.5em 0;
@@ -52,6 +56,7 @@ input.large_number {
 
 input[type=checkbox] {
   transform: scale(1.2);
+  margin-left: .5em;
 }
 
 #starglitter {
