@@ -90,7 +90,7 @@
                         data: [0,10,25,50,75,90,99.9],
                         fill : true,
                         tension : 0.2,
-                        borderColor: "rgba(23,114,203,0.6)",
+                        borderColor: "rgba(23,114,203,0.8)",
                         fillColor: "rgba(151,205,187,1)"
                     }]
                 },
@@ -102,6 +102,16 @@
                             padding: {
                             }
                         }
+                    },
+                    scales:{
+                        y: {
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    return value + "%";
+                                }
+                            },
+                            beginAtZero: true
+                        }
                     }
                 }
             });
@@ -112,6 +122,12 @@
                 <path id="graph_line" d="" xmlns="http://www.w3.org/2000/svg"></path>
                 <g id="graph_highlights" xmlns="http://www.w3.org/2000/svg"></g>
             </svg>
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'probability'
+                            }
+                        }]
         </div>-->
     </div>
 </body>
