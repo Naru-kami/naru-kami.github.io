@@ -1,23 +1,12 @@
 body{
-  margin:40px auto;
-  max-width:1080px;
+  margin:40px center;
+  max-width:720px;
   line-height:1.6;
   font-size:18px;
   color:#444;
-  padding:0 10px;
+  padding-left:10px;
   align-items: center;
   
-}
-
-h1,h2,h3 {
-  line-height:1.2
-}
-
-.no-select {
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
 }
 
 header {
@@ -38,17 +27,6 @@ input.large_number {
 #goal {
   width: 10em;
 }
-
-/*#graph {
-  border: 1px solid black;
-  cursor: pointer;
-}
-
-#graph_line {
-  fill: none;
-  stroke: black;
-  stroke-width: 0.5px;
-}*/
 
 #content > div {
   padding: 0.5em 0;
