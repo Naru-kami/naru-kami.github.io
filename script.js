@@ -1,4 +1,5 @@
-function wishing(wanted) {
+function wishing() {
+    const wanted = 1;
     const _rate5 = 0.006;
     const _rate4 = 0.051;
     const _pity5 = 73;
@@ -7,6 +8,9 @@ function wishing(wanted) {
     const pulls = 0;
     const starglitters = 0;
     const prob5, prob4;
+    const pullsResult = [];
+    const starglittersResult = [];
+    const reducedResult = [];
 
     const gc = 0
     const g = false;
@@ -39,5 +43,9 @@ function wishing(wanted) {
             counter4 += 1;
         }
     }
-    return pulls, starglitters, pulls - Math.floor(starglitters / 5) + 2;
+
+    pullsResult.push(pulls);
+    starglittersResult.push(starglitters);
+    reducedResult.push(pulls - Math.floor(starglitters / 5) + 2);
+    return { pullsResult, starglittersResult, reducedResult };
 }

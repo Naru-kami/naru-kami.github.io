@@ -21,15 +21,15 @@ let simulChart = new Chart(myChart, {
                 displayColors: false,
                 callbacks: {
                     label: function(context) {
+                        console.log(context);
                         let label = "";
-                        if (context.parsed.y !== null) {
-                            label += (context.parsed.y).toFixed(1) + " %";
-                        }
+                        label += (context.label) + " pulls";
                         return label;
                     },
                     title: function(context) {
+                        console.log(context);
                         let title = "";
-                        title += parseFloat(context[0].label) + " pulls";
+                        title += (context[0].parsed.y).toFixed(1) + " %";
                         return title;
                     }
                 },
