@@ -21,7 +21,6 @@ let simulChart = new Chart(myChart, {
                 displayColors: false,
                 callbacks: {
                     label: function(context) {
-                        console.log(context);
                         let label = "";
                         if (context.parsed.y !== null) {
                             label += (context.parsed.y).toFixed(1) + " %";
@@ -29,7 +28,6 @@ let simulChart = new Chart(myChart, {
                         return label;
                     },
                     title: function(context) {
-                        console.log(context);
                         let title = "";
                         title += parseFloat(context[0].label) + " pulls";
                         return title;
