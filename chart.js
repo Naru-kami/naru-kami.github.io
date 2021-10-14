@@ -21,14 +21,18 @@ let simulChart = new Chart(myChart, {
                 displayColors: false,
                 callbacks: {
                     label: function(context) {
-                        let label = context.dataset.label;
+                        console.log(context);
+                        let label = "";
                         if (context.parsed.y !== null) {
                             label += (context.parsed.y).toFixed(1) + " %";
                         }
                         return label;
                     },
                     title: function(context) {
-                        return "pulls";
+                        console.log(context);
+                        let title = "";
+                        title += parseFloat(context[0].label) + " pulls";
+                        return title;
                     }
                 },
                 titleFont: { weight: "normal" },
@@ -37,7 +41,7 @@ let simulChart = new Chart(myChart, {
         scales:{
             y: {
                 ticks: {
-                    callback: function(value, index, values) {
+                    callback: function(value) {
                         return value + "%";
                     }
                 },
