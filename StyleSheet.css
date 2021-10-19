@@ -1,10 +1,11 @@
 body{
-  margin:40px center;
+  margin:40px auto;
+  width: 100%;
   max-width:720px;
   line-height:1.6;
   font-size:18px;
   color:#444;
-  padding-left:10px;
+  padding:10px;
   align-items: center;
   
 }
@@ -25,7 +26,8 @@ input.large_number {
 }
 
 #goal {
-  width: 10em;
+  width: 11em;
+  height: 1.75em;
 }
 
 #content > div {

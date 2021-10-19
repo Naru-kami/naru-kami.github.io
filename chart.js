@@ -1,12 +1,12 @@
+let arr = [0];
 let myChart = document.getElementById("myChart").getContext("2d");
-
 let simulChart = new Chart(myChart, {
     type:"line",
     data:{
-        labels:[0,23,54,120,233,351,1049],
+        labels: arr,
         datasets:[{
             label: "",
-            data: [0,10,25,50,75,90,99.9],
+            data: [0],
             fill : true,
             tension : 0.2,
             borderColor: "rgba(23,114,203,0.8)",
@@ -21,13 +21,11 @@ let simulChart = new Chart(myChart, {
                 displayColors: false,
                 callbacks: {
                     label: function(context) {
-                        console.log(context);
                         let label = "";
                         label += (context.label) + " pulls";
                         return label;
                     },
                     title: function(context) {
-                        console.log(context);
                         let title = "";
                         title += (context[0].parsed.y).toFixed(1) + " %";
                         return title;
@@ -59,3 +57,9 @@ let simulChart = new Chart(myChart, {
         }
     }
 });
+
+function draw(){
+    simulChart.data.labels.push(23, 54, 120, 233, 351, 1049);
+    simulChart.data.datasets[0].data.push(10, 25, 50, 75, 90, 99.9);
+    simulChart.update('none');
+}
