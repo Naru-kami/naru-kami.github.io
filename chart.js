@@ -1,12 +1,11 @@
-let arr = [0];
 let myChart = document.getElementById("myChart").getContext("2d");
 let simulChart = new Chart(myChart, {
     type:"line",
     data:{
-        labels: arr,
+        labels: [0],
         datasets:[{
             label: "",
-            data: [0],
+            data: [],
             fill : true,
             tension : 0.2,
             borderColor: "rgba(23,114,203,0.8)",
@@ -31,7 +30,7 @@ let simulChart = new Chart(myChart, {
                         return title;
                     }
                 },
-                titleFont: { weight: "normal" },
+                titleFont: { weight: "normal" }
             }
         },
         scales:{
@@ -54,12 +53,33 @@ let simulChart = new Chart(myChart, {
         interaction: {
             intersect: false,
             mode: 'x'
+        },
+        elements:{
+            point:{
+                radius: 0,
+                hitRadius: 0.9,
+                hoverRadius: 1,
+                hoverBorderWidth: 4
+            }
         }
     }
 });
 
 function draw(){
-    simulChart.data.labels.push(23, 54, 120, 233, 351, 1049);
-    simulChart.data.datasets[0].data.push(10, 25, 50, 75, 90, 99.9);
+    simulChart.data.labels = [];
+    simulChart.data.datasets[0].data = [];
+    let datas = wishing(1000000);
+    simulChart.data.labels = simulChart.data.labels.concat(datas.pullnumber);
+    simulChart.data.datasets[0].data = simulChart.data.datasets[0].data.concat(datas.pullsResult);
+    simulChart.options.scales.x.ticks = {
+        autoSkip: true,
+        callback: function(value, index, values) {
+            let newticks = Math.ceil(Math.max.apply(null, datas.pullnumber)/50/5)*5;
+            if (value % newticks == 0){
+                return value;
+            }
+        },
+        maxRotation : 0
+    };
     simulChart.update('none');
 }
