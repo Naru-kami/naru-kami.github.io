@@ -41,11 +41,11 @@ function wishing(n) {
                 counter5 += 1;
                 counter4 = 1;
                 if ( x < (prob4+prob5)/3){
-                    GetStarglitter(4, fs1 + Number(document.getElementById("4s1").value));
+                    starglitters += GetStarglitter(4, fs1 + Number(document.getElementById("4s1").value));
                 } else if (x < (prob4+prob5)/3*2){
-                    GetStarglitter(4, fs2 + Number(document.getElementById("4s2").value));
+                    starglitters += GetStarglitter(4, fs2 + Number(document.getElementById("4s2").value));
                 } else if (x < prob4+prob5) {
-                    GetStarglitter(4, fs3 + Number(document.getElementById("4s3").value));
+                    starglitters += GetStarglitter(4, fs3 + Number(document.getElementById("4s3").value));
                 } else {starglitters += 2;}
             } else {
                 counter5 += 1;
