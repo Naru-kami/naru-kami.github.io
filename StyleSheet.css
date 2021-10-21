@@ -45,14 +45,6 @@ input[type=checkbox] {
   font-size: 18px;
 }
 
-#starglitter > label {
-  height: 1.2em;
-}
-
-#const_note > label {
-  height: 1.2em;
-}
-
 #const_note{
   font-size: 14px;
 }
