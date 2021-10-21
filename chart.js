@@ -52,14 +52,13 @@ let simulChart = new Chart(myChart, {
         },
         interaction: {
             intersect: false,
-            mode: 'x'
+            mode: 'nearest',
+            axis: 'x'
         },
         elements:{
             point:{
                 radius: 0,
-                hitRadius: 0.9,
-                hoverRadius: 1,
-                hoverBorderWidth: 4
+                hoverRadius: 4,
             }
         }
     }
