@@ -36,6 +36,7 @@ let simulChart = new Chart(myChart, {
         scales:{
             y: {
                 ticks: {
+                    stepSize: 10,
                     callback: function(value) {
                         return value + "%";
                     }
