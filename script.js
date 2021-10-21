@@ -63,9 +63,8 @@ function wishing(n) {
         }
         pullsResult[pulls] += 1/n*100;
     }
-    for(let h = 0; h < pullsResult.length; h++){
-        if ( h==0 ) {continue}
-        else {pullsResult[h] += pullsResult[h-1];}
+    for(let h = 1; h < pullsResult.length; h++){
+        pullsResult[h] += pullsResult[h-1];
     }
     return { pullnumber, pullsResult };
 }

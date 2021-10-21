@@ -68,7 +68,7 @@ let simulChart = new Chart(myChart, {
 function draw(){
     simulChart.data.labels = [];
     simulChart.data.datasets[0].data = [];
-    let datas = wishing(1000000);
+    let datas = wishing(100000);
     simulChart.data.labels = simulChart.data.labels.concat(datas.pullnumber);
     simulChart.data.datasets[0].data = simulChart.data.datasets[0].data.concat(datas.pullsResult);
     simulChart.options.scales.x.ticks = {
