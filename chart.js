@@ -74,6 +74,8 @@ let simulChart = new Chart(myChart, {
 function draw(){
     simulChart.data.labels = [];
     simulChart.data.datasets[0].data = [];
+    document.getElementById("myBar").style.width = 0 + "%";
+    document.getElementById("myProgress").style.display = "block";
     let datas = wishing(100000);
     simulChart.data.labels = simulChart.data.labels.concat(datas.pullnumber);
     simulChart.data.datasets[0].data = simulChart.data.datasets[0].data.concat(datas.pullsResult);
@@ -88,4 +90,5 @@ function draw(){
         maxRotation : 0
     };
     simulChart.update('none');
+    document.getElementById("myProgress").style.display = "none";
 }

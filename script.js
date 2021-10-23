@@ -49,19 +49,19 @@ function wishing(n) {
                 }
                 counter5 = 1;
                 counter4 += 1;
-                starglitters += GetStarglitter(5, promoted + Number(document.getElementById("5s_c").value),true);
+                starglitters += GetStarglitter(5, promoted + Number(document.getElementById("5s_c").value),g);
             } else if ( x < prob4 + prob5) {
                 counter5 += 1;
                 counter4 = 1;
                 if (g == 0){
                     if ( x < (prob4+prob5)/3/2 ){
-                        starglitters += GetStarglitter(4, fs1 + Number(document.getElementById("4s1").value),false);
+                        starglitters += GetStarglitter(4, fs1 + Number(document.getElementById("4s1").value),0);
                         fs1 += 1;
                     } else if (x < (prob4+prob5)/3 ){
-                        starglitters += GetStarglitter(4, fs2 + Number(document.getElementById("4s2").value),false);
+                        starglitters += GetStarglitter(4, fs2 + Number(document.getElementById("4s2").value),0);
                         fs2 += 1;
                     } else if (x < (prob4+prob5)/2 ) {
-                        starglitters += GetStarglitter(4, fs3 + Number(document.getElementById("4s3").value),false);
+                        starglitters += GetStarglitter(4, fs3 + Number(document.getElementById("4s3").value),0);
                         fs3 += 1;
                     }
                 }
@@ -78,6 +78,8 @@ function wishing(n) {
             }
         }
         pullsResult[pulls] += 1/n*100;
+        document.getElementById("myBar").style.width = (j+1)/n*100 + "%";
+        document.getElementById("myBar").innerHTML = (j+1)/n*100 + "%";
     }
     for(let h = 1; h < pullsResult.length; h++){
         pullsResult[h] += pullsResult[h-1];
@@ -86,7 +88,7 @@ function wishing(n) {
 }
 
 function GetStarglitter(star, count, bool){
-    if (bool === true){return 10;}
+    if (bool == 1){return 10;}
     if ( star == 5){
         if ( count == -1 ) {
             return 0;
