@@ -26,7 +26,13 @@ let simulChart = new Chart(myChart, {
                     },
                     title: function(context) {
                         let title = "";
-                        title += (context[0].parsed.y).toFixed(1) + " %";
+                        if(context[0].parsed.y<=99.8){
+                            title += (context[0].parsed.y).toFixed(1) + " %";
+                        } else if (context[0].parsed.y>=99.98) {
+                            title += (context[0].parsed.y).toFixed(3) + " %";
+                        } else {
+                            title += (context[0].parsed.y).toFixed(2) + " %";
+                        }
                         return title;
                     }
                 },
