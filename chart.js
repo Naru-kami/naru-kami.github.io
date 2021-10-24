@@ -70,25 +70,3 @@ let simulChart = new Chart(myChart, {
         }
     }
 });
-
-function draw(){
-    simulChart.data.labels = [];
-    simulChart.data.datasets[0].data = [];
-    document.getElementById("myBar").style.width = 0 + "%";
-    document.getElementById("myProgress").style.display = "block";
-    let datas = wishing(100000);
-    simulChart.data.labels = simulChart.data.labels.concat(datas.pullnumber);
-    simulChart.data.datasets[0].data = simulChart.data.datasets[0].data.concat(datas.pullsResult);
-    simulChart.options.scales.x.ticks = {
-        autoSkip: true,
-        callback: function(value, index, values) {
-            let newticks = Math.ceil(Math.max.apply(null, datas.pullnumber)/50/5)*5;
-            if (value % newticks == 0){
-                return value;
-            }
-        },
-        maxRotation : 0
-    };
-    simulChart.update('none');
-    document.getElementById("myProgress").style.display = "none";
-}

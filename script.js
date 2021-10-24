@@ -1,121 +1,84 @@
-function wishing(n) {
-    let wanted = Number(document.getElementById("focus_count").value);
-    let _rate5 = Banner().rate5;
-    let _rate4 = Banner().rate4;
-    let _pity5 = Banner().pity5;
-    let _pity4 = Banner().pity4;
-    let prob5 = 0;
-    let prob4 = 0;
-    let pullsResult = [0];
-    let pullnumber = [0];
-    let checking = document.getElementById("sg_use").checked;
-    let g = document.getElementById('goal').value;
-    for (let j = 0; j < n; j++){
-        let gc = Banner().gc;
-        let counter5 = Number(document.getElementById("pity_count").value);
-        let counter4 = 1;
-        let starglitters = Number(document.getElementById("sg_count").value);
-        let pulls = 0;
-        let promoted = 0;
-        let fs1 = 0, fs2 = 0, fs3 = 0;
-        let offbanner = document.getElementById("offbanner").checked ? 1 : 0;
-        
-        while (promoted < wanted) {
-            pulls += 1;
-            if (checking && starglitters >= 5) {
-                pulls -= 1;
-                starglitters -= 5;
-            }
-            prob5 = Math.min(1, _rate5 + Math.max(0, (counter5 - _pity5) * 10 * _rate5));
-            prob4 = Math.min(1, _rate4 + Math.max(0, (counter4 - _pity4) * 10 * _rate4));
-            let x = Math.random();
-            if (x < prob5) {
-                if(document.getElementById('goal').value == 0){
-                    if (x <= prob5/2 || gc == 1){
-                        gc = 0;
-                        promoted += 1;
-                    } else {
-                        gc += 1;
-                    }
-                } else if (document.getElementById('goal').value == 1){
-                    if(offbanner == 1) { x*=0.75; }
-                    if (x <= prob5*0.375 || gc == 2){
-                        gc = 0;
-                        promoted += 1;
-                    } else {
-                        gc += 1;
-                    }
-                     x > prob5*0.75 ? offbanner += 1 : offbanner = 0;
-                }
-                counter5 = 1;
-                counter4 += 1;
-                starglitters += GetStarglitter(5, promoted + Number(document.getElementById("5s_c").value),g);
-            } else if ( x < prob4 + prob5) {
-                counter5 += 1;
-                counter4 = 1;
-                if (g == 0){
-                    if ( x < (prob4+prob5)/3/2 ){
-                        starglitters += GetStarglitter(4, fs1 + Number(document.getElementById("4s1").value),0);
-                        fs1 += 1;
-                    } else if (x < (prob4+prob5)/3 ){
-                        starglitters += GetStarglitter(4, fs2 + Number(document.getElementById("4s2").value),0);
-                        fs2 += 1;
-                    } else if (x < (prob4+prob5)/2 ) {
-                        starglitters += GetStarglitter(4, fs3 + Number(document.getElementById("4s3").value),0);
-                        fs3 += 1;
-                    }
-                }
-                else {starglitters += 2;}
-            } else {
-                counter5 += 1;
-                counter4 += 1;
-            }
-        }
-        if (pullsResult[pulls] == null){
-            for (let k = pullsResult.length; k <= pulls; k++){
-                pullsResult.push(0);
-                pullnumber.push(k);
-            }
-        }
-        pullsResult[pulls] += 1/n*100;
-        document.getElementById("myBar").style.width = (j+1)/n*100 + "%";
-        document.getElementById("myBar").innerHTML = (j+1)/n*100 + "%";
-    }
-    for(let h = 1; h < pullsResult.length; h++){
-        pullsResult[h] += pullsResult[h-1];
-    }
-    return { pullnumber, pullsResult };
-}
+var blob = new Blob([
+    document.querySelector('#worker').textContent
+], { type: "text/javascript" });
 
-function GetStarglitter(star, count, bool){
-    if (bool == 1){return 10;}
-    if ( star == 5){
-        if ( count == -1 ) {
-            return 0;
-        } else if ( count >= 0 && count < 6 ) {
-            return 10;
-        } else { return 25;}
-    } else if ( star == 4 ){
-        if ( count == -1 ) {
-            return 0;
-        } else if ( count >= 0 && count < 6 ) {
-            return 2;
-        } else { return 10;}
-    }
-}
+var worker;
 
-function Banner(){
-    let rate5 = 0.006;
-    let rate4 = 0.051;
-    let pity5 = 73;
-    let pity4 = 8;
-    let gc = document.getElementById("gcCheck").checked ? 1: 0;
-    if (document.getElementById('goal').value == 1){
-        rate5 = 0.007;
-        rate4 = 0.06;
-        pity5 = 62;
-        gc = Number(document.getElementById("gcCounter").value);
-    }
-    return {rate5,rate4,pity5,pity4,gc};
+function draw(){
+    simulChart.data.labels = [];
+    simulChart.data.datasets[0].data = [];
+    document.getElementById("myBar").style.width = 0 + "%";
+    document.getElementById("myProgress").style.display = "block";
+    if (worker){worker.terminate();}
+    worker = new Worker (window.URL.createObjectURL(blob));
+    worker.postMessage({
+        wanted  :   Number(document.getElementById("focus_count").value),   // wanted
+        sgUse  :   document.getElementById("sg_use").checked,               // use starglitter?
+        goal    :   document.getElementById('goal').value,                  // character or weapon banner
+        pityCount: Number(document.getElementById("pity_count").value),     // counter for 5 star pity
+        sgCount :  Number(document.getElementById("sg_count").value),       // starglitter count
+        offbanner : document.getElementById("offbanner").checked,           // weapon banner offbanner 75%
+        c5s :       Number(document.getElementById("5s_c").value),          // constellation count 5 and 4 star
+        c4s1 :      Number(document.getElementById("4s1").value),           
+        c4s2 :      Number(document.getElementById("4s2").value),           
+        c4s3 :      Number(document.getElementById("4s3").value),           
+        gcCheck :  document.getElementById("gcCheck").checked,              // guaranteed pity checkbox
+        gcCounter: Number(document.getElementById("gcCounter").value),      // guaranteed pity for weapon banner
+        n :         100000                                                  // iterations
+    });
     
+    worker.onmessage = function (e){
+        document.getElementById("myProgress").style.display = "block";
+        if ( e.data.progress != null){
+            document.getElementById("myBar").style.width = e.data.progress/1000 + "%";
+            document.getElementById("myBarText").innerHTML = e.data.progress/1000 + "%";
+            return;
+        }
+        simulChart.data.labels = simulChart.data.labels.concat(e.data.pullnumber);
+        simulChart.data.datasets[0].data = simulChart.data.datasets[0].data.concat(e.data.pullsResult);
+        simulChart.options.scales.x.ticks = {
+            autoSkip: true,
+            callback: function(value, index, values) {
+                let newticks = Math.ceil(Math.max.apply(null, e.data.pullnumber)/50/5)*5;
+                if (value % newticks == 0){
+                    return value;
+                }
+            },
+            maxRotation : 0
+        };
+        simulChart.update('none');
+        document.getElementById("myProgress").style.display = "none";
+    }
+}
+
+function showMe (box) {
+    var chbox = document.getElementById("sg_use");
+    var vis = "none";
+    if(chbox.checked == true){
+    vis = "block";
+    }
+    document.getElementById(box).style.display = vis;
+}
+
+function getOption() {
+    var vis = "none";
+    var vis2 = "block";
+    var v = 0;
+    var pityMax = 90,
+        focusMax = 7;
+
+    if(document.getElementById('goal').value == 1 && document.getElementById('gcCheck').checked == true){
+    vis = "block";
+    v = 2;
+    }
+    if(document.getElementById('goal').value == 1){
+        pityMax = 80;
+        focusMax = "";
+        vis2 = "none";
+    }
+    document.getElementById("const_input").style.display = vis2;
+    document.getElementById("focus_count").max = focusMax;
+    document.getElementById("pity_count").max = pityMax;
+    document.getElementById("wpity").style.display = vis;
+    document.getElementById("gcCounter").value = v;
 }

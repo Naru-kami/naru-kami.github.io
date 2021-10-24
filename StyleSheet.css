@@ -31,7 +31,7 @@ input.large_number {
 }
 
 #content > div {
-  padding: 5px 10px 5px 5px;
+  padding: 0px 10px 0px 5px;
 }
 
 input[type=checkbox] {
@@ -60,14 +60,21 @@ hr {
 
 #myProgress {
   width: 100%;
+  height: 10px;
   background-color: #ccc;
 }
 
 #myBar {
   width: 0%;
-  height: 30px;
-  background-color: #016842;
+  height: 20px;
+  background-color: rgb(81, 168, 81);
+
+}
+
+#myBarText {
+  width: 100%;
+  height: 20px;
   text-align: center;
-  line-height: 30px;
-  color: white;
+  line-height: 20px;
+  color: rgb(0, 0, 0);
 }
