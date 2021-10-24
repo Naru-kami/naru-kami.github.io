@@ -76,6 +76,7 @@ function getOption() {
         focusMax = "";
         vis2 = "none";
     }
+    document.getElementById("offbanner").checked = false;
     document.getElementById("const_input").style.display = vis2;
     document.getElementById("focus_count").max = focusMax;
     document.getElementById("pity_count").max = pityMax;
