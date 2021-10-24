@@ -6,11 +6,14 @@ body{
   font-size:18px;
   color:#444;
   padding:10px;
-  align-items: center;
   
 }
 
 header {
+  text-align: right;
+}
+
+h3{
   text-align: center;
   text-decoration: underline;
 }
@@ -31,7 +34,7 @@ input.large_number {
 }
 
 #content > div {
-  padding: 0px 10px 0px 5px;
+  padding: 5px 10px 0px 5px;
 }
 
 input[type=checkbox] {
@@ -60,8 +63,7 @@ hr {
 
 #myProgress {
   width: 100%;
-  height: 10px;
-  background-color: #ccc;
+  height: 15px;
 }
 
 #myBar {
@@ -77,4 +79,5 @@ hr {
   text-align: center;
   line-height: 20px;
   color: rgb(0, 0, 0);
+  background-color: #ccc;
 }
