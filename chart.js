@@ -9,7 +9,7 @@ let simulChart = new Chart(myChart, {
             fill : true,
             tension : 0.2,
             borderColor: "rgba(23,114,203,0.8)",
-            fillColor: "rgba(151,205,187,1)"
+            backgroundColor: "rgba(104,104,104,0.25)"
         }]
     },
     options:{
