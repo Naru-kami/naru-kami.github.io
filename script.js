@@ -52,7 +52,7 @@ function draw(){
         simulChart.options.scales.x.ticks = {
             autoSkip: true,
             callback: function(value, index, values) {
-                let newticks = Math.ceil(Math.max.apply(null, e.data.pullnumber)/50/5+1)*5;
+                let newticks = Math.ceil(Math.max.apply(null, e.data.pullnumber)/100/10)*10;
                 if (value % newticks == 0){
                     return value;
                 }
