@@ -1,3 +1,16 @@
+document.addEventListener('DOMContentLoaded', Action);
+function Action(){
+    var goalButton = document.getElementById("goal"),
+        runButton = document.getElementById("runButton"),
+        gcCheck = document.getElementById("gcCheck"),
+        sg_use = document.getElementById("sg_use");
+    
+    goalButton.addEventListener("change", getOption);
+    runButton.addEventListener("click", draw);
+    gcCheck.addEventListener("click", getOption);
+    sg_use.addEventListener("click", showMe);
+}
+
 var blob = new Blob([
     document.querySelector('#worker').textContent
 ], { type: "text/javascript" });
@@ -51,13 +64,13 @@ function draw(){
     }
 }
 
-function showMe (box) {
+function showMe () {
     var chbox = document.getElementById("sg_use");
     var vis = "none";
     if(chbox.checked == true){
     vis = "block";
     }
-    document.getElementById(box).style.display = vis;
+    document.getElementById("starglitter").style.display = vis;
 }
 
 function getOption() {
