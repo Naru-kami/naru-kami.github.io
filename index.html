@@ -151,7 +151,7 @@
     <div id="content">
         <div id="selection">
             <div id="Banner Type">
-                <select id="goal" onchange="getOption()" style="color: #686868;">
+                <select id="goal" style="color: #686868;">
                     <option value="0">Character Banner</option>
                     <option value="1">Weapon Banner</option>
                 </select>
@@ -165,7 +165,7 @@
                 <input id="pity_count" type="number" class="large_number" value="1" min="1" max="90" required="true">
             </div><div>
                 <label class="form-check-label" for="g_pity">Guaranteed pity?</label>
-                <input id="gcCheck" type="checkbox" class="form-check-input" onclick="getOption()">
+                <input id="gcCheck" type="checkbox" class="form-check-input">
             </div>
             <div id="wpity" style="display: none;">
                 <label for="gcCounter" class="form-check-label">Epitomized Path:</label>
@@ -175,7 +175,7 @@
             </div>
             <div>
                 <label for="sg_use">Immediately use Starglitter?</label>
-                <input id="sg_use" type="checkbox" class="form-check-input" onclick="showMe('starglitter')">
+                <input id="sg_use" type="checkbox" class="form-check-input">
             </div>
             <div id="starglitter" style="display: none;">
                 <hr/>
@@ -202,7 +202,7 @@
                 <hr/>
             </div>
             <div id="simul_button">
-                <button type="button" class="btn btn-primary mt-2" onclick="draw()" style="color:#686868;">Run</button>
+                <button type="button" id="runButton" class="btn btn-primary mt-2" style="color:#686868;">Run</button>
             </div>
         </div>
 
