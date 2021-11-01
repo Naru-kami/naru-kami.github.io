@@ -1,14 +1,38 @@
 document.addEventListener('DOMContentLoaded', Action);
 function Action(){
-    var goalButton = document.getElementById("goal"),
-        runButton = document.getElementById("runButton"),
-        gcCheck = document.getElementById("gcCheck"),
-        sg_use = document.getElementById("sg_use");
+    var goalButton  = document.getElementById("goal"),
+        runButton   = document.getElementById("runButton"),
+        wanted      = document.getElementById("focus_count"),
+        sgUse       = document.getElementById("sg_use"),
+        goal        = document.getElementById('goal'),
+        pityCount   = document.getElementById("pity_count"),
+        sgCount     = document.getElementById("sg_count"),
+        offbanner   = document.getElementById("offbanner"),
+        c5s         = document.getElementById("5s_c"),
+        c4s1        = document.getElementById("4s1"),
+        c4s2        = document.getElementById("4s2"),
+        c4s3        = document.getElementById("4s3"),
+        gcCheck     = document.getElementById("gcCheck"),
+        gcCounter   = document.getElementById("gcCounter");
     
     goalButton.addEventListener("change", getOption);
     runButton.addEventListener("click", draw);
     gcCheck.addEventListener("click", getOption);
-    sg_use.addEventListener("click", showMe);
+    sgUse.addEventListener("click", showMe);
+
+    goalButton.addEventListener("change", reset);
+    wanted.addEventListener("input", reset);
+    sgUse.addEventListener("input", reset);
+    goal.addEventListener("input", reset);
+    pityCount.addEventListener("input", reset);
+    sgCount.addEventListener("input", reset);
+    offbanner.addEventListener("input", reset);
+    c5s.addEventListener("input", reset);
+    c4s1.addEventListener("input", reset);
+    c4s2.addEventListener("input", reset);
+    c4s3.addEventListener("input", reset);
+    gcCheck.addEventListener("input", reset);
+    gcCounter.addEventListener("input", reset);
 }
 
 var blob = new Blob([
@@ -16,10 +40,17 @@ var blob = new Blob([
 ], { type: "text/javascript" });
 
 var worker;
+var n = 0,
+    xArr = [],
+    yArr = [],
+    helper = [];
+function reset(){
+    xArr = [];
+    yArr = [];
+    document.getElementById("runButton").innerHTML = "Run";
+}
 
 function draw(){
-    simulChart.data.labels = [];
-    simulChart.data.datasets[0].data = [];
     document.getElementById("myBar").style.width = 0 + "%";
     document.getElementById("myProgress").style.display = "block";
     if (worker){worker.terminate();}
@@ -47,12 +78,27 @@ function draw(){
             document.getElementById("myBarText").innerHTML = e.data.progress/1000 + "%";
             return;
         }
-        simulChart.data.labels = simulChart.data.labels.concat(e.data.pullnumber);
-        simulChart.data.datasets[0].data = simulChart.data.datasets[0].data.concat(e.data.pullsResult);
+        for( let v = 0; v < e.data.pullsResult.length; v++){
+            if (xArr[v]==null){
+                xArr.push(v);
+                yArr.push(0);
+                helper.push(0);
+            }
+            yArr[v] += e.data.pullsResult[v];
+        }
+        for ( v = 0; v < yArr.length; v++){
+            helper[v] = yArr[v];
+        }
+        cumulate(helper);
+        const n = helper[helper.length-1];
+        //console.log("helper:\t"+ (helper.length-1) + ":" +n + "\n\t\t"+ (helper.length-2) + ": " + helper[helper.length-2] + "\n" +"yArr:\t" + (yArr.length-1) +": "+ yArr[yArr.length-1]);
+        normalize(helper, n);
+        simulChart.data.labels = xArr;
+        simulChart.data.datasets[0].data = helper;
         simulChart.options.scales.x.ticks = {
             autoSkip: true,
             callback: function(value, index, values) {
-                let newticks = Math.ceil(Math.max.apply(null, e.data.pullnumber)/100/10)*10;
+                let newticks = Math.ceil(Math.max.apply(null, xArr)/100/10)*10;
                 if (value % newticks == 0){
                     return value;
                 }
@@ -61,6 +107,9 @@ function draw(){
         };
         simulChart.update('none');
         document.getElementById("myProgress").style.display = "none";
+        document.getElementById("runButton").innerHTML = "More samples";
+        document.getElementById("sample").innerHTML = "&nbsp;&nbsp;&nbsp;Sample size: " + n.toLocaleString(undefined);
+        helper = [];
     }
 }
 
@@ -95,4 +144,18 @@ function getOption() {
     document.getElementById("pity_count").max = pityMax;
     document.getElementById("wpity").style.display = vis;
     document.getElementById("gcCounter").value = v;
+}
+
+function normalize(A, n){
+    for(let i=0; i<A.length; i++){
+        A[i] *= 100/n;
+    }
+    return A;
+}
+
+function cumulate(A){
+    for(let h = 1; h < A.length; h++){
+        A[h] += A[h-1];
+    }
+    return A;
 }
