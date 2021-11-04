@@ -13,7 +13,9 @@ function Action(){
         c4s2        = document.getElementById("4s2"),
         c4s3        = document.getElementById("4s3"),
         gcCheck     = document.getElementById("gcCheck"),
-        gcCounter   = document.getElementById("gcCounter");
+        gcCounter   = document.getElementById("gcCounter"),
+        Minus       = document.getElementById("-"),
+        Plus        = document.getElementById("+");
     
     goalButton.addEventListener("change", getOption);
     runButton.addEventListener("click", draw);
@@ -33,6 +35,15 @@ function Action(){
     c4s3.addEventListener("input", reset);
     gcCheck.addEventListener("input", reset);
     gcCounter.addEventListener("input", reset);
+    Minus.addEventListener("mousedown", minus);
+    Plus.addEventListener("mousedown", plus);
+    Minus.addEventListener("mouseup", mouseup);
+    Plus.addEventListener("mouseup", mouseup);
+    Minus.addEventListener("mouseout", mouseup);
+    Plus.addEventListener("mouseout", mouseup);    
+
+    const ye = 100000;
+    document.getElementById("sampleSize").innerText = ye.toLocaleString(undefined);
 }
 
 var blob = new Blob([
@@ -40,42 +51,45 @@ var blob = new Blob([
 ], { type: "text/javascript" });
 
 var worker;
-var n = 0,
+var smp = 100000;
     xArr = [],
     yArr = [],
-    helper = [];
+    helper = [],
+    holdStarter = null,
+    holdActive = false,
+    mouseDown = null;
+
 function reset(){
     xArr = [];
     yArr = [];
     document.getElementById("runButton").innerHTML = "Run";
 }
-
 function draw(){
     document.getElementById("myBar").style.width = 0 + "%";
     document.getElementById("myProgress").style.display = "block";
     if (worker){worker.terminate();}
     worker = new Worker (window.URL.createObjectURL(blob));
     worker.postMessage({
-        wanted  :   Number(document.getElementById("focus_count").value),   // wanted
-        sgUse  :   document.getElementById("sg_use").checked,               // use starglitter?
-        goal    :   document.getElementById('goal').value,                  // character or weapon banner
-        pityCount: Number(document.getElementById("pity_count").value),     // counter for 5 star pity
-        sgCount :  Number(document.getElementById("sg_count").value),       // starglitter count
-        offbanner : document.getElementById("offbanner").checked,           // weapon banner offbanner 75%
-        c5s :       Number(document.getElementById("5s_c").value),          // constellation count 5 and 4 star
-        c4s1 :      Number(document.getElementById("4s1").value),           
-        c4s2 :      Number(document.getElementById("4s2").value),           
-        c4s3 :      Number(document.getElementById("4s3").value),           
-        gcCheck :  document.getElementById("gcCheck").checked,              // guaranteed pity checkbox
-        gcCounter: Number(document.getElementById("gcCounter").value),      // guaranteed pity for weapon banner
-        n :         100000                                                  // iterations
+        wanted      : Number(document.getElementById("focus_count").value), // wanted
+        sgUse       : document.getElementById("sg_use").checked,            // use starglitter?
+        goal        : document.getElementById('goal').value,                // character or weapon banner
+        pityCount   : Number(document.getElementById("pity_count").value),  // counter for 5 star pity
+        sgCount     : Number(document.getElementById("sg_count").value),    // starglitter count
+        offbanner   : document.getElementById("offbanner").checked,         // weapon banner offbanner 75%
+        c5s         : Number(document.getElementById("5s_c").value),        // constellation count 5 and 4 star
+        c4s1        : Number(document.getElementById("4s1").value),         
+        c4s2        : Number(document.getElementById("4s2").value),         
+        c4s3        : Number(document.getElementById("4s3").value),         
+        gcCheck     : document.getElementById("gcCheck").checked,           // guaranteed pity checkbox
+        gcCounter   : Number(document.getElementById("gcCounter").value),   // guaranteed pity for weapon banner
+        n           : smp                                                   // iterations
     });
     
     worker.onmessage = function (e){
         document.getElementById("myProgress").style.display = "block";
         if ( e.data.progress != null){
-            document.getElementById("myBar").style.width = e.data.progress/1000 + "%";
-            document.getElementById("myBarText").innerHTML = e.data.progress/1000 + "%";
+            document.getElementById("myBar").style.width = e.data.progress + "%";
+            document.getElementById("myBarText").innerHTML = e.data.progress + "%";
             return;
         }
         for( let v = 0; v < e.data.pullsResult.length; v++){
@@ -91,7 +105,6 @@ function draw(){
         }
         cumulate(helper);
         const n = helper[helper.length-1];
-        //console.log("helper:\t"+ (helper.length-1) + ":" +n + "\n\t\t"+ (helper.length-2) + ": " + helper[helper.length-2] + "\n" +"yArr:\t" + (yArr.length-1) +": "+ yArr[yArr.length-1]);
         normalize(helper, n);
         simulChart.data.labels = xArr;
         simulChart.data.datasets[0].data = helper;
@@ -112,7 +125,6 @@ function draw(){
         helper = [];
     }
 }
-
 function showMe () {
     var chbox = document.getElementById("sg_use");
     var vis = "none";
@@ -121,7 +133,6 @@ function showMe () {
     }
     document.getElementById("starglitter").style.display = vis;
 }
-
 function getOption() {
     var vis = "none";
     var vis2 = "block";
@@ -145,17 +156,54 @@ function getOption() {
     document.getElementById("wpity").style.display = vis;
     document.getElementById("gcCounter").value = v;
 }
-
 function normalize(A, n){
     for(let i=0; i<A.length; i++){
         A[i] *= 100/n;
     }
     return A;
 }
-
 function cumulate(A){
     for(let h = 1; h < A.length; h++){
         A[h] += A[h-1];
     }
     return A;
+}
+function minus(){
+    if (smp <= 0){return;}
+    smp -= 100000;
+    document.getElementById("sampleSize").textContent = smp.toLocaleString(undefined);
+    holdStarter = setTimeout(() => {
+        holdStarter = null;
+        holdActive = true;
+        mouseDown =  setInterval(iter,75);
+        function iter(){
+            if (smp>0){
+                smp -= 100000;
+                document.getElementById("sampleSize").textContent = smp.toLocaleString(undefined);
+            }else 
+                mouseup();
+        }
+    }, 500);
+}
+function plus(){
+    smp += 100000;
+    document.getElementById("sampleSize").textContent = smp.toLocaleString(undefined);
+    holdStarter = setTimeout(() => {
+        holdStarter = null;
+        holdActive = true;
+        mouseDown =  setInterval(iter,75);
+        function iter(){
+            smp += 100000;
+            document.getElementById("sampleSize").textContent = smp.toLocaleString(undefined);
+        }
+    }, 500);
+}
+function mouseup(event){
+    if(holdStarter) {
+        clearTimeout(holdStarter);
+    }else if(holdActive){
+        holdActive = false;
+        mouseDown = clearInterval(mouseDown);
+        mouseDown = null;
+    }
 }

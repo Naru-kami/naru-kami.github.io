@@ -24,17 +24,29 @@ input.small_number {
   width: 2.25em;
   height: 1.2em;
   color:#686868;
+  background-color: #F8F9FA;
+  border: solid 1px;
+  border-color: #686868;
+  border-radius: 4px;
 }
 
 input.large_number {
   width: 3em;
   height: 1.2em;
   color:#686868;
+  background-color: #F8F9FA;
+  border: solid 1px;
+  border-color: #686868;
+  border-radius: 4px;
 }
 
 #goal {
   width: 11em;
   height: 1.75em;
+  background-color: #F8F9FA;
+  border: solid 1px;
+  border-color: #686868;
+  border-radius: 4px;
 }
 
 #content {
@@ -44,6 +56,7 @@ input.large_number {
 input[type=checkbox] {
   transform: scale(1.2);
   margin-left: .5em;
+  background-color: #F8F9FA;
 }
 
 #starglitter {
@@ -101,3 +114,12 @@ img {
   max-height: 100%;
   max-width: 100%;
 }
+
+/*#sampleSize {
+  font-size: 13px;
+  width: 6em;
+  background-color: #F8F9FA;
+  border: solid 1px;
+  border-color: #686868;
+  border-radius: 4px;
+}*/
