@@ -7,224 +7,225 @@
     <title>Summoning Statistics</title>
     <link href="StyleSheet.css" rel="stylesheet">
     <link rel="icon" sizes="128x128" type="image/x-icon" href="favicon.ico">
-    <script id="worker" type="javascript/worker">
-        self.onmessage = function (e) {
-            const n = e.data.n;
-            const pog = e.data.n/100;
-            const wanted = e.data.wanted;
-            const _rate5 = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).rate5;
-            const _rate4 = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).rate4;
-            const _pity5 = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).pity5;
-            const _pity4 = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).pity4;
-            let prob5 = 0;
-            let prob4 = 0;
-            let pullsResult = [0];
-            let pullnumber = [0];
-            let checking = e.data.sgUse;
-            let g = e.data.goal;
-            for (let j = 0; j < n; j++){
-                let gc = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).gc;
-                let counter5 = e.data.pityCount;
-                let counter4 = 1;
-                let starglitters = e.data.sgCount;
-                let pulls = 0;
-                let promoted = 0;
-                let fs1 = 0, fs2 = 0, fs3 = 0;
-                let offbanner = e.data.offbanner ? 1 : 0;
-                
-                while (promoted < wanted) {
-                    pulls += 1;
-                    if (checking && starglitters >= 5) {
-                        pulls -= 1;
-                        starglitters -= 5;
-                    }
-                    prob5 = Math.min(1, _rate5 + Math.max(0, (counter5 - _pity5) * 10 * _rate5));
-                    prob4 = Math.min(1, _rate4 + Math.max(0, (counter4 - _pity4) * 10 * _rate4));
-                    let x = Math.random();
-                    if (x < prob5) {
-                        if(g == 0){
-                            if (x <= prob5/2 || gc == 1){
-                                gc = 0;
-                                promoted += 1;
-                                starglitters += GetStarglitter(5, promoted + e.data.c5s);
-                            } else {
-                                gc += 1;
-                                starglitters += 5;
-                            }
-                        } else if (g == 1){
-                            if (offbanner == 1) { x*=0.75; }
-                            if (x <= prob5*0.375 || gc == 2){
-                                gc = 0;
-                                promoted += 1;
-                            } else {
-                                gc += 1;
-                            }
-                             x > prob5*0.75 ? offbanner += 1 : offbanner = 0;
-                             starglitters += 10;
-                        }
-                        counter5 = 1;
-                        counter4 += 1;
-                    } else if ( x < prob4 + prob5) {
-                        counter5 += 1;
-                        counter4 = 1;
-                        if (g == 0){
-                            if ( x < (prob4+prob5)/3/2 ){
-                                starglitters += GetStarglitter(4, fs1 + e.data.c4s1);
-                                fs1 += 1;
-                            } else if (x < (prob4+prob5)/3 ){
-                                starglitters += GetStarglitter(4, fs2 + e.data.c4s2);
-                                fs2 += 1;
-                            } else if (x < (prob4+prob5)/2 ) {
-                                starglitters += GetStarglitter(4, fs3 + e.data.c4s3);
-                                fs3 += 1;
-                            } else { starglitters += 2 ;}
-                        }
-                        else if (g == 1){starglitters += 2;}
+<script id="worker" type="javascript/worker">self.onmessage = function (e) {
+    const n = e.data.n;
+    const pog = e.data.n/100;
+    const wanted = e.data.wanted;
+    const _rate5 = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).rate5;
+    const _rate4 = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).rate4;
+    const _pity5 = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).pity5;
+    const _pity4 = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).pity4;
+    let prob5 = 0;
+    let prob4 = 0;
+    let pullsResult = [0];
+    let pullnumber = [0];
+    let checking = e.data.sgUse;
+    let g = e.data.goal;
+    for (let j = 0; j < n; j++){
+        let gc = Banner(e.data.gcCheck , e.data.goal , e.data.gcCounter).gc;
+        let counter5 = e.data.pityCount;
+        let counter4 = 1;
+        let starglitters = e.data.sgCount;
+        let pulls = 0;
+        let promoted = 0;
+        let fs1 = 0, fs2 = 0, fs3 = 0;
+        let offbanner = e.data.offbanner ? 1 : 0;
+        
+        while (promoted < wanted) {
+            pulls += 1;
+            if (checking && starglitters >= 5) {
+                pulls -= 1;
+                starglitters -= 5;
+            }
+            prob5 = Math.min(1, _rate5 + Math.max(0, (counter5 - _pity5) * 10 * _rate5));
+            prob4 = Math.min(1, _rate4 + Math.max(0, (counter4 - _pity4) * 10 * _rate4));
+            let x = Math.random();
+            if (x < prob5) {
+                if(g == 0){
+                    if (x <= prob5/2 || gc == 1){
+                        gc = 0;
+                        promoted += 1;
+                        starglitters += GetStarglitter(5, promoted + e.data.c5s);
                     } else {
-                        counter5 += 1;
-                        counter4 += 1;
+                        gc += 1;
+                        starglitters += 5;
                     }
-                }
-                if (pullsResult[pulls] == null){
-                    for (let k = pullsResult.length; k <= pulls; k++){
-                        pullsResult.push(0);
-                        pullnumber.push(k);
+                } else if (g == 1){
+                    if (offbanner == 1) { x*=0.75; }
+                    if (x <= prob5*0.375 || gc == 2){
+                        gc = 0;
+                        promoted += 1;
+                    } else {
+                        gc += 1;
                     }
+                        x > prob5*0.75 ? offbanner += 1 : offbanner = 0;
+                        starglitters += 10;
                 }
-                pullsResult[pulls] += 1;
-                if (j % pog == 0) {
-                    postMessage({ progress : (j + pog)/pog });
+                counter5 = 1;
+                counter4 += 1;
+            } else if ( x < prob4 + prob5) {
+                counter5 += 1;
+                counter4 = 1;
+                if (g == 0){
+                    if ( x < (prob4+prob5)/3/2 ){
+                        starglitters += GetStarglitter(4, fs1 + e.data.c4s1);
+                        fs1 += 1;
+                    } else if (x < (prob4+prob5)/3 ){
+                        starglitters += GetStarglitter(4, fs2 + e.data.c4s2);
+                        fs2 += 1;
+                    } else if (x < (prob4+prob5)/2 ) {
+                        starglitters += GetStarglitter(4, fs3 + e.data.c4s3);
+                        fs3 += 1;
+                    } else { starglitters += 2 ;}
                 }
-            }
-            postMessage({
-                pullsResult : pullsResult
-            });
-        }
-        
-        function GetStarglitter(star, count){
-            if ( star == 5){
-                if ( count == -1 ) {
-                    return 0;
-                } else if ( count >= 0 && count < 6 ) {
-                    return 10;
-                } else { return 25;}
-            } else if ( star == 4 ){
-                if ( count == -1 ) {
-                    return 0;
-                } else if ( count >= 0 && count < 6 ) {
-                    return 2;
-                } else { return 5;}
+                else if (g == 1){starglitters += 2;}
+            } else {
+                counter5 += 1;
+                counter4 += 1;
             }
         }
-        
-        function Banner(u, v, w){
-            let rate5 = 0.006;
-            let rate4 = 0.051;
-            let pity5 = 73;
-            let pity4 = 8;
-            let gc = u ? 1: 0;
-            if (v == 1){
-                rate5 = 0.007;
-                rate4 = 0.06;
-                pity5 = 62;
-                pity4 = 7;
-                gc = w;
+        if (pullsResult[pulls] == null){
+            for (let k = pullsResult.length; k <= pulls; k++){
+                pullsResult.push(0);
+                pullnumber.push(k);
             }
-            return {rate5,rate4,pity5,pity4,gc};
         }
-    </script>
+        pullsResult[pulls] += 1;
+        if (j % pog == 0) {
+            postMessage({ progress : (j + pog)/pog });
+        }
+    }
+    postMessage({
+        pullsResult : pullsResult
+    });
+}
+
+function GetStarglitter(star, count){
+    if ( star == 5){
+        if ( count == -1 ) {
+            return 0;
+        } else if ( count >= 0 && count < 6 ) {
+            return 10;
+        } else { return 25;}
+    } else if ( star == 4 ){
+        if ( count == -1 ) {
+            return 0;
+        } else if ( count >= 0 && count < 6 ) {
+            return 2;
+        } else { return 5;}
+    }
+}
+
+function Banner(u, v, w){
+    let rate5 = 0.006;
+    let rate4 = 0.051;
+    let pity5 = 73;
+    let pity4 = 8;
+    let gc = u ? 1: 0;
+    if (v == 1){
+        rate5 = 0.007;
+        rate4 = 0.06;
+        pity5 = 62;
+        pity4 = 7;
+        gc = w;
+    }
+    return {rate5,rate4,pity5,pity4,gc};
+}</script>
     <script src="script.js" type="text/javascript"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
 </head>
 
 <body>
-    <header style="text-align: right">
-        <a href="about/" style="color:#0645AD;">About</a>
-         |
-         <a href="changelog/" style="color:#0645AD;">Changelog</a>
-         | v1.2
-    </header>
-    <h3>Statistics for Genshin Impacts wishing system</h3>
-    <div id="content">
-        <div id="selection">
-            <div id="Banner Type">
-                <select id="goal" style="color: #686868;">
-                    <option value="0">Character Banner</option>
-                    <option value="1">Weapon Banner</option>
-                </select>
-            </div>
-            <div id="focus count">
-                <label for="focus_count">5☆ goal:</label>
-                <input id="focus_count" type="number" class="small_number" value="1" min="0" max="7" required="true">
-            </div>
-            <div>
-                <label for="pity_count">Pity count towards 5☆:</label>
-                <input id="pity_count" type="number" class="large_number" value="1" min="1" max="90" required="true">
-            </div><div>
-                <label class="form-check-label" for="g_pity">Guaranteed pity?</label>
-                <input id="gcCheck" type="checkbox" class="form-check-input">
-            </div>
-            <div id="wpity" style="display: none;">
-                <label for="gcCounter" class="form-check-label">Epitomized Path:</label>
-                <input id="gcCounter" type="number" class="small_number" value="0" min="0" max="2">
-                <label for="offbanner">&nbsp;Last 5☆ was off banner? :</label>
-                <input id="offbanner" type="checkbox" class="form-check-input">
-            </div>
-            <div>
-                <label for="sg_use">Immediately use Starglitter?</label>
-                <input id="sg_use" type="checkbox" class="form-check-input">
-            </div>
-            <div id="starglitter" style="display: none;">
-                <hr/>
+    <div id="body">
+        <header style="text-align: right">
+            <a href="about/" style="color:#0645AD;">About</a>
+            |
+            <a href="changelog/" style="color:#0645AD;">Changelog</a>
+            | v1.3
+        </header>
+        <h3>Statistics for Genshin Impacts wishing system</h3>
+        <div id="content">
+            <div id="selection">
+                <div id="Banner Type">
+                    <select id="goal" style="color: #686868;">
+                        <option value="0">Character Banner</option>
+                        <option value="1">Weapon Banner</option>
+                    </select>
+                </div>
+                <div id="focus count">
+                    <label for="focus_count">5☆ goal:</label>
+                    <input id="focus_count" type="number" class="small_number" value="1" min="0" max="7" required="true">
+                </div>
                 <div>
-                    <label for="sg_count">Current Starglitter count</label>
-                    <input id="sg_count" value="0" min="0" type="number" class="large_number"></input>
+                    <label for="pity_count">Pity count towards 5☆:</label>
+                    <input id="pity_count" type="number" class="large_number" value="1" min="1" max="90" required="true">
+                </div><div>
+                    <label class="form-check-label" for="g_pity">Guaranteed pity?</label>
+                    <input id="gcCheck" type="checkbox" class="form-check-input">
                 </div>
-                <div id="const_input" style = "display: block;">
-                    <label>Enter constellations for your characters:</label>
+                <div id="wpity" style="display: none;">
+                    <label for="gcCounter" class="form-check-label">Epitomized Path:</label>
+                    <input id="gcCounter" type="number" class="small_number" value="0" min="0" max="2">
+                    <label for="offbanner">&nbsp;Last 5☆ was off banner? :</label>
+                    <input id="offbanner" type="checkbox" class="form-check-input">
+                </div>
+                <div>
+                    <label for="sg_use">Immediately use Starglitter?</label>
+                    <input id="sg_use" type="checkbox" class="form-check-input">
+                </div>
+                <div id="starglitter" style="display: none;">
+                    <hr/>
                     <div>
-                        <label for="5s_c">5☆:</label>
-                        <input id="5s_c" type="number" class="small_number" value="-1" min="-1" max="6">
-                        <label for="4s1">&nbsp;&nbsp;&nbsp;First 4☆:</label>
-                        <input id="4s1" type="number" class="small_number" value="-1" min="-1" max="6">
-                        <label for="4s2">&nbsp;&nbsp;&nbsp;Second 4☆:</label>
-                        <input id="4s2" type="number" class="small_number" value="-1" min="-1" max="6">
-                        <label for="4s3">&nbsp;&nbsp;&nbsp;Third 4☆:</label>
-                        <input id="4s3" type="number" class="small_number" value="-1" min="-1" max="6">
+                        <label for="sg_count">Current Starglitter count</label>
+                        <input id="sg_count" value="0" min="0" type="number" class="large_number"></input>
                     </div>
-                    <div id="const_note">
-                        <label for="const_note">&nbsp;&nbsp;&nbsp;&nbsp;<em>Note: constellation </em>"-1"<em> means you don't own the character yet.</em></label>
+                    <div id="const_input" style = "display: block;">
+                        <label>Enter constellations for your characters:</label>
+                        <div>
+                            <label for="5s_c">5☆:</label>
+                            <input id="5s_c" type="number" class="small_number" value="-1" min="-1" max="6">
+                            <label for="4s1">&nbsp;&nbsp;&nbsp;First 4☆:</label>
+                            <input id="4s1" type="number" class="small_number" value="-1" min="-1" max="6">
+                            <label for="4s2">&nbsp;&nbsp;&nbsp;Second 4☆:</label>
+                            <input id="4s2" type="number" class="small_number" value="-1" min="-1" max="6">
+                            <label for="4s3">&nbsp;&nbsp;&nbsp;Third 4☆:</label>
+                            <input id="4s3" type="number" class="small_number" value="-1" min="-1" max="6">
+                        </div>
+                        <div id="const_note">
+                            <label for="const_note">&nbsp;&nbsp;&nbsp;&nbsp;<em>Note: constellation </em>"-1"<em> means you don't own the character yet.</em></label>
+                        </div>
                     </div>
+                    <hr/>
                 </div>
-                <hr/>
+                <div id="simul_button" style="margin-bottom: 10px;">
+                    <button type="button" id="runButton" class="btn btn-primary mt-2" style="color:#686868;">Run</button>
+                </div>
             </div>
-            <div id="simul_button">
-                <button type="button" id="runButton" class="btn btn-primary mt-2" style="color:#686868;">Run</button>
-            </div>
-        </div>
 
-        <div class="container">
-            <canvas id="myChart" width="720" height="455"></canvas>
-        </div>
-        
-            <div id="myProgress" style="position : relative; display: none;">
-                <div id="myBarBackground" style="position : absolute; top:0; left:0;"></div>
-                <div id="myBar" style="position : absolute; top:0; left:0;"></div>
-                <div id="myBarText" style="position : absolute; top:0; left:0;">0%</div>
+            <div class="container">
+                <canvas id="myChart" width="720" height="455"></canvas>
             </div>
-        <div>
-            <label id="sample" style="font-size: 14px;">&nbsp;&nbsp;&nbsp;Sample size: 0</label>
-        </div>
-        <div style="font-size: 14px;">
-            <label>&nbsp;&nbsp;&nbsp;Set sample interval:&nbsp;&nbsp;</label>
-            <button type="button" id="-" class="btn" style="padding: 0px 3px 0px 3px;">-</button>
-            <div style="display: inline-block; text-align: center; width: 4.5em;">
-                <label id="sampleSize" style="font-size: 14px;"></label>
+            
+                <div id="myProgress" style="position : relative; display: none;">
+                    <div id="myBarBackground" style="position : absolute; top:0; left:0;"></div>
+                    <div id="myBar" style="position : absolute; top:0; left:0;"></div>
+                    <div id="myBarText" style="position : absolute; top:0; left:0;">0%</div>
+                </div>
+            <div>
+                <label id="sample" style="font-size: 14px;">&nbsp;&nbsp;&nbsp;Sample size: 0</label>
             </div>
-            <button type="button" id="+" class="btn" style="padding: 0px 3px 0px 3px;">+</button>
+            <div style="font-size: 14px;">
+                <label>&nbsp;&nbsp;&nbsp;Set sample interval:&nbsp;&nbsp;</label>
+                <button type="button" id="-" class="btn" style="padding: 0px 3px 0px 3px;">-</button>
+                <div style="display: inline-block; text-align: center; width: 4.5em;">
+                    <label id="sampleSize" style="font-size: 14px;"></label>
+                </div>
+                <button type="button" id="+" class="btn" style="padding: 0px 3px 0px 3px;">+</button>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+            <script src="chart.js" type="text/javascript"></script>
         </div>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.js" integrity="sha512-b3xr4frvDIeyC3gqR1/iOi6T+m3pLlQyXNuvn5FiRrrKiMUJK3du2QqZbCywH6JxS5EOfW0DY0M6WwdXFbCBLQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="chart.js" type="text/javascript"></script>
     </div>
 </body>
 

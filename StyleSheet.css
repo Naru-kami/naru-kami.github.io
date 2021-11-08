@@ -3,6 +3,10 @@ html {
 }
 
 body{
+  margin: 0px 26px 0px 0px;
+}
+
+#body{
   margin:30px auto;
   width: 100%;
   max-width:850px;
@@ -114,12 +118,3 @@ img {
   max-height: 100%;
   max-width: 100%;
 }
-
-/*#sampleSize {
-  font-size: 13px;
-  width: 6em;
-  background-color: #F8F9FA;
-  border: solid 1px;
-  border-color: #686868;
-  border-radius: 4px;
-}*/

@@ -12,6 +12,7 @@ let simulChart = new Chart(myChart, {
             backgroundColor: "rgba(104,104,104,0.25)"
         }]
     },
+    plugins: [ChartDataLabels],
     options:{
         plugins:{
             title:{ display: false },
@@ -39,6 +40,34 @@ let simulChart = new Chart(myChart, {
                     }
                 },
                 titleFont: { weight: "normal" }
+            },
+            datalabels: {
+                display: function(e) {
+                    let data = e.dataset.data, close = [], goal = [10, 25, 50, 75, 90];
+                    for (let i=0; i<5; i++){
+                        close [i] = data.reduce(function(prev, curr) {
+                            return (Math.abs(curr - goal[i]) < Math.abs(prev - goal[i]) ? curr : prev);
+                        });
+                        goal[i] = data.indexOf(close[i]);
+                    }
+                    return goal.includes(e.dataIndex);
+                },
+                formatter: function(e, t) {
+                    return (e).toFixed(1) + " %\n" + t.dataIndex + " Pulls"
+                },
+                align: "225",
+                anchor: "center",
+                offset: 0,
+                backgroundColor: "#000",
+                borderRadius: 4,
+                color: "#fff",
+                opacity: 0.8,
+                padding: {
+                    top: 4,
+                    right: 4,
+                    bottom: 4,
+                    left: 4
+                }
             }
         },
         scales:{

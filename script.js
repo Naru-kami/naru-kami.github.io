@@ -15,7 +15,8 @@ function Action(){
         gcCheck     = document.getElementById("gcCheck"),
         gcCounter   = document.getElementById("gcCounter"),
         Minus       = document.getElementById("-"),
-        Plus        = document.getElementById("+");
+        Plus        = document.getElementById("+"),
+        Canvas      = document.getElementById("myChart");
     
     goalButton.addEventListener("change", getOption);
     runButton.addEventListener("click", draw);
@@ -41,6 +42,8 @@ function Action(){
     Plus.addEventListener("mouseup", mouseup);
     Minus.addEventListener("mouseout", mouseup);
     Plus.addEventListener("mouseout", mouseup);    
+    Canvas.addEventListener("mouseenter", hideLabel);
+    Canvas.addEventListener("mouseleave", showLabel);
 
     const ye = 100000;
     document.getElementById("sampleSize").innerText = ye.toLocaleString(undefined);
@@ -67,7 +70,6 @@ function reset(){
 function draw(){
     document.getElementById("myBar").style.width = 0 + "%";
     document.getElementById("myProgress").style.display = "block";
-    if (worker){worker.terminate();}
     worker = new Worker (window.URL.createObjectURL(blob));
     worker.postMessage({
         wanted      : Number(document.getElementById("focus_count").value), // wanted
@@ -123,6 +125,7 @@ function draw(){
         document.getElementById("runButton").innerHTML = "More samples";
         document.getElementById("sample").innerHTML = "&nbsp;&nbsp;&nbsp;Sample size: " + n.toLocaleString(undefined);
         helper = [];
+        worker.terminate();
     }
 }
 function showMe () {
@@ -206,4 +209,40 @@ function mouseup(event){
         mouseDown = clearInterval(mouseDown);
         mouseDown = null;
     }
+}
+
+function hideLabel(){
+    simulChart.options.plugins.datalabels = {display: false};
+    simulChart.update("none");
+}
+function showLabel(){
+    simulChart.options.plugins.datalabels = {
+        display: function(e) {
+            let data = e.dataset.data, close = [], goal = [10, 25, 50, 75, 90];
+            for (let i=0; i<5; i++){
+                close [i] = data.reduce(function(prev, curr) {
+                    return (Math.abs(curr - goal[i]) < Math.abs(prev - goal[i]) ? curr : prev);
+                });
+                goal[i] = data.indexOf(close[i]);
+            }
+            return goal.includes(e.dataIndex);
+        },
+        formatter: function(e, t) {
+            return (e).toFixed(1) + " %\n" + t.dataIndex + " Pulls"
+        },
+        align: "225",
+        anchor: "center",
+        offset: 0,
+        backgroundColor: "#000",
+        borderRadius: 4,
+        color: "#fff",
+        opacity: 0.8,
+        padding: {
+            top: 4,
+            right: 4,
+            bottom: 4,
+            left: 4
+        }
+    };
+    simulChart.update("none");
 }
