@@ -3,12 +3,8 @@ html {
 }
 
 body{
-  margin: 0px 26px 0px 0px;
-}
-
-#body{
   margin:30px auto;
-  width: 100%;
+  width: auto;
   max-width:850px;
   line-height:1.6;
   font-size:18px;
