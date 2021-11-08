@@ -240,7 +240,7 @@ function showLabel(){
         padding: {
             top: 4,
             right: 4,
-            bottom: 4,
+            bottom: 0,
             left: 4
         }
     };
