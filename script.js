@@ -70,6 +70,7 @@ function reset(){
 function draw(){
     document.getElementById("myBar").style.width = 0 + "%";
     document.getElementById("myProgress").style.display = "block";
+    if(worker){worker.terminate();}
     worker = new Worker (window.URL.createObjectURL(blob));
     worker.postMessage({
         wanted      : Number(document.getElementById("focus_count").value), // wanted
@@ -88,7 +89,6 @@ function draw(){
     });
     
     worker.onmessage = function (e){
-        document.getElementById("myProgress").style.display = "block";
         if ( e.data.progress != null){
             document.getElementById("myBar").style.width = e.data.progress + "%";
             document.getElementById("myBarText").innerHTML = e.data.progress + "%";
@@ -125,7 +125,6 @@ function draw(){
         document.getElementById("runButton").innerHTML = "More samples";
         document.getElementById("sample").innerHTML = "&nbsp;&nbsp;&nbsp;Sample size: " + n.toLocaleString(undefined);
         helper = [];
-        worker.terminate();
     }
 }
 function showMe () {
