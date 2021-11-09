@@ -50,7 +50,7 @@ let simulChart = new Chart(myChart, {
                         });
                         goal[i] = data.indexOf(close[i]);
                     }
-                    return goal.includes(e.dataIndex);
+                    return goal.includes(e.dataIndex)?'auto':false;
                 },
                 formatter: function(e, t) {
                     return (e).toFixed(1) + " %\n" + t.dataIndex + " Pulls"

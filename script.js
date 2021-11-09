@@ -73,19 +73,19 @@ function draw(){
     if(worker){worker.terminate();}
     worker = new Worker (window.URL.createObjectURL(blob));
     worker.postMessage({
-        wanted      : Number(document.getElementById("focus_count").value), // wanted
-        sgUse       : document.getElementById("sg_use").checked,            // use starglitter?
-        goal        : document.getElementById('goal').value,                // character or weapon banner
-        pityCount   : Number(document.getElementById("pity_count").value),  // counter for 5 star pity
-        sgCount     : Number(document.getElementById("sg_count").value),    // starglitter count
-        offbanner   : document.getElementById("offbanner").checked,         // weapon banner offbanner 75%
-        c5s         : Number(document.getElementById("5s_c").value),        // constellation count 5 and 4 star
-        c4s1        : Number(document.getElementById("4s1").value),         
-        c4s2        : Number(document.getElementById("4s2").value),         
-        c4s3        : Number(document.getElementById("4s3").value),         
-        gcCheck     : document.getElementById("gcCheck").checked,           // guaranteed pity checkbox
-        gcCounter   : Number(document.getElementById("gcCounter").value),   // guaranteed pity for weapon banner
-        n           : smp                                                   // iterations
+        wanted      : Number(document.getElementById("focus_count").value),
+        sgUse       : document.getElementById("sg_use").checked,
+        goal        : document.getElementById('goal').value,
+        pityCount   : Number(document.getElementById("pity_count").value),
+        sgCount     : Number(document.getElementById("sg_count").value),
+        offbanner   : document.getElementById("offbanner").checked,
+        c5s         : Number(document.getElementById("5s_c").value),
+        c4s1        : Number(document.getElementById("4s1").value),
+        c4s2        : Number(document.getElementById("4s2").value),
+        c4s3        : Number(document.getElementById("4s3").value),
+        gcCheck     : document.getElementById("gcCheck").checked,
+        gcCounter   : Number(document.getElementById("gcCounter").value),
+        n           : smp
     });
     
     worker.onmessage = function (e){
@@ -224,7 +224,7 @@ function showLabel(){
                 });
                 goal[i] = data.indexOf(close[i]);
             }
-            return goal.includes(e.dataIndex);
+            return goal.includes(e.dataIndex)?'auto':false;
         },
         formatter: function(e, t) {
             return (e).toFixed(1) + " %\n" + t.dataIndex + " Pulls"
