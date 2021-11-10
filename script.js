@@ -53,14 +53,16 @@ var blob = new Blob([
     document.querySelector('#worker').textContent
 ], { type: "text/javascript" });
 
-var worker;
-var smp = 100000;
+var worker,
+    worker2, worker3, worker4
+    smp = 100000,
     xArr = [],
     yArr = [],
     helper = [],
     holdStarter = null,
     holdActive = false,
-    mouseDown = null;
+    mouseDown = null,
+    wCount = 0;
 
 function reset(){
     xArr = [];
@@ -70,24 +72,60 @@ function reset(){
 function draw(){
     document.getElementById("myBar").style.width = 0 + "%";
     document.getElementById("myProgress").style.display = "block";
-    if(worker){worker.terminate();}
+    if(worker){worker.terminate();worker2.terminate();worker3.terminate();worker4.terminate();}
     worker = new Worker (window.URL.createObjectURL(blob));
-    worker.postMessage({
-        wanted      : Number(document.getElementById("focus_count").value),
-        sgUse       : document.getElementById("sg_use").checked,
-        goal        : document.getElementById('goal').value,
-        pityCount   : Number(document.getElementById("pity_count").value),
-        sgCount     : Number(document.getElementById("sg_count").value),
-        offbanner   : document.getElementById("offbanner").checked,
-        c5s         : Number(document.getElementById("5s_c").value),
-        c4s1        : Number(document.getElementById("4s1").value),
-        c4s2        : Number(document.getElementById("4s2").value),
-        c4s3        : Number(document.getElementById("4s3").value),
-        gcCheck     : document.getElementById("gcCheck").checked,
-        gcCounter   : Number(document.getElementById("gcCounter").value),
-        n           : smp
-    });
-    
+    worker2 = new Worker (window.URL.createObjectURL(blob));
+    worker3 = new Worker (window.URL.createObjectURL(blob));
+    worker4 = new Worker (window.URL.createObjectURL(blob));
+    postToWorker(worker);
+    postToWorker(worker2);
+    postToWorker(worker3);
+    postToWorker(worker4);
+    worker2.onmessage = function(e){
+        if ( e.data.progress != null){return;}
+        for( let v = 0; v < e.data.pullsResult.length; v++){
+            if (xArr[v]==null){
+                xArr.push(v);
+                yArr.push(0);
+                helper.push(0);
+            }
+            yArr[v] += e.data.pullsResult[v];
+        }
+        wCount += 1;
+        if(wCount == 4){
+            assemble();
+        }
+    }
+    worker3.onmessage = function(e){
+        if ( e.data.progress != null){return;}
+        for( let v = 0; v < e.data.pullsResult.length; v++){
+            if (xArr[v]==null){
+                xArr.push(v);
+                yArr.push(0);
+                helper.push(0);
+            }
+            yArr[v] += e.data.pullsResult[v];
+        }
+        wCount += 1;
+        if(wCount == 4){
+            assemble();
+        }
+    }
+    worker4.onmessage = function(e){
+        if ( e.data.progress != null){return;}
+        for( let v = 0; v < e.data.pullsResult.length; v++){
+            if (xArr[v]==null){
+                xArr.push(v);
+                yArr.push(0);
+                helper.push(0);
+            }
+            yArr[v] += e.data.pullsResult[v];
+        }
+        wCount += 1;
+        if(wCount == 4){
+            assemble();
+        }
+    }
     worker.onmessage = function (e){
         if ( e.data.progress != null){
             document.getElementById("myBar").style.width = e.data.progress + "%";
@@ -102,30 +140,54 @@ function draw(){
             }
             yArr[v] += e.data.pullsResult[v];
         }
-        for ( v = 0; v < yArr.length; v++){
-            helper[v] = yArr[v];
+        wCount += 1;
+        if(wCount == 4){
+            assemble();
         }
-        cumulate(helper);
-        const n = helper[helper.length-1];
-        normalize(helper, n);
-        simulChart.data.labels = xArr;
-        simulChart.data.datasets[0].data = helper;
-        simulChart.options.scales.x.ticks = {
-            autoSkip: true,
-            callback: function(value, index, values) {
-                let newticks = Math.ceil(Math.max.apply(null, xArr)/100/10)*10;
-                if (value % newticks == 0){
-                    return value;
-                }
-            },
-            maxRotation : 0
-        };
-        simulChart.update('none');
-        document.getElementById("myProgress").style.display = "none";
-        document.getElementById("runButton").innerHTML = "More samples";
-        document.getElementById("sample").innerHTML = "&nbsp;&nbsp;&nbsp;Sample size: " + n.toLocaleString(undefined);
-        helper = [];
     }
+}
+function assemble(){
+    for ( v = 0; v < yArr.length; v++){
+        helper[v] = yArr[v];
+    }
+    cumulate(helper);
+    const n = helper[helper.length-1];
+    normalize(helper, n);
+    simulChart.data.labels = xArr;
+    simulChart.data.datasets[0].data = helper;
+    simulChart.options.scales.x.ticks = {
+        autoSkip: true,
+        callback: function(value, index, values) {
+            let newticks = Math.ceil(Math.max.apply(null, xArr)/100/10)*10;
+            if (value % newticks == 0){
+                return value;
+            }
+        },
+        maxRotation : 0
+    };
+    simulChart.update('none');
+    document.getElementById("myProgress").style.display = "none";
+    document.getElementById("runButton").innerHTML = "More samples";
+    document.getElementById("sample").innerHTML = "&nbsp;&nbsp;&nbsp;Sample size: " + n.toLocaleString(undefined);
+    helper = [];
+    wCount = 0;
+}
+function postToWorker(f){
+    f.postMessage({
+        wanted      : Number(document.getElementById("focus_count").value),
+        sgUse       : document.getElementById("sg_use").checked,
+        goal        : document.getElementById('goal').value,
+        pityCount   : Number(document.getElementById("pity_count").value),
+        sgCount     : Number(document.getElementById("sg_count").value),
+        offbanner   : document.getElementById("offbanner").checked,
+        c5s         : Number(document.getElementById("5s_c").value),
+        c4s1        : Number(document.getElementById("4s1").value),
+        c4s2        : Number(document.getElementById("4s2").value),
+        c4s3        : Number(document.getElementById("4s3").value),
+        gcCheck     : document.getElementById("gcCheck").checked,
+        gcCounter   : Number(document.getElementById("gcCounter").value),
+        n           : smp/4
+    });
 }
 function showMe () {
     var chbox = document.getElementById("sg_use");
