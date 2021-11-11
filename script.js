@@ -70,7 +70,12 @@ function reset(){
     document.getElementById("runButton").innerHTML = "Run";
 }
 function draw(){
-    if(worker || worker2 ||worker3 ||worker4){worker.terminate();worker2.terminate();worker3.terminate();worker4.terminate();}
+    if(worker){
+        worker.terminate();
+        worker2.terminate();
+        worker3.terminate();
+        worker4.terminate();
+    }
     document.getElementById("myBar").style.width = 0 + "%";
     document.getElementById("myProgress").style.display = "block";
     worker = new Worker (window.URL.createObjectURL(blob));
@@ -95,6 +100,7 @@ function draw(){
         if(wCount == 4){
             assemble();
         }
+        worker2.terminate();
     }
     worker3.onmessage = function(e){
         if ( e.data.progress != null){return;}
@@ -110,6 +116,7 @@ function draw(){
         if(wCount == 4){
             assemble();
         }
+        worker3.terminate();
     }
     worker4.onmessage = function(e){
         if ( e.data.progress != null){return;}
@@ -125,6 +132,7 @@ function draw(){
         if(wCount == 4){
             assemble();
         }
+        worker4.terminate();
     }
     worker.onmessage = function (e){
         if ( e.data.progress != null){
@@ -144,6 +152,7 @@ function draw(){
         if(wCount == 4){
             assemble();
         }
+        worker.terminate();
     }
 }
 function assemble(){
