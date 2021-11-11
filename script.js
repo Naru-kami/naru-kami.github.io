@@ -70,9 +70,9 @@ function reset(){
     document.getElementById("runButton").innerHTML = "Run";
 }
 function draw(){
+    if(worker || worker2 ||worker3 ||worker4){worker.terminate();worker2.terminate();worker3.terminate();worker4.terminate();}
     document.getElementById("myBar").style.width = 0 + "%";
     document.getElementById("myProgress").style.display = "block";
-    if(worker){worker.terminate();worker2.terminate();worker3.terminate();worker4.terminate();}
     worker = new Worker (window.URL.createObjectURL(blob));
     worker2 = new Worker (window.URL.createObjectURL(blob));
     worker3 = new Worker (window.URL.createObjectURL(blob));
