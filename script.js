@@ -52,6 +52,9 @@ function Action(){
 var blob = new Blob([
     document.querySelector('#worker').textContent
 ], { type: "text/javascript" });
+var blob2 = new Blob([
+    document.querySelector('#worker2').textContent
+], { type: "text/javascript" });
 
 var worker,
     worker2, worker3, worker4
@@ -79,15 +82,14 @@ function draw(){
     document.getElementById("myBar").style.width = 0 + "%";
     document.getElementById("myProgress").style.display = "block";
     worker = new Worker (window.URL.createObjectURL(blob));
-    worker2 = new Worker (window.URL.createObjectURL(blob));
-    worker3 = new Worker (window.URL.createObjectURL(blob));
-    worker4 = new Worker (window.URL.createObjectURL(blob));
+    worker2 = new Worker (window.URL.createObjectURL(blob2));
+    worker3 = new Worker (window.URL.createObjectURL(blob2));
+    worker4 = new Worker (window.URL.createObjectURL(blob2));
     postToWorker(worker);
     postToWorker(worker2);
     postToWorker(worker3);
     postToWorker(worker4);
     worker2.onmessage = function(e){
-        if ( e.data.progress != null){return;}
         for( let v = 0; v < e.data.pullsResult.length; v++){
             if (xArr[v]==null){
                 xArr.push(v);
@@ -103,7 +105,6 @@ function draw(){
         worker2.terminate();
     }
     worker3.onmessage = function(e){
-        if ( e.data.progress != null){return;}
         for( let v = 0; v < e.data.pullsResult.length; v++){
             if (xArr[v]==null){
                 xArr.push(v);
@@ -119,7 +120,6 @@ function draw(){
         worker3.terminate();
     }
     worker4.onmessage = function(e){
-        if ( e.data.progress != null){return;}
         for( let v = 0; v < e.data.pullsResult.length; v++){
             if (xArr[v]==null){
                 xArr.push(v);
