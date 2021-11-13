@@ -90,12 +90,16 @@ function draw(){
     postToWorker(worker3);
     postToWorker(worker4);
     worker2.onmessage = function(e){
-        for( let v = 0; v < e.data.pullsResult.length; v++){
-            if (xArr[v]==null){
-                xArr.push(v);
+        const len = e.data.pullsResult.length;
+        const ylen = yArr.length;
+        if (len > ylen){
+            for( let v = 0; v < (len - ylen); v++){
+                xArr.push(ylen+v);
                 yArr.push(0);
                 helper.push(0);
             }
+        }
+        for( let v = 0; v < len; v++){
             yArr[v] += e.data.pullsResult[v];
         }
         wCount += 1;
@@ -105,12 +109,16 @@ function draw(){
         worker2.terminate();
     }
     worker3.onmessage = function(e){
-        for( let v = 0; v < e.data.pullsResult.length; v++){
-            if (xArr[v]==null){
-                xArr.push(v);
+        const len = e.data.pullsResult.length;
+        const ylen = yArr.length;
+        if (len > ylen){
+            for( let v = 0; v < (len - ylen); v++){
+                xArr.push(ylen+v);
                 yArr.push(0);
                 helper.push(0);
             }
+        }
+        for( let v = 0; v < len; v++){
             yArr[v] += e.data.pullsResult[v];
         }
         wCount += 1;
@@ -120,12 +128,16 @@ function draw(){
         worker3.terminate();
     }
     worker4.onmessage = function(e){
-        for( let v = 0; v < e.data.pullsResult.length; v++){
-            if (xArr[v]==null){
-                xArr.push(v);
+        const len = e.data.pullsResult.length;
+        const ylen = yArr.length;
+        if (len > ylen){
+            for( let v = 0; v < (len - ylen); v++){
+                xArr.push(ylen+v);
                 yArr.push(0);
                 helper.push(0);
             }
+        }
+        for( let v = 0; v < len; v++){
             yArr[v] += e.data.pullsResult[v];
         }
         wCount += 1;
@@ -140,12 +152,16 @@ function draw(){
             document.getElementById("myBarText").innerHTML = e.data.progress + "%";
             return;
         }
-        for( let v = 0; v < e.data.pullsResult.length; v++){
-            if (xArr[v]==null){
-                xArr.push(v);
+        const len = e.data.pullsResult.length;
+        const ylen = yArr.length;
+        if (len > ylen){
+            for( let v = 0; v < (len - ylen); v++){
+                xArr.push(ylen+v);
                 yArr.push(0);
                 helper.push(0);
             }
+        }
+        for( let v = 0; v < len; v++){
             yArr[v] += e.data.pullsResult[v];
         }
         wCount += 1;
