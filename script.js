@@ -183,8 +183,7 @@ function assemble(){
     simulChart.options.scales.x.ticks = {
         autoSkip: true,
         callback: function(value, index, values) {
-            let newticks = Math.ceil(Math.max.apply(null, xArr)/100/10)*10;
-            if (value % newticks == 0){
+            if (value % 10 == 0){
                 return value;
             }
         },
