@@ -283,10 +283,13 @@ function Banner(u, v, w){
                     <input id="focus_count" type="number" class="small_number" value="1" min="0" max="7" required="true">
                 </div>
                 <div>
-                    <label for="pity_count">Pity count towards 5☆:</label>
-                    <input id="pity_count" type="number" class="large_number" value="1" min="1" max="90" required="true">
+                    <div class="tooltip">
+                        <label for="pity_count">Current 5☆ pity:</label>
+                        <span id="tooltiptext" class="tooltiptext">0 - 89</span>
+                    </div>
+                    <input id="pity_count" type="number" class="large_number" value="0" min="0" max="89" required="true">
                 </div><div>
-                    <label class="form-check-label" for="g_pity">Guaranteed pity?</label>
+                    <label for="gcCheck">Guaranteed pity?</label>
                     <input id="gcCheck" type="checkbox" class="form-check-input">
                 </div>
                 <div id="wpity" style="display: none;">
@@ -339,14 +342,15 @@ function Banner(u, v, w){
                 </div>
             <div>
                 <label id="sample" style="font-size: 14px;">&nbsp;&nbsp;&nbsp;Sample size: 0</label>
+                <button type="button" id="switch" class="btn">⇋</button>
             </div>
             <div style="font-size: 14px;">
                 <label>&nbsp;&nbsp;&nbsp;Set sample interval:&nbsp;&nbsp;</label>
-                <button type="button" id="-" class="btn" style="padding: 0px 3px 0px 3px;">-</button>
+                <button type="button" id="-" class="btn" style="padding: 0px 4px 0px 4px;">-</button>
                 <div style="display: inline-block; text-align: center; width: 4.5em;">
                     <label id="sampleSize" style="font-size: 14px;"></label>
                 </div>
-                <button type="button" id="+" class="btn" style="padding: 0px 3px 0px 3px;">+</button>
+                <button type="button" id="+" class="btn" style="padding: 0px 4px 0px 4px;">+</button>
             </div>
             <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>

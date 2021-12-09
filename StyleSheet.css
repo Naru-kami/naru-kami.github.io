@@ -54,7 +54,7 @@ input.large_number {
 }
 
 input[type=checkbox] {
-  transform: scale(1.2);
+  transform: scale(1.25);
   margin-left: .5em;
   background-color: #F8F9FA;
 }
@@ -113,4 +113,40 @@ img {
   margin: 0 auto;
   max-height: 100%;
   max-width: 100%;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted #36393F;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 50px;
+  background-color: #36393F;
+  font-size: 16px;
+  color: #F8F9FA;
+  text-align: center;
+  border-radius: 5px;
+  padding: 0px 0;
+  
+  position: absolute;
+  z-index: 1;
+  top: 100%;
+  left: 50%;
+  margin-left: -20px;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+#switch {
+  margin-top: 10px;
+  padding: 1px 3px 1px 3px;
+  float: right;
+  border-width: 1px;
+  border-radius: 4px;
+  border-color: #686868;
 }

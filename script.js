@@ -4,7 +4,6 @@ function Action(){
         runButton   = document.getElementById("runButton"),
         wanted      = document.getElementById("focus_count"),
         sgUse       = document.getElementById("sg_use"),
-        goal        = document.getElementById('goal'),
         pityCount   = document.getElementById("pity_count"),
         sgCount     = document.getElementById("sg_count"),
         offbanner   = document.getElementById("offbanner"),
@@ -17,16 +16,17 @@ function Action(){
         Minus       = document.getElementById("-"),
         Plus        = document.getElementById("+"),
         Canvas      = document.getElementById("myChart");
+        Switching   = document.getElementById("switch");
     
     goalButton.addEventListener("change", getOption);
     runButton.addEventListener("click", draw);
     gcCheck.addEventListener("click", getOption);
     sgUse.addEventListener("click", showMe);
+    Switching.addEventListener("click", switchTo);
 
     goalButton.addEventListener("change", reset);
     wanted.addEventListener("input", reset);
     sgUse.addEventListener("input", reset);
-    goal.addEventListener("input", reset);
     pityCount.addEventListener("input", reset);
     sgCount.addEventListener("input", reset);
     offbanner.addEventListener("input", reset);
@@ -36,6 +36,7 @@ function Action(){
     c4s3.addEventListener("input", reset);
     gcCheck.addEventListener("input", reset);
     gcCounter.addEventListener("input", reset);
+
     Minus.addEventListener("mousedown", minus);
     Plus.addEventListener("mousedown", plus);
     Minus.addEventListener("mouseup", mouseup);
@@ -61,16 +62,19 @@ var worker,
     smp = 100000,
     xArr = [],
     yArr = [],
-    helper = [],
     holdStarter = null,
     holdActive = false,
     mouseDown = null,
-    wCount = 0;
+    wCount = 0,
+    switcher = false;
 
 function reset(){
     xArr = [];
     yArr = [];
     document.getElementById("runButton").innerHTML = "Run";
+    simulChart.data.datasets[0].data = [];
+    simulChart.data.labels = [];
+    simulChart.update();
 }
 function draw(){
     if(worker){
@@ -96,7 +100,6 @@ function draw(){
             for( let v = 0; v < (len - ylen); v++){
                 xArr.push(ylen+v);
                 yArr.push(0);
-                helper.push(0);
             }
         }
         for( let v = 0; v < len; v++){
@@ -115,7 +118,6 @@ function draw(){
             for( let v = 0; v < (len - ylen); v++){
                 xArr.push(ylen+v);
                 yArr.push(0);
-                helper.push(0);
             }
         }
         for( let v = 0; v < len; v++){
@@ -134,7 +136,6 @@ function draw(){
             for( let v = 0; v < (len - ylen); v++){
                 xArr.push(ylen+v);
                 yArr.push(0);
-                helper.push(0);
             }
         }
         for( let v = 0; v < len; v++){
@@ -158,7 +159,6 @@ function draw(){
             for( let v = 0; v < (len - ylen); v++){
                 xArr.push(ylen+v);
                 yArr.push(0);
-                helper.push(0);
             }
         }
         for( let v = 0; v < len; v++){
@@ -172,14 +172,40 @@ function draw(){
     }
 }
 function assemble(){
-    for ( v = 0; v < yArr.length; v++){
-        helper[v] = yArr[v];
-    }
-    cumulate(helper);
-    const n = helper[helper.length-1];
-    normalize(helper, n);
+    const n = yArr.reduce((a, b) => a + b, 0);
     simulChart.data.labels = xArr;
-    simulChart.data.datasets[0].data = helper;
+    if (switcher){
+        yArr.forEach((element, index) => {
+            simulChart.data.datasets[0].data[index] = yArr[index]/n*100;
+        });
+        simulChart.options.scales.y = {
+            ticks: {
+                callback: function(value) {
+                    return value + "%";
+                }
+            },
+            max: Math.ceil(yArr.reduce((a,b) => a>b?a:b,0)/n*100),
+            beginAtZero: true
+        };
+    } else {
+        yArr.forEach((element, index) => {
+            if (index==0) {
+                simulChart.data.datasets[0].data[index] = yArr[index]/n*100;
+            } else {
+                simulChart.data.datasets[0].data[index] = yArr[index]/n*100 + simulChart.data.datasets[0].data[index-1];
+            }
+        });
+        simulChart.options.scales.y = {
+            ticks: {
+                stepSize: 10,
+                callback: function(value) {
+                    return value + "%";
+                }
+            },
+            max: 100,
+            beginAtZero: true
+        };
+    }
     simulChart.options.scales.x.ticks = {
         autoSkip: true,
         callback: function(value, index, values) {
@@ -193,7 +219,6 @@ function assemble(){
     document.getElementById("myProgress").style.display = "none";
     document.getElementById("runButton").innerHTML = "More samples";
     document.getElementById("sample").innerHTML = "&nbsp;&nbsp;&nbsp;Sample size: " + n.toLocaleString(undefined);
-    helper = [];
     wCount = 0;
 }
 function postToWorker(f){
@@ -201,7 +226,7 @@ function postToWorker(f){
         wanted      : Number(document.getElementById("focus_count").value),
         sgUse       : document.getElementById("sg_use").checked,
         goal        : document.getElementById('goal').value,
-        pityCount   : Number(document.getElementById("pity_count").value),
+        pityCount   : Number(document.getElementById("pity_count").value)+1,
         sgCount     : Number(document.getElementById("sg_count").value),
         offbanner   : document.getElementById("offbanner").checked,
         c5s         : Number(document.getElementById("5s_c").value),
@@ -225,7 +250,7 @@ function getOption() {
     var vis = "none";
     var vis2 = "block";
     var v = 0;
-    var pityMax = 90,
+    var pityMax = 89,
         focusMax = 7;
 
     if(document.getElementById('goal').value == 1 && document.getElementById('gcCheck').checked == true){
@@ -233,28 +258,17 @@ function getOption() {
     v = 2;
     }
     if(document.getElementById('goal').value == 1){
-        pityMax = 80;
+        pityMax = 79;
         focusMax = "";
         vis2 = "none";
     }
+    document.getElementById("tooltiptext").textContent = "0 - " + pityMax;
     document.getElementById("offbanner").checked = false;
     document.getElementById("const_input").style.display = vis2;
     document.getElementById("focus_count").max = focusMax;
     document.getElementById("pity_count").max = pityMax;
     document.getElementById("wpity").style.display = vis;
     document.getElementById("gcCounter").value = v;
-}
-function normalize(A, n){
-    for(let i=0; i<A.length; i++){
-        A[i] *= 100/n;
-    }
-    return A;
-}
-function cumulate(A){
-    for(let h = 1; h < A.length; h++){
-        A[h] += A[h-1];
-    }
-    return A;
 }
 function minus(){
     if (smp <= 0){return;}
@@ -297,37 +311,120 @@ function mouseup(event){
 }
 
 function hideLabel(){
-    simulChart.options.plugins.datalabels = {display: false};
-    simulChart.update("none");
+    if (true) {
+        simulChart.options.plugins.datalabels = {display: false};
+        simulChart.update("none");
+    }
 }
 function showLabel(){
-    simulChart.options.plugins.datalabels = {
-        display: function(e) {
-            let data = e.dataset.data, close = [], goal = [10, 25, 50, 75, 90];
-            for (let i=0; i<5; i++){
-                close [i] = data.reduce(function(prev, curr) {
-                    return (Math.abs(curr - goal[i]) < Math.abs(prev - goal[i]) ? curr : prev);
-                });
-                goal[i] = data.indexOf(close[i]);
+    if (switcher==false) {
+        simulChart.options.plugins.datalabels = {
+            display: function(e) {
+                let data = e.dataset.data, close = [], goal = [10, 25, 50, 75, 90];
+                for (let i=0; i<5; i++){
+                    close [i] = data.reduce(function(prev, curr) {
+                        return (Math.abs(curr - goal[i]) < Math.abs(prev - goal[i]) ? curr : prev);
+                    });
+                    goal[i] = data.indexOf(close[i]);
+                }
+                return goal.includes(e.dataIndex)?'auto':false;
+            },
+            formatter: function(e, t) {
+                return (e).toFixed(1) + " %\n" + t.dataIndex + " Pulls";
+            },
+            align: "225",
+            anchor: "center",
+            offset: 0,
+            backgroundColor: "#000",
+            borderRadius: 4,
+            color: "#fff",
+            opacity: 0.8,
+            padding: {
+                top: 4,
+                right: 4,
+                bottom: 0,
+                left: 4
             }
-            return goal.includes(e.dataIndex)?'auto':false;
-        },
-        formatter: function(e, t) {
-            return (e).toFixed(1) + " %\n" + t.dataIndex + " Pulls"
-        },
-        align: "225",
-        anchor: "center",
-        offset: 0,
-        backgroundColor: "#000",
-        borderRadius: 4,
-        color: "#fff",
-        opacity: 0.8,
-        padding: {
-            top: 4,
-            right: 4,
-            bottom: 0,
-            left: 4
-        }
-    };
-    simulChart.update("none");
+        };
+        simulChart.update("none");
+    }
+}
+function switchTo(){
+    const n = yArr.reduce((a, b) => a + b, 0);
+    if(switcher){
+        switcher = false;
+        yArr.forEach((element, index) => {
+            if (index==0) {
+                simulChart.data.datasets[0].data[index] = yArr[index]/n*100;
+            } else {
+                simulChart.data.datasets[0].data[index] = yArr[index]/n*100 + simulChart.data.datasets[0].data[index-1];
+            }
+        });
+        simulChart.options.scales.y = {
+            ticks: {
+                stepSize: 10,
+                callback: function(value) {
+                    return value + "%";
+                }
+            },
+            max: 100,
+            beginAtZero: true
+        };
+        simulChart.options.plugins.tooltip.callbacks = {
+            label: function(context) {
+                let label = "";
+                label += (context.label) + " pulls";
+                return label;
+            },
+            title: function(context) {
+                let title = "";
+                if (context[0].parsed.y == 0 || context[0].parsed.y >= 100){
+                    title += (context[0].parsed.y).toFixed(0) + " %";
+                }else if(context[0].parsed.y <= 99.8 && context[0].parsed.y >= 0.2){
+                    title += (context[0].parsed.y).toFixed(1) + " %";
+                } else if (context[0].parsed.y > 99.98 || context[0].parsed.y < 0.02) {
+                    title += (context[0].parsed.y).toFixed(3) + " %";
+                } else {
+                    title += (context[0].parsed.y).toFixed(2) + " %";
+                }
+                return title;
+            }
+        };
+        showLabel();
+    } else {
+        switcher = true;
+        yArr.forEach((element, index) => {
+            simulChart.data.datasets[0].data[index] = yArr[index]/n*100;
+        });
+        simulChart.options.scales.y = {
+            ticks: {
+                callback: function(value) {
+                    return value + "%";
+                }
+            },
+            max: Math.ceil(yArr[0]==null?1:(yArr.reduce((a,b) => a>b? a:b,0)/n*100)),
+            beginAtZero: true
+        };
+        simulChart.options.plugins.tooltip.callbacks = {
+            label: function(context) {
+                let label = "";
+                label += (context.label) + " pulls";
+                return label;
+            },
+            title: function(context) {
+                let title = "";
+                if (context[0].parsed.y == 0){
+                    title += (context[0].parsed.y).toFixed(0) + " %";
+                } else if (context[0].parsed.y >= 0.2){
+                    title += (context[0].parsed.y).toFixed(2) + " %";
+                } else if (context[0].parsed.y < 0.02) {
+                    title += (context[0].parsed.y).toFixed(3) + " %";
+                } else {
+                    title += (context[0].parsed.y).toFixed(2) + " %";
+                }
+                return title;
+            }
+        };
+        hideLabel();
+    }
 }
