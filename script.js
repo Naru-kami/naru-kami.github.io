@@ -73,7 +73,7 @@ function reset(){
     yArr = [];
     document.getElementById("runButton").innerHTML = "Run";
     simulChart.data.datasets[0].data = [];
-    simulChart.data.labels = [];
+    simulChart.data.labels = [0];
     simulChart.update();
 }
 function draw(){
