@@ -27,7 +27,7 @@ let simulChart = new Chart(myChart, {
                     },
                     title: function(context) {
                         let title = "";
-                        if (context[0].parsed.y == 0 || context[0].parsed.y >= 100){
+                        if (context[0].parsed.y == 0 || context[0].parsed.y >= 99.9999999999999){
                             title += (context[0].parsed.y).toFixed(0) + " %";
                         }else if(context[0].parsed.y <= 99.8 && context[0].parsed.y >= 0.2){
                             title += (context[0].parsed.y).toFixed(1) + " %";
