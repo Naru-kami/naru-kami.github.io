@@ -15,10 +15,20 @@ function Action(){
         gcCounter   = document.getElementById("gcCounter"),
         Minus       = document.getElementById("-"),
         Plus        = document.getElementById("+"),
-        Canvas      = document.getElementById("myChart");
-        Switching   = document.getElementById("switch");
+        Canvas      = document.getElementById("myChart"),
+        Switching   = document.getElementById("switch"),
+
+        gcCheck_w   = document.getElementById("gcCheck_w"),
+        gcCheck_c   = document.getElementById("gcCheck_c"),
+        pityCount_w = document.getElementById("pity_count_w"),
+        pityCount_c = document.getElementById("pity_count_c"),
+        focuscount_w= document.getElementById("focus_count_w"),
+        focuscount_c= document.getElementById("focus_count_c"),
+        gcCounter_w = document.getElementById("gcCounter_w"),
+        offbanner_w = document.getElementById("offbanner_w");
     
     goalButton.addEventListener("change", getOption);
+    gcCheck_w.addEventListener("change", getOption);
     runButton.addEventListener("click", draw);
     gcCheck.addEventListener("click", getOption);
     sgUse.addEventListener("click", showMe);
@@ -36,6 +46,14 @@ function Action(){
     c4s3.addEventListener("input", reset);
     gcCheck.addEventListener("input", reset);
     gcCounter.addEventListener("input", reset);
+    gcCheck_w.addEventListener("input", reset);
+    pityCount_w.addEventListener("input", reset);
+    focuscount_w.addEventListener("input", reset);
+    gcCheck_c.addEventListener("input", reset);
+    pityCount_c.addEventListener("input", reset);
+    focuscount_c.addEventListener("input", reset);
+    offbanner_w.addEventListener("input", reset);
+    gcCounter_w.addEventListener("input", reset);
 
     Minus.addEventListener("mousedown", minus);
     Plus.addEventListener("mousedown", plus);
@@ -222,21 +240,43 @@ function assemble(){
     wCount = 0;
 }
 function postToWorker(f){
-    f.postMessage({
-        wanted      : Number(document.getElementById("focus_count").value),
-        sgUse       : document.getElementById("sg_use").checked,
-        goal        : document.getElementById('goal').value,
-        pityCount   : Number(document.getElementById("pity_count").value)+1,
-        sgCount     : Number(document.getElementById("sg_count").value),
-        offbanner   : document.getElementById("offbanner").checked,
-        c5s         : Number(document.getElementById("5s_c").value),
-        c4s1        : Number(document.getElementById("4s1").value),
-        c4s2        : Number(document.getElementById("4s2").value),
-        c4s3        : Number(document.getElementById("4s3").value),
-        gcCheck     : document.getElementById("gcCheck").checked,
-        gcCounter   : Number(document.getElementById("gcCounter").value),
-        n           : smp/4
-    });
+    const d = Number(document.getElementById('goal').value);
+    if (d == 0 || d == 1){
+        f.postMessage({
+            wanted      : Number(document.getElementById("focus_count").value),
+            sgUse       : document.getElementById("sg_use").checked,
+            goal        : d,
+            pityCount   : Number(document.getElementById("pity_count").value)+1,
+            sgCount     : Number(document.getElementById("sg_count").value),
+            offbanner   : document.getElementById("offbanner").checked,
+            c5s         : Number(document.getElementById("5s_c").value),
+            c4s1        : Number(document.getElementById("4s1").value),
+            c4s2        : Number(document.getElementById("4s2").value),
+            c4s3        : Number(document.getElementById("4s3").value),
+            gcCheck     : document.getElementById("gcCheck").checked,
+            gcCounter   : Number(document.getElementById("gcCounter").value),
+            n           : smp/4
+    });}
+    else {
+        f.postMessage({
+            wanted      : Number(document.getElementById("focus_count_c").value),
+            wanted_w    : Number(document.getElementById("focus_count_w").value),
+            sgUse       : document.getElementById("sg_use").checked,
+            goal        : d,
+            pityCount_w : Number(document.getElementById("pity_count_w").value)+1,
+            pityCount   : Number(document.getElementById("pity_count_c").value)+1,
+            sgCount     : Number(document.getElementById("sg_count").value),
+            offbanner   : document.getElementById("offbanner_w").checked,
+            c5s         : Number(document.getElementById("5s_c").value),
+            c4s1        : Number(document.getElementById("4s1").value),
+            c4s2        : Number(document.getElementById("4s2").value),
+            c4s3        : Number(document.getElementById("4s3").value),
+            gcCheck     : document.getElementById("gcCheck_c").checked,
+            gcCheck_w   : document.getElementById("gcCheck_w").checked,
+            gcCounter   : Number(document.getElementById("gcCounter_w").value),
+            n           : smp/4
+        });
+    }
 }
 function showMe () {
     var chbox = document.getElementById("sg_use");
@@ -247,28 +287,48 @@ function showMe () {
     document.getElementById("starglitter").style.display = vis;
 }
 function getOption() {
-    var vis = "none";
-    var vis2 = "block";
-    var v = 0;
-    var pityMax = 89,
-        focusMax = 7;
+    const d = document.getElementById('goal').value;
+    if (d == 0 || d == 1){
+        var vis = "none";
+        var vis2 = "block";
+        var v = 0;
+        var pityMax = 89,
+            focusMax = 7;
 
-    if(document.getElementById('goal').value == 1 && document.getElementById('gcCheck').checked == true){
-    vis = "block";
-    v = 2;
+        if(d == 1 && document.getElementById('gcCheck').checked == true){
+        vis = "block";
+        v = 2;
+        }
+        if(d == 1){
+            pityMax = 79;
+            focusMax = "";
+            vis2 = "none";
+        }
+        document.getElementById("tooltiptext").textContent = "0 - " + pityMax;
+        document.getElementById("offbanner").checked = false;
+        document.getElementById("const_input").style.display = vis2;
+        document.getElementById("focus_count").max = focusMax;
+        document.getElementById("pity_count").max = pityMax;
+        document.getElementById("wpity").style.display = vis;
+        document.getElementById("gcCounter").value = v;
+
+        document.getElementById("selection").style.display = "block";
+        document.getElementById("selection2").style.display = "none";
+    }else{
+        var vis = "none";
+        var vis2 = "block";
+        var v = 0;
+        if (document.getElementById("gcCheck_w").checked){
+            vis = "block";
+            v = 2;
+        }
+        document.getElementById("offbanner_w").checked = false;
+        document.getElementById("const_input").style.display = "block";
+        document.getElementById("wpity_w").style.display = vis;
+        document.getElementById("gcCounter_w").value = v;
+        document.getElementById("selection").style.display = "none";
+        document.getElementById("selection2").style.display = "block";
     }
-    if(document.getElementById('goal').value == 1){
-        pityMax = 79;
-        focusMax = "";
-        vis2 = "none";
-    }
-    document.getElementById("tooltiptext").textContent = "0 - " + pityMax;
-    document.getElementById("offbanner").checked = false;
-    document.getElementById("const_input").style.display = vis2;
-    document.getElementById("focus_count").max = focusMax;
-    document.getElementById("pity_count").max = pityMax;
-    document.getElementById("wpity").style.display = vis;
-    document.getElementById("gcCounter").value = v;
 }
 function minus(){
     if (smp <= 0){return;}
