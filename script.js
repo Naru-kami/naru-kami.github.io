@@ -95,6 +95,7 @@ function reset(){
     simulChart.update();
 }
 function draw(){
+    wCount = 0;
     if(worker){
         worker.terminate();
         worker2.terminate();
@@ -237,7 +238,6 @@ function assemble(){
     document.getElementById("myProgress").style.display = "none";
     document.getElementById("runButton").innerHTML = "More samples";
     document.getElementById("sample").innerHTML = "&nbsp;&nbsp;&nbsp;Sample size: " + n.toLocaleString(undefined);
-    wCount = 0;
 }
 function postToWorker(f){
     const d = Number(document.getElementById('goal').value);
