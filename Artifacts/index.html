@@ -7,14 +7,21 @@
     <title>About</title>
     <link rel="icon" sizes="128x128" type="image/x-icon" href="../favicon.ico">
     <link href="../StyleSheet.css" rel="stylesheet">
+    <!--<script id="worker" type="javascript/worker">
+self.onmessage = function (e) {
+
+}
+    </script> -->
+    <script src="temp.js" type="text/javascript"></script>
 </head>
 <body>
     <div id=body>
         <h3>Statistics for Genshin Impacts artifact system</h3>
     </div>
     <div id=content>
-        <div style="display: inline-block; width: 49%;">
-            <select id="goal" style="color: #686868;">
+        <p style="margin: 0px; width: 147px;">Artifact Type</p>
+        <div>
+            <select id="type" style="color: #686868;">
                 <option value="0">Flower</option>
                 <option value="1">Feather</option>
                 <option value="2">Sands</option>
@@ -22,14 +29,117 @@
                 <option value="4">Circlet</option>
             </select>
         </div>
-        <div style="display: inline-block; vertical-align:top; width: 49%;">
-            <select id="goal" style="color: #686868;">
-                <option value="0">Flower</option>
-                <option value="1">Feather</option>
-                <option value="2">Sands</option>
-                <option value="3">Goblet</option>
-                <option value="4">Circlet</option>
+        <p style="margin: 0px; width: 147px;">Main Stat</p>
+        <div>
+            <select id="main" style="color: #686868;">
+                <option value="1">Flat HP</option>
+                <option value="2">Flat ATK</option>
+                <option value="3">Flat DEF</option>
+                <option value="4">HP%</option>
+                <option value="5">ATK%</option>
+                <option value="6">DEF%</option>
+                <option value="7">Energy Recharge</option>
+                <option value="8">Elemental Mastery</option>
+                <option value="9">Critical Rate</option>
+                <option value="10">Critical Damage</option>
+                <option value="11">Healing Bonus</option>
+                <option value="12">Elemental Bonus Damage</option>
             </select>
         </div>
+        <p style="margin: 0px; width: 157px;display: inline-block;">Substats</p>
+        <p style="margin: 0px; display: inline-block;">Upgrade Rolls</p>
+        <div>
+            <select id="sub1" style="color: #686868; margin-right: 10px;">
+                <option value="1">Flat HP</option>
+                <option value="2">Flat ATK</option>
+                <option value="3">Flat DEF</option>
+                <option value="4">HP%</option>
+                <option value="5" selected="1">ATK%</option>
+                <option value="6">DEF%</option>
+                <option value="7">Energy Recharge</option>
+                <option value="8">Elemental Mastery</option>
+                <option value="9">Critical Rate</option>
+                <option value="10">Critical Damage</option>
+            </select>
+            <select id="compare1" style="color: #686868; width: 75px;">
+                <option value="1">At least</option>
+                <option value="2">Equal to</option>
+                <option value="3">At most</option>
+            </select>
+            <input id="roll1" type="number" class="small_number" value="0" min="0" max="5" required="true">
+        </div>
+        <div>
+            <select id="sub2" style="color: #686868; margin-right: 10px;">
+                <option value="1">Flat HP</option>
+                <option value="2">Flat ATK</option>
+                <option value="3">Flat DEF</option>
+                <option value="4">HP%</option>
+                <option value="5">ATK%</option>
+                <option value="6">DEF%</option>
+                <option value="7">Energy Recharge</option>
+                <option value="8" selected="1">Elemental Mastery</option>
+                <option value="9">Critical Rate</option>
+                <option value="10">Critical Damage</option>
+            </select>
+            <select id="compare2" style="color: #686868; width: 75px;">
+                <option value="1">At least</option>
+                <option value="2">Equal to</option>
+                <option value="3">At most</option>
+            </select>
+            <input id="roll2" type="number" class="small_number" value="0" min="0" max="5" required="true">
+        </div>
+        <div>
+            <select id="sub3" style="color: #686868; margin-right: 10px;">
+                <option value="1">Flat HP</option>
+                <option value="2">Flat ATK</option>
+                <option value="3">Flat DEF</option>
+                <option value="4">HP%</option>
+                <option value="5">ATK%</option>
+                <option value="6">DEF%</option>
+                <option value="7">Energy Recharge</option>
+                <option value="8">Elemental Mastery</option>
+                <option value="9" selected="1">Critical Rate</option>
+                <option value="10">Critical Damage</option>
+            </select>
+            <select id="compare3" style="color: #686868; width: 75px;">
+                <option value="1">At least</option>
+                <option value="2">Equal to</option>
+                <option value="3">At most</option>
+            </select>
+            <input id="roll3" type="number" class="small_number" value="0" min="0" max="5" required="true">
+        </div>
+        <div>
+            <select id="sub4" style="color: #686868; margin-right: 10px;">
+                <option value="1">Flat HP</option>
+                <option value="2">Flat ATK</option>
+                <option value="3">Flat DEF</option>
+                <option value="4">HP%</option>
+                <option value="5">ATK%</option>
+                <option value="6">DEF%</option>
+                <option value="7">Energy Recharge</option>
+                <option value="8">Elemental Mastery</option>
+                <option value="9">Critical Rate</option>
+                <option value="10" selected="1">Critical Damage</option>
+            </select>
+            <select id="compare4" style="color: #686868; width: 75px;">
+                <option value="1">At least</option>
+                <option value="2">Equal to</option>
+                <option value="3">At most</option>
+            </select>
+            <input id="roll4" type="number" class="small_number" value="0" min="0" max="5" required="true">
+        </div>
+        <div style="margin-top: 10px;">
+            <label for="resin">Resin per Day:</label>
+            <input id="resin" type="number" class="large_number" value="180" min="180" max="540" step="60">
+        </div>
+        <div id="simul_button" style="margin: 10px 0px 10px 0px; width: 100%;">
+            <button type="button" id="runButton" class="btn btn-primary mt-2" style="color: #686868; border-radius: 5px; border-width: 1px; height: 21px;">Run</button>
+        </div>
+        <div class="container" style="width: 100%;">
+            <canvas id="myChart" width="720" height="455"></canvas>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
+        <script src="chart.js" type="text/javascript"></script>
     </div>
 </body>
