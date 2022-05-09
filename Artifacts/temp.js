@@ -1,97 +1,143 @@
-function randInt(min,max){
-    var x = Math.random();
-    return Math.floor( x * ( max + 1 - min ) + min );
+function Binom(k, n, p){
+    if(k > n || k < 0){
+        return 0;
+    }
+    if(k == 0){
+        return pow(1.0-p, double(n));
+    }
+    return Binom(k-1, n, p) * (n-k+1.0) / double(k) * p / (1.0-p) ;
 }
 
-function choices(Arr, weights){
-    var n = 0, wc = 0, x = 0;
-    for(let i = 0; i < weights.length; i++){
-        n += weights[i];
+function BinomCDF(k, n, p){
+    if(k > n || k < 0){
+        return 0;
     }
-    x = randInt(0,n-1);
-    for(let i = 0; i < weights.length; i++){
-        wc += weights[i];
-        if(x < wc){
-            return Arr[i];
+    var sum = 0;
+    for(let i = 0; i <= k; i++){
+        sum += Binom(i, n, p);
+    }
+    return sum;
+}
+
+function frac(k){
+    if(k == 0){
+        return 1;
+    } else {
+        return k*frac(k-1);
+    }
+}
+
+function swap(arr, a, b){
+    var c = arr[a];
+    arr[a] = arr[b];
+    arr[b] = c;
+    return arr;
+}
+
+function permutate(k, sub, mainstat){
+    if (k == 1){
+        artichance += advancedodds(mainstat, sub.slice()) / (frac(sub.filter(e => e == -1).length));
+    }
+    else{
+        permutate(k - 1, sub, mainstat);
+        for(let i = 0; i < k-1; i ++){
+            if( k % 2 == 0)
+                swap(sub,i,k-1);
+            else
+                swap(sub,0,k-1);
+            permutate(k - 1, sub, mainstat);
         }
     }
 }
 
-function callSubstats(Arr, n){
-    var roll,
-        substats = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 
-        subweights = [150, 150, 150, 100, 100, 100, 100, 100, 75, 75];
-                    // [hp , atk, def, hp%,atk%,def%, ER%, EM ,cr%,cd%]
-    if (n >= 1 && n <=10){
-        subweights[substats.indexOf(n)] = 0;
+function calcodds(mainstat, arr) {
+    if(arr.includes(mainstat[1]))
+        return 0;
+    var chance=1;//hp , atk, def, hp%,atk%,def%, ER%, EM ,cr%,cd%
+    var weights = [150, 150, 150, 100, 100, 100, 100, 100, 75, 75];
+    if ( (mainstat[1] < 10) && (mainstat[1] >= 0) ){
+        weights[mainstat[1]] = 0;
     }
-    for (let i = 2 ; i < 6 ; i++){
-        roll = choices(substats, subweights, 10);
-        Arr[i] = roll;
-        subweights[substats.indexOf(roll)] = 0;
+    for (let i = 0; i < arr.length; i++){
+        chance *= weights[arr[i]] / (weights.reduce( (a,b) => a + b, 0));
+        weights[arr[i]] = 0;
     }
+    return chance;
 }
 
-function callArtifact(Arr){
-    var x = randInt(1,5);
-    Arr[0] = x;
-    switch (x){
-        case 1: { Arr[1] = x; callSubstats(Arr,x); break;}
-        case 2: { Arr[1] = x; callSubstats(Arr,x); break;}
-        case 3: {
-            let v = [1,2,3,4,5,6,7,8,9,10];
-            let w = [0,0,0,1334,1333,1333,500,500,0,0];
-            Arr[1] = choices(v,w,10);
-            callSubstats(Arr,Arr[1]);
-            break;
-        }
-        case 4: {
-            let v = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17];
-            let w = [0,0,0,850,850,800,0,100,0,0,200,200,200,200,200,200,200];
-            Arr[1] = choices(v,w,17);
-            callSubstats(Arr,Arr[1]);
-            break;
-        }
-        case 5: {
-            let v = [1,2,3,4,5,6,7,8,9,10,11];
-            let w = [0,0,0,1100,1100,1100,0,200,500,500,500];
-            Arr[1] = choices(v,w,11);
-            callSubstats(Arr,Arr[1]);
-            break;
-        }     
-    }
-}
-
-function upgradeArtifact(){
-    var upgrade = [0,0,0,0];
-    for (let i = 0 ; i < 5; i++){
-        upgrade[randInt(0,4)]++;
-    }
-    return upgrade;
-}
-
-var results = [0], artif = [0,0,0,0,0,0];
-const c = 3;
-for(let i = 0; i < 1e5; i++){
-    let check = 0;
-    let counter = 0;
-    while(check < c){
-        counter++;
-        artif = [0,0,0,0,0,0];
-        callArtifact(artif);
-        if(artif[0] == 1 && artif[1] == 1){
-            for(let j = 2; j < 6; j++){
-                if(artif[j] == 5 || artif[j] == 9 || artif[j] == 10){
-                    check++;
+function advancedodds(mainstat, arr){
+    if (arr.includes(-1) == false)
+        return calcodds(mainstat, arr);
+    else{
+        var chance = 0;
+        let hmax = arr[0] == -1 ? 10 : 1;
+        let imax = arr[1] == -1 ? 10 : 1;
+        let jmax = arr[2] == -1 ? 10 : 1;
+        let kmax = arr[3] == -1 ? 10 : 1;
+        for(let h = 0; h < hmax; h++){
+            for(let i = 0; i < imax; i++){
+                for(let j = 0; j < jmax; j++){
+                    for(let k = 0; k < kmax; k++){
+                        arr[0] = hmax == 1 ? arr[0] : h;
+                        arr[1] = imax == 1 ? arr[1] : i;
+                        arr[2] = jmax == 1 ? arr[2] : j;
+                        arr[3] = kmax == 1 ? arr[3] : k;
+                        chance += calcodds(mainstat, arr);
+                    }
                 }
             }
         }
-        check = (check == c) ? c : 0;
+        return chance;
     }
-    if(results[i] == null){
-        for (let k = results.length; k <= counter; k++){
-            results.push(0);
-        }
+}
+
+function calcmainodds(mainstat){
+    var mainchance = 0.2;
+    var mainweights;
+    switch(mainstat[0]){
+        case 0:
+            break;
+        case 1:
+            break;
+        case 2:
+            mainweights = [0, 0, 0, 1334, 1333, 1333, 500, 500, 0, 0];
+            mainchance *= mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
+            break;
+        case 3:
+            mainweights = [0, 0, 0, 850, 850, 800, 0, 100, 0, 0, 200, 200, 200, 200, 200, 200, 200];
+            console.log(mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0)));
+            mainchance *= mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
+            break;
+        case 4:
+            mainweights = [0, 0, 0, 1100, 1100, 1100, 0, 200, 500, 500, 500];
+            mainchance *= mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
+            break;
     }
-    results[counter]++;
+    return mainchance;
+}
+
+var artichance;
+
+function main(){
+    var subbase = [0,0,0,0];
+    var mainbase = [0,0];
+    mainbase[0] = Number(document.getElementById("type").value);
+    mainbase[1] = Number(document.getElementById("main").value);
+    subbase[0] = Number(document.getElementById("sub1").value);
+    subbase[1] = Number(document.getElementById("sub2").value);
+    subbase[2] = Number(document.getElementById("sub3").value);
+    subbase[3] = Number(document.getElementById("sub4").value);
+    artichance = 0;
+    console.log(mainbase, subbase);
+    permutate(subbase.length, subbase, mainbase);
+    artichance *= calcmainodds(mainbase);
+    console.log(artichance*100);
+    document.getElementById("showchance").innerHTML = artichance*100 + "%";
+}
+
+
+document.addEventListener('DOMContentLoaded', Action);
+function Action(){
+    var run = document.getElementById("runButton");
+    run.addEventListener("click", main);
 }
