@@ -13,6 +13,7 @@ self.onmessage = function (e) {
 }
     </script> -->
     <script src="temp.js" type="text/javascript"></script>
+    <script src="pagefunctions.js" type="text/javascript"></script>
 </head>
 <body>
     <div id=body>
@@ -33,17 +34,17 @@ self.onmessage = function (e) {
         <div>
             <select id="main" style="color: #686868;">
                 <option value="0" selected>Flat HP</option>
-                <option value="1">Flat ATK</option>
-                <option value="2">Flat DEF</option>
-                <option value="3">HP%</option>
-                <option value="4">ATK%</option>
-                <option value="5">DEF%</option>
-                <option value="6">Energy Recharge</option>
-                <option value="7">Elemental Mastery</option>
-                <option value="8">Critical Rate</option>
-                <option value="9">Critical Damage</option>
-                <option value="10">Healing Bonus</option>
-                <option value="11">Elemental Bonus Damage</option>
+                <option value="1" hidden>Flat ATK</option>
+                <option value="2" hidden>Flat DEF</option>
+                <option value="3" hidden>HP%</option>
+                <option value="4" hidden>ATK%</option>
+                <option value="5" hidden>DEF%</option>
+                <option value="6" hidden>Energy Recharge%</option>
+                <option value="7" hidden>Elemental Mastery</option>
+                <option value="8" hidden>Critical Rate%</option>
+                <option value="9" hidden>Critical Damage%</option>
+                <option value="10" hidden>Healing Bonus%</option>
+                <option value="11" hidden>Elemental / Physical Bonus Damage%</option>
             </select>
         </div>
         <p style="margin: 0px; width: 157px;display: inline-block;">Substats</p>
@@ -51,16 +52,16 @@ self.onmessage = function (e) {
         <div>
             <select id="sub1" style="color: #686868; margin-right: 10px;">
                 <option value="-1">- - - Any - - -</option>
-                <option value="0">Flat HP</option>
+                <option value="0" hidden>Flat HP</option>
                 <option value="1">Flat ATK</option>
                 <option value="2">Flat DEF</option>
                 <option value="3">HP%</option>
                 <option value="4" selected>ATK%</option>
                 <option value="5">DEF%</option>
-                <option value="6">Energy Recharge</option>
+                <option value="6">Energy Recharge%</option>
                 <option value="7">Elemental Mastery</option>
-                <option value="8">Critical Rate</option>
-                <option value="9">Critical Damage</option>
+                <option value="8">Critical Rate%</option>
+                <option value="9">Critical Damage%</option>
             </select>
             <select id="compare1" style="color: #686868; width: 75px;">
                 <option value="1">At least</option>
@@ -72,16 +73,16 @@ self.onmessage = function (e) {
         <div>
             <select id="sub2" style="color: #686868; margin-right: 10px;">
                 <option value="-1">- - - Any - - -</option>
-                <option value="0">Flat HP</option>
+                <option value="0" hidden>Flat HP</option>
                 <option value="1">Flat ATK</option>
                 <option value="2">Flat DEF</option>
                 <option value="3">HP%</option>
                 <option value="4">ATK%</option>
                 <option value="5">DEF%</option>
-                <option value="6">Energy Recharge</option>
+                <option value="6">Energy Recharge%</option>
                 <option value="7" selected>Elemental Mastery</option>
-                <option value="8">Critical Rate</option>
-                <option value="9">Critical Damage</option>
+                <option value="8">Critical Rate%</option>
+                <option value="9">Critical Damage%</option>
             </select>
             <select id="compare2" style="color: #686868; width: 75px;">
                 <option value="1">At least</option>
@@ -93,16 +94,16 @@ self.onmessage = function (e) {
         <div>
             <select id="sub3" style="color: #686868; margin-right: 10px;">
                 <option value="-1">- - - Any - - -</option>
-                <option value="0">Flat HP</option>
+                <option value="0" hidden>Flat HP</option>
                 <option value="1">Flat ATK</option>
                 <option value="2">Flat DEF</option>
                 <option value="3">HP%</option>
                 <option value="4">ATK%</option>
                 <option value="5">DEF%</option>
-                <option value="6">Energy Recharge</option>
+                <option value="6">Energy Recharge%</option>
                 <option value="7">Elemental Mastery</option>
-                <option value="8" selected>Critical Rate</option>
-                <option value="9">Critical Damage</option>
+                <option value="8" selected>Critical Rate%</option>
+                <option value="9">Critical Damage%</option>
             </select>
             <select id="compare3" style="color: #686868; width: 75px;">
                 <option value="1">At least</option>
@@ -114,16 +115,16 @@ self.onmessage = function (e) {
         <div>
             <select id="sub4" style="color: #686868; margin-right: 10px;">
                 <option value="-1">- - - Any - - -</option>
-                <option value="0">Flat HP</option>
+                <option value="0" hidden>Flat HP</option>
                 <option value="1">Flat ATK</option>
                 <option value="2">Flat DEF</option>
                 <option value="3">HP%</option>
                 <option value="4">ATK%</option>
                 <option value="5">DEF%</option>
-                <option value="6">Energy Recharge</option>
+                <option value="6">Energy Recharge%</option>
                 <option value="7">Elemental Mastery</option>
-                <option value="8">Critical Rate</option>
-                <option value="9" selected>Critical Damage</option>
+                <option value="8">Critical Rate%</option>
+                <option value="9" selected>Critical Damage%</option>
             </select>
             <select id="compare4" style="color: #686868; width: 75px;">
                 <option value="1">At least</option>
@@ -146,11 +147,15 @@ self.onmessage = function (e) {
         <div class="container" style="width: 100%;">
             <canvas id="myChart" width="720" height="455"></canvas>
         </div>
+        <div>
+            <button type="button" id="stat" class="btn">▼</button>
+            <div id="showchance" style="display: none; margin: 5px 0px 0px 20px; border: 1px solid; border-radius: 4px; border-color: #686868;"> 
+                <div id="basestat" style="margin-left: 5px;">Base Artifact chance: </div>
+            </div>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
         <script src="chart.js" type="text/javascript"></script>
-        <div id = "showchance">
-            
-        </div>
+        
     </div>
 </body>
