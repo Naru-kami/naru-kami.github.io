@@ -133,6 +133,7 @@ function main(){
     artichance *= calcmainodds(mainbase);
     console.log(artichance*100);
     document.getElementById("basestat").innerHTML = "Base Artifact chance:  " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
+    
 }
 
 
