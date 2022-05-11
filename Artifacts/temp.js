@@ -3,17 +3,14 @@ function Binom(k, n, p){
         return 0;
     }
     if(k == 0){
-        return pow(1.0-p, double(n));
+        return Math.pow(1.0-p, (n));
     }
-    return Binom(k-1, n, p) * (n-k+1.0) / double(k) * p / (1.0-p) ;
+    return Binom(k-1, n, p) * (n-k+1.0) / (k) * p / (1.0-p) ;
 }
 
-function BinomCDF(k, n, p){
-    if(k > n || k < 0){
-        return 0;
-    }
+function BinomCDF(start, n, p){
     var sum = 0;
-    for(let i = 0; i <= k; i++){
+    for(let i = start; i <= n; i++){
         sum += Binom(i, n, p);
     }
     return sum;
@@ -116,6 +113,24 @@ function calcmainodds(mainstat){
     return mainchance;
 }
 
+function populate(){
+    var data = [];
+    var label = [];
+    var chance = 0;
+    var n = 0;
+    var trials = document.getElementById('resinA').value/document.getElementById('resinD').value;
+    while(chance <= 0.99){
+        chance = BinomCDF(1, n, artichance);
+        data.push(chance*100);
+        label.push(n*trials);
+        console.log(chance);
+        n++;
+    }
+    simulChart.data.datasets[0].data = data;
+    simulChart.data.labels = label;
+    simulChart.update('none');
+}
+
 var artichance;
 
 function main(){
@@ -133,7 +148,7 @@ function main(){
     artichance *= calcmainodds(mainbase);
     console.log(artichance*100);
     document.getElementById("basestat").innerHTML = "Base Artifact chance:  " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
-    
+    populate();
 }
 
 
