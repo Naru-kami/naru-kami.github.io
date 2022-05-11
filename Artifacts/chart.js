@@ -53,7 +53,7 @@ let simulChart = new Chart(myChart, {
                     return goal.includes(e.dataIndex)?'auto':false;
                 },
                 formatter: function(e, t) {
-                    return (e).toFixed(1) + " %\n" + t.dataIndex + " Pulls"
+                    return (e).toFixed(1) + " %\n" + (t.dataIndex*document.getElementById('resinA').value/document.getElementById('resinD').value).toFixed(2) + " Days"
                 },
                 align: "225",
                 anchor: "center",

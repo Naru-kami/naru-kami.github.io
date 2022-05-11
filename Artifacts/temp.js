@@ -119,7 +119,7 @@ function populate(){
     var chance = 0;
     var n = 0;
     var trials = document.getElementById('resinA').value/document.getElementById('resinD').value;
-    while(chance <= 0.99){
+    while(chance <= 0.90){
         chance = BinomCDF(1, n, artichance);
         data.push(chance*100);
         label.push(n*trials);
@@ -128,6 +128,15 @@ function populate(){
     }
     simulChart.data.datasets[0].data = data;
     simulChart.data.labels = label;
+    simulChart.options.scales.x.ticks = {
+        autoSkip: true,
+        callback: function(value, index, values) {
+            if (value % 10 == 0){
+                return (value*document.getElementById('resinA').value/document.getElementById('resinD').value).toFixed(1);
+            }
+        },
+        maxRotation : 0
+    };
     simulChart.update('none');
 }
 
