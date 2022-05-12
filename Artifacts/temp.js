@@ -113,9 +113,16 @@ function calcmainodds(mainstat){
     return mainchance;
 }
 
+function exit(){
+    if (worker) {
+        worker.terminate();
+        document.getElementById("myProgress").style.display = "none";
+    }
+}
+
 function populate(){
-    var data = [];
-    var label = [];
+    document.getElementById("myBar").style.width = 0 + "%";
+    document.getElementById("myProgress").style.display = "block";
     var trials = document.getElementById('resinA').value/document.getElementById('resinD').value;
     if (worker){
         worker.terminate();
@@ -126,6 +133,11 @@ function populate(){
         trials: trials
     })
     worker.onmessage = function (e) {
+        if ( e.data.progress != null){
+            document.getElementById("myBar").style.width = e.data.progress + "%";
+            document.getElementById("myBarText").innerHTML = e.data.progress.toFixed(1) + "%";
+            return;
+        }
         simulChart.data.datasets[0].data = e.data.data;
         simulChart.data.labels = e.data.label;
         simulChart.options.scales.x.ticks = {
@@ -138,6 +150,7 @@ function populate(){
             maxRotation : 0
         };
         simulChart.update('none');
+        document.getElementById("myProgress").style.display = "none";
     }
 }
 

@@ -31,10 +31,11 @@ self.onmessage = function (e) {
         }
         return sum;
     }
-    while (chance <= 0.90) {
+    while (chance <= 0.999) {
         chance = BinomCDF(1, n, artichance);
         data.push(chance*100);
         label.push(n*trials);
+        postMessage({progress: chance*100});
         n++;
     }
     postMessage({
@@ -177,6 +178,11 @@ self.onmessage = function (e) {
         </div>
         <div class="container" style="width: 100%;">
             <canvas id="myChart" width="720" height="455"></canvas>
+        </div>
+        <div id="myProgress" style="position : relative; display: none; float: left; width: 100%;">
+            <div id="myBarBackground" style="position : absolute; top:0; left:0;"></div>
+            <div id="myBar" style="position : absolute; top:0; left:0;"></div>
+            <div id="myBarText" style="position : absolute; top:0; left:0;">0%</div>
         </div>
         <div>
             <button type="button" id="stat" class="btn">▼</button>
