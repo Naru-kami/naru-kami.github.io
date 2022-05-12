@@ -7,11 +7,42 @@
     <title>About</title>
     <link rel="icon" sizes="128x128" type="image/x-icon" href="../favicon.ico">
     <link href="../StyleSheet.css" rel="stylesheet">
-    <!--<script id="worker" type="javascript/worker">
+    <script id="worker" type="javascript/worker">
 self.onmessage = function (e) {
-
+    var data = [];
+    var label = [];
+    var chance = 0;
+    var n = 0;
+    const artichance = e.data.artichance;
+    const trials = e.data.trials;
+    function Binom(k, n, p) {
+        if(k > n || k < 0){
+            return 0;
+        }
+        if(k == 0){
+            return Math.pow(1.0-p, (n));
+        }
+        return Binom(k-1, n, p) * (n-k+1.0) / (k) * p / (1.0-p) ;
+    }
+    function BinomCDF(start, n, p) {
+        var sum = 0;
+        for(let i = start; i <= n; i++){
+            sum += Binom(i, n, p);
+        }
+        return sum;
+    }
+    while (chance <= 0.90) {
+        chance = BinomCDF(1, n, artichance);
+        data.push(chance*100);
+        label.push(n*trials);
+        n++;
+    }
+    postMessage({
+        data : data,
+        label : label
+    });
 }
-    </script> -->
+    </script>
     <script src="temp.js" type="text/javascript"></script>
     <script src="pagefunctions.js" type="text/javascript"></script>
 </head>

@@ -116,31 +116,35 @@ function calcmainodds(mainstat){
 function populate(){
     var data = [];
     var label = [];
-    var chance = 0;
-    var n = 0;
     var trials = document.getElementById('resinA').value/document.getElementById('resinD').value;
-    while(chance <= 0.90){
-        chance = BinomCDF(1, n, artichance);
-        data.push(chance*100);
-        label.push(n*trials);
-        console.log(chance);
-        n++;
+    if (worker){
+        worker.terminate();
     }
-    simulChart.data.datasets[0].data = data;
-    simulChart.data.labels = label;
-    simulChart.options.scales.x.ticks = {
-        autoSkip: true,
-        callback: function(value, index, values) {
-            if (value % 10 == 0){
-                return (value*document.getElementById('resinA').value/document.getElementById('resinD').value).toFixed(1);
-            }
-        },
-        maxRotation : 0
-    };
-    simulChart.update('none');
+    worker = new Worker (window.URL.createObjectURL(blob));
+    worker.postMessage({
+        artichance: artichance,
+        trials: trials
+    })
+    worker.onmessage = function (e) {
+        simulChart.data.datasets[0].data = e.data.data;
+        simulChart.data.labels = e.data.label;
+        simulChart.options.scales.x.ticks = {
+            autoSkip: true,
+            callback: function(value, index, values) {
+                let r = (value*document.getElementById('resinA').value/document.getElementById('resinD').value);
+                if (r % 5 == 0) 
+                    return r;
+            },
+            maxRotation : 0
+        };
+        simulChart.update('none');
+    }
 }
 
-var artichance;
+var blob = new Blob([
+    document.querySelector('#worker').textContent
+], { type: "text/javascript" });
+var artichance, worker;
 
 function main(){
     var subbase = [0,0,0,0];

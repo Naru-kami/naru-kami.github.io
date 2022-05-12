@@ -3,7 +3,7 @@ let simulChart = new Chart(myChart, {
     type:"line",
     data:{
         labels: [0],
-        datasets:[{
+        datasets: [{
             label: "",
             data: [],
             fill : true,
@@ -13,23 +13,26 @@ let simulChart = new Chart(myChart, {
         }]
     },
     plugins: [ChartDataLabels],
-    options:{
+    options: {
         plugins:{
-            title:{ display: false },
-            legend:{ display: false },
+            title: { display: false },
+            legend: { display: false },
             tooltip: {
                 displayColors: false,
                 callbacks: {
                     label: function(context) {
                         let label = "";
-                        label += (context.label) + " pulls";
+                        if (context.label % 1 == 0)
+                            label += (context.label) + " Days";
+                        else
+                            label += (context.label*1).toFixed(2) + " Days";
                         return label;
                     },
                     title: function(context) {
                         let title = "";
                         if (context[0].parsed.y == 0 || context[0].parsed.y >= 99.9999999999999){
                             title += (context[0].parsed.y).toFixed(0) + " %";
-                        }else if(context[0].parsed.y <= 99.8 && context[0].parsed.y >= 0.2){
+                        } else if(context[0].parsed.y <= 99.8 && context[0].parsed.y >= 0.2){
                             title += (context[0].parsed.y).toFixed(1) + " %";
                         } else if (context[0].parsed.y > 99.98 || context[0].parsed.y < 0.02) {
                             title += (context[0].parsed.y).toFixed(3) + " %";
