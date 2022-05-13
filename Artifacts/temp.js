@@ -1,4 +1,4 @@
-function Binom(k, n, p){
+function Binom(k, n, p) {
     if(k > n || k < 0){
         return 0;
     }
@@ -8,12 +8,25 @@ function Binom(k, n, p){
     return Binom(k-1, n, p) * (n-k+1.0) / (k) * p / (1.0-p) ;
 }
 
-function BinomCDF(start, n, p){
+function BinomCDF(start, n, p) {
     var sum = 0;
     for(let i = start; i <= n; i++){
         sum += Binom(i, n, p);
     }
     return sum;
+}
+
+function binomial_cdf(x,n,p) {
+    var log_pmf_k;
+    var cdf = 0;
+    var b = 0;
+    for (let k = x; k<= n; k++) {
+        if (k > 0)
+            b += + Math.log(n-k+1) - Math.log(k) ;
+        log_pmf_k = b + k * Math.log(p) + (n-k) * Math.log(1-p);
+        cdf += Math.exp(log_pmf_k);
+    }
+    return cdf;
 }
 
 function frac(k){
@@ -134,8 +147,8 @@ function populate(){
     })
     worker.onmessage = function (e) {
         if ( e.data.progress != null){
-            document.getElementById("myBar").style.width = e.data.progress + "%";
-            document.getElementById("myBarText").innerHTML = e.data.progress.toFixed(1) + "%";
+            document.getElementById("myBar").style.width = (e.data.progress/99*100).toFixed(1) + "%";
+            document.getElementById("myBarText").innerHTML = (e.data.progress/99*100).toFixed(1) + "%";
             return;
         }
         simulChart.data.datasets[0].data = e.data.data;
@@ -143,9 +156,9 @@ function populate(){
         simulChart.options.scales.x.ticks = {
             autoSkip: true,
             callback: function(value, index, values) {
-                let r = (value*document.getElementById('resinA').value/document.getElementById('resinD').value);
-                if (r % 5 == 0) 
-                    return r;
+                let r = simulChart.data.labels[value];
+                if (index % (Math.floor(values.length/20)) == 0) 
+                    return r.toFixed(0);;
             },
             maxRotation : 0
         };

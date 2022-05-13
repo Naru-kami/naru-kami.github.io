@@ -15,28 +15,26 @@ self.onmessage = function (e) {
     var n = 0;
     const artichance = e.data.artichance;
     const trials = e.data.trials;
-    function Binom(k, n, p) {
-        if(k > n || k < 0){
-            return 0;
+    function binomial_cdf(x,n,p) {
+        var log_pmf_k;
+        var cdf = 0;
+        var b = 0;
+        for (let k = x; k<= n; k++) {
+            if (k > 0)
+                b += + Math.log(n-k+1) - Math.log(k) ;
+            log_pmf_k = b + k * Math.log(p) + (n-k) * Math.log(1-p);
+            cdf += Math.exp(log_pmf_k);
         }
-        if(k == 0){
-            return Math.pow(1.0-p, (n));
-        }
-        return Binom(k-1, n, p) * (n-k+1.0) / (k) * p / (1.0-p) ;
+        return cdf;
     }
-    function BinomCDF(start, n, p) {
-        var sum = 0;
-        for(let i = start; i <= n; i++){
-            sum += Binom(i, n, p);
-        }
-        return sum;
-    }
-    while (chance <= 0.999) {
-        chance = BinomCDF(1, n, artichance);
+    while (chance <= 0.99) {
+        chance = binomial_cdf(1, n, artichance);
         data.push(chance*100);
         label.push(n*trials);
-        postMessage({progress: chance*100});
-        n++;
+        if ( (chance*1000).toFixed(1) % 1 == 0) {
+            postMessage({progress: chance*100});
+        }
+        n += 1;
     }
     postMessage({
         data : data,
@@ -179,7 +177,7 @@ self.onmessage = function (e) {
         <div class="container" style="width: 100%;">
             <canvas id="myChart" width="720" height="455"></canvas>
         </div>
-        <div id="myProgress" style="position : relative; display: none; float: left; width: 100%;">
+        <div id="myProgress" style="position : relative; display: none; width: 100%;">
             <div id="myBarBackground" style="position : absolute; top:0; left:0;"></div>
             <div id="myBar" style="position : absolute; top:0; left:0;"></div>
             <div id="myBarText" style="position : absolute; top:0; left:0;">0%</div>

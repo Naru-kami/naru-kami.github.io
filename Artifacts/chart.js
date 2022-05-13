@@ -56,9 +56,13 @@ let simulChart = new Chart(myChart, {
                     return goal.includes(e.dataIndex)?'auto':false;
                 },
                 formatter: function(e, t) {
-                    return (e).toFixed(1) + " %\n" + (t.dataIndex*document.getElementById('resinA').value/document.getElementById('resinD').value).toFixed(2) + " Days"
+                    var fract = simulChart.data.labels[t.dataIndex];
+                    if (fract % 1 == 0)
+                        return (e).toFixed(1) + " %\n" + (fract).toFixed(0) + " Days"
+                    else
+                        return (e).toFixed(1) + " %\n" + (fract).toFixed(2) + " Days"
                 },
-                align: "225",
+                align: "45",
                 anchor: "center",
                 offset: 0,
                 backgroundColor: "#000",
