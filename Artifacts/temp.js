@@ -106,22 +106,32 @@ function calcmainodds(mainstat){
     var mainweights;
     switch(mainstat[0]){
         case 0:
+            document.getElementById("mainstat").innerHTML = "Mainstat Chance: " + (100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " %";
             break;
         case 1:
+            document.getElementById("mainstat").innerHTML = "Mainstat Chance: " + (100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " %";
             break;
-        case 2:
+        case 2: {
             mainweights = [0, 0, 0, 1334, 1333, 1333, 500, 500, 0, 0];
-            mainchance *= mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
+            let x = mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
+            document.getElementById("mainstat").innerHTML = "Mainstat Chance: " + (x*100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " %";
+            mainchance *= x;
             break;
-        case 3:
+        }
+        case 3: {
             mainweights = [0, 0, 0, 850, 850, 800, 0, 100, 0, 0, 200, 200, 200, 200, 200, 200, 200];
-            console.log(mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0)));
-            mainchance *= mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
+            let x = mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
+            document.getElementById("mainstat").innerHTML = "Mainstat Chance: " + (x*100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " %";
+            mainchance *= x;
             break;
-        case 4:
+        }
+        case 4: {
             mainweights = [0, 0, 0, 1100, 1100, 1100, 0, 200, 500, 500, 500];
-            mainchance *= mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
+            let x = mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
+            document.getElementById("mainstat").innerHTML = "Mainstat Chance: " + (x*100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " %";
+            mainchance *= x;
             break;
+        }
     }
     return mainchance;
 }
@@ -182,10 +192,9 @@ function main(){
     subbase[2] = Number(document.getElementById("sub3").value);
     subbase[3] = Number(document.getElementById("sub4").value);
     artichance = 0;
-    console.log(mainbase, subbase);
     permutate(subbase.length, subbase, mainbase);
+    document.getElementById("subconfig").innerHTML = "Substat Configuration Chance: " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     artichance *= calcmainodds(mainbase);
-    console.log(artichance*100);
     document.getElementById("basestat").innerHTML = "Base Artifact chance:  " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     populate();
 }
