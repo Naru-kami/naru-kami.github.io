@@ -76,7 +76,6 @@ function hidesubs(){
         document.getElementById('sub3').getElementsByTagName('option')[ki].hidden = true;
         document.getElementById('sub4').getElementsByTagName('option')[ki].hidden = true;
     }
-    console.log(Number(document.getElementById('sub1').value),ki-1);
     if(Number(document.getElementById('sub1').value) == ki-1){
         document.getElementById('sub1').getElementsByTagName('option')[0].selected = 'selected';
     }
