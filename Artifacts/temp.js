@@ -195,7 +195,7 @@ function main(){
     subbase[3] = Number(document.getElementById("sub4").value);
     artichance = 0;
     permutate(subbase.length, subbase, mainbase);
-    document.getElementById("subconfig").innerHTML = "Substat Configuration Chance: " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
+    document.getElementById("subconfig").innerHTML = "Substat Config Chance: " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     artichance *= calcmainodds(mainbase);
     document.getElementById("basestat").innerHTML = "Base Artifact chance:  " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     populate();
