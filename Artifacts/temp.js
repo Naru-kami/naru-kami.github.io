@@ -144,13 +144,13 @@ function exit(){
 }
 
 function populate(){
-    document.getElementById("myBar").style.width = 0 + "%";
-    document.getElementById("myProgress").style.display = "block";
     var trials = document.getElementById('resinA').value/document.getElementById('resinD').value;
     if (worker){
         worker.terminate();
     }
     if(artichance != 0){
+        document.getElementById("myBar").style.width = 0 + "%";
+        document.getElementById("myProgress").style.display = "block";
         worker = new Worker (window.URL.createObjectURL(blob));
         worker.postMessage({
             artichance: artichance,
