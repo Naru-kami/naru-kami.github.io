@@ -150,30 +150,32 @@ function populate(){
     if (worker){
         worker.terminate();
     }
-    worker = new Worker (window.URL.createObjectURL(blob));
-    worker.postMessage({
-        artichance: artichance,
-        trials: trials
-    })
-    worker.onmessage = function (e) {
-        if ( e.data.progress != null){
-            document.getElementById("myBar").style.width = (e.data.progress/99*100).toFixed(1) + "%";
-            document.getElementById("myBarText").innerHTML = (e.data.progress/99*100).toFixed(1) + "%";
-            return;
+    if(artichance != 0){
+        worker = new Worker (window.URL.createObjectURL(blob));
+        worker.postMessage({
+            artichance: artichance,
+            trials: trials
+        })
+        worker.onmessage = function (e) {
+            if ( e.data.progress != null){
+                document.getElementById("myBar").style.width = (e.data.progress/99*100).toFixed(1) + "%";
+                document.getElementById("myBarText").innerHTML = (e.data.progress/99*100).toFixed(1) + "%";
+                return;
+            }
+            simulChart.data.datasets[0].data = e.data.data;
+            simulChart.data.labels = e.data.label;
+            simulChart.options.scales.x.ticks = {
+                autoSkip: true,
+                callback: function(value, index, values) {
+                    let r = simulChart.data.labels[value];
+                    if (index % (Math.floor(values.length/20)) == 0) 
+                        return r.toFixed(0);;
+                },
+                maxRotation : 0
+            };
+            simulChart.update('none');
+            document.getElementById("myProgress").style.display = "none";
         }
-        simulChart.data.datasets[0].data = e.data.data;
-        simulChart.data.labels = e.data.label;
-        simulChart.options.scales.x.ticks = {
-            autoSkip: true,
-            callback: function(value, index, values) {
-                let r = simulChart.data.labels[value];
-                if (index % (Math.floor(values.length/20)) == 0) 
-                    return r.toFixed(0);;
-            },
-            maxRotation : 0
-        };
-        simulChart.update('none');
-        document.getElementById("myProgress").style.display = "none";
     }
 }
 

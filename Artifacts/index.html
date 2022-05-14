@@ -27,7 +27,7 @@ self.onmessage = function (e) {
         }
         return cdf;
     }
-    while (chance <= 0.99) {
+    while (chance <= 0.99) { // 90% - 97% - 99%
         chance = binomial_cdf(1, n, artichance);
         data.push(chance*100);
         label.push(n*trials);
