@@ -1,17 +1,17 @@
-function Binom(k, n, p) {
+function BinomPDF(k, n, p) {
     if(k > n || k < 0){
         return 0;
     }
     if(k == 0){
         return Math.pow(1.0-p, (n));
     }
-    return Binom(k-1, n, p) * (n-k+1.0) / (k) * p / (1.0-p) ;
+    return BinomPDF(k-1, n, p) * (n-k+1.0) / (k) * p / (1.0-p) ;
 }
 
 function BinomCDF(start, n, p) {
     var sum = 0;
     for(let i = start; i <= n; i++){
-        sum += Binom(i, n, p);
+        sum += BinomPDF(i, n, p);
     }
     return sum;
 }
@@ -141,6 +141,28 @@ function exit(){
         worker.terminate();
         document.getElementById("myProgress").style.display = "none";
     }
+}
+
+function fact(n){
+    if(n > 20)
+        return 0;
+    if(n == 0 || n == 1)
+        return 1;
+    var f = 1;
+    for(let i = 2; i <= n; i++){
+        f *= i;
+    }
+    return f;
+}
+
+function MultinomPDF( stat ){
+    var N = stat.reduce( (a,b) => a+b, 0 );
+    var chance = fact(N);
+    for(let i = 0; i < stat.length; i++){
+        chance /= fact(stat[i]);
+    }
+    chance *= Math.pow( 1/4, N);
+    return chance;
 }
 
 function populate(){
