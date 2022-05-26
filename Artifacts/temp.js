@@ -137,22 +137,11 @@ function exit(){
     }
 }
 
-function fact(n){
-    if(n > 20)
-        return 0;
-    if(n == 0 || n == 1)
-        return 1;
-    var f = 1;
-    for(let i = 2; i <= n; i++)
-        f *= i;
-    return f;
-}
-
 function MultinomPDF( stat ){
     var N = stat.reduce( (a,b) => a+b, 0 );
-    var chance = fact(N);
+    var chance = frac(N);
     for(let i = 0; i < stat.length; i++)
-        chance /= fact(stat[i]);
+        chance /= frac(stat[i]);
     chance *= Math.pow( 1/4, N);
     return chance;
 }
@@ -171,8 +160,8 @@ function populate(){
         })
         worker.onmessage = function (e) {
             if ( e.data.progress != null){
-                document.getElementById("myBar").style.width = (e.data.progress/99.5*100).toFixed(1) + "%";
-                document.getElementById("myBarText").innerHTML = (e.data.progress/99.5*100).toFixed(1) + "%";
+                document.getElementById("myBar").style.width = (e.data.progress/99*100).toFixed(1) + "%";
+                document.getElementById("myBarText").innerHTML = (e.data.progress/99*100).toFixed(1) + "%";
                 return;
             }
             trace.x = e.data.label;

@@ -15,7 +15,7 @@ self.onmessage = function (e) {
     var n = 0;
     const artichance = e.data.artichance;
     const trials = e.data.trials;
-    while (chance <= 0.995) { // 90% - 97% - 99%
+    while (chance <= 0.99) { // 90% - 97% - 99%
         chance = 1-Math.exp(n*Math.log(1-artichance));
         data.push(chance*100);
         label.push(n*trials);
@@ -164,7 +164,7 @@ self.onmessage = function (e) {
         <div id="simul_button" style="margin: 10px 0px 10px 0px; width: 100%;">
             <button type="button" id="runButton" class="btn btn-primary mt-2" style="color: #686868; border-radius: 5px; border-width: 1px; height: 21px;">Run</button>
         </div>
-        <div id="myChart" style="width: 720; height: 455px;"></div>
+        <div id="myChart" style="width: 100%; height: 455px;"></div>
         <div id="myProgress" style="position : relative; display: none; width: 100%;">
             <div id="myBarBackground" style="position : absolute; top:0; left:0;"></div>
             <div id="myBar" style="position : absolute; top:0; left:0;"></div>
