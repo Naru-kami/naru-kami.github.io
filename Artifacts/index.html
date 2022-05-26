@@ -7,7 +7,7 @@
     <title>Artifact Statistics</title>
     <link rel="icon" sizes="128x128" type="image/x-icon" href="../favicon.ico">
     <link href="../StyleSheet.css" rel="stylesheet">
-    <script id="worker" type="javascript/worker">
+    <script id="worker" type="application/javascript">
 self.onmessage = function (e) {
     var data = [];
     var label = [];
@@ -15,20 +15,8 @@ self.onmessage = function (e) {
     var n = 0;
     const artichance = e.data.artichance;
     const trials = e.data.trials;
-    function binomial_cdf(x,n,p) {
-        var log_pmf_k;
-        var cdf = 0;
-        var b = 0;
-        for (let k = x; k<= n; k++) {
-            if (k > 0)
-                b += + Math.log(n-k+1) - Math.log(k) ;
-            log_pmf_k = b + k * Math.log(p) + (n-k) * Math.log(1-p);
-            cdf += Math.exp(log_pmf_k);
-        }
-        return cdf;
-    }
-    while (chance <= 0.99) { // 90% - 97% - 99%
-        chance = binomial_cdf(1, n, artichance);
+    while (chance <= 0.995) { // 90% - 97% - 99%
+        chance = 1-Math.exp(n*Math.log(1-artichance));
         data.push(chance*100);
         label.push(n*trials);
         if ( (chance*1000).toFixed(1) % 1 == 0) {
@@ -40,10 +28,12 @@ self.onmessage = function (e) {
         data : data,
         label : label
     });
+    self.close();
 }
     </script>
-    <script src="temp.js" type="text/javascript"></script>
-    <script src="pagefunctions.js" type="text/javascript"></script>
+    <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+    <script src="temp.js" type="application/javascript"></script>
+    <script src="pagefunctions.js" type="application/javascript"></script>
 </head>
 <body>
     <div id=body>
@@ -174,15 +164,13 @@ self.onmessage = function (e) {
         <div id="simul_button" style="margin: 10px 0px 10px 0px; width: 100%;">
             <button type="button" id="runButton" class="btn btn-primary mt-2" style="color: #686868; border-radius: 5px; border-width: 1px; height: 21px;">Run</button>
         </div>
-        <div class="container" style="width: 100%;">
-            <canvas id="myChart" width="720" height="455"></canvas>
-        </div>
+        <div id="myChart" style="width: 720; height: 455px;"></div>
         <div id="myProgress" style="position : relative; display: none; width: 100%;">
             <div id="myBarBackground" style="position : absolute; top:0; left:0;"></div>
             <div id="myBar" style="position : absolute; top:0; left:0;"></div>
             <div id="myBarText" style="position : absolute; top:0; left:0;">0%</div>
         </div>
-        <div>
+        <div style="margin-bottom: 25px; margin-top: 5px;">
             <button type="button" id="stat" class="btn">▼</button>
             <div id="showchance" style="display: none; margin: 5px 0px 0px 20px; border: 1px solid; border-radius: 6px; border-color: #686868;"> 
                 <div id="basestat" style="margin-left: 5px;">Base Artifact Chance: </div>
@@ -190,8 +178,6 @@ self.onmessage = function (e) {
                 <div id="subconfig" style="margin-left: 5px;">Substat Config Chance: </div>
             </div>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0/dist/chartjs-plugin-datalabels.min.js"></script>
         <script src="chart.js" type="text/javascript"></script>
         
     </div>

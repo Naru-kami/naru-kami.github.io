@@ -1,18 +1,15 @@
 function BinomPDF(k, n, p) {
-    if(k > n || k < 0){
+    if(k > n || k < 0)
         return 0;
-    }
-    if(k == 0){
+    if(k == 0)
         return Math.pow(1.0-p, (n));
-    }
     return BinomPDF(k-1, n, p) * (n-k+1.0) / (k) * p / (1.0-p) ;
 }
 
 function BinomCDF(start, n, p) {
     var sum = 0;
-    for(let i = start; i <= n; i++){
+    for(let i = start; i <= n; i++)
         sum += BinomPDF(i, n, p);
-    }
     return sum;
 }
 
@@ -30,11 +27,10 @@ function binomial_cdf(x,n,p) {
 }
 
 function frac(k){
-    if(k == 0){
+    if(k == 0)
         return 1;
-    } else {
+    else
         return k*frac(k-1);
-    }
 }
 
 function swap(arr, a, b){
@@ -45,9 +41,8 @@ function swap(arr, a, b){
 }
 
 function permutate(k, sub, mainstat){
-    if (k == 1){
+    if (k == 1)
         artichance += advancedodds(mainstat, sub.slice()) / (frac(sub.filter(e => e == -1).length));
-    }
     else{
         permutate(k - 1, sub, mainstat);
         for(let i = 0; i < k-1; i ++){
@@ -65,9 +60,8 @@ function calcodds(mainstat, arr) {
         return 0;
     var chance=1;//hp , atk, def, hp%,atk%,def%, ER%, EM ,cr%,cd%
     var weights = [150, 150, 150, 100, 100, 100, 100, 100, 75, 75];
-    if ( (mainstat[1] < 10) && (mainstat[1] >= 0) ){
+    if ( (mainstat[1] < 10) && (mainstat[1] >= 0) )
         weights[mainstat[1]] = 0;
-    }
     for (let i = 0; i < arr.length; i++){
         chance *= weights[arr[i]] / (weights.reduce( (a,b) => a + b, 0));
         weights[arr[i]] = 0;
@@ -149,27 +143,24 @@ function fact(n){
     if(n == 0 || n == 1)
         return 1;
     var f = 1;
-    for(let i = 2; i <= n; i++){
+    for(let i = 2; i <= n; i++)
         f *= i;
-    }
     return f;
 }
 
 function MultinomPDF( stat ){
     var N = stat.reduce( (a,b) => a+b, 0 );
     var chance = fact(N);
-    for(let i = 0; i < stat.length; i++){
+    for(let i = 0; i < stat.length; i++)
         chance /= fact(stat[i]);
-    }
     chance *= Math.pow( 1/4, N);
     return chance;
 }
 
 function populate(){
     var trials = document.getElementById('resinA').value/document.getElementById('resinD').value;
-    if (worker){
+    if (worker)
         worker.terminate();
-    }
     if(artichance != 0){
         document.getElementById("myBar").style.width = 0 + "%";
         document.getElementById("myProgress").style.display = "block";
@@ -180,22 +171,13 @@ function populate(){
         })
         worker.onmessage = function (e) {
             if ( e.data.progress != null){
-                document.getElementById("myBar").style.width = (e.data.progress/99*100).toFixed(1) + "%";
-                document.getElementById("myBarText").innerHTML = (e.data.progress/99*100).toFixed(1) + "%";
+                document.getElementById("myBar").style.width = (e.data.progress/99.5*100).toFixed(1) + "%";
+                document.getElementById("myBarText").innerHTML = (e.data.progress/99.5*100).toFixed(1) + "%";
                 return;
             }
-            simulChart.data.datasets[0].data = e.data.data;
-            simulChart.data.labels = e.data.label;
-            simulChart.options.scales.x.ticks = {
-                autoSkip: true,
-                callback: function(value, index, values) {
-                    let r = simulChart.data.labels[value];
-                    if (index % (Math.floor(values.length/20)) == 0) 
-                        return r.toFixed(0);;
-                },
-                maxRotation : 0
-            };
-            simulChart.update('none');
+            trace.x = e.data.label;
+            trace.y = e.data.data;
+            Plotly.redraw(MYCHART);
             document.getElementById("myProgress").style.display = "none";
         }
     }
@@ -203,7 +185,7 @@ function populate(){
 
 var blob = new Blob([
     document.querySelector('#worker').textContent
-], { type: "text/javascript" });
+], { type: "application/javascript" });
 var artichance, worker;
 
 function main(){

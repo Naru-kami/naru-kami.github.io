@@ -1,110 +1,16 @@
-let myChart = document.getElementById("myChart").getContext("2d");
-let simulChart = new Chart(myChart, {
-    type:"line",
-    data:{
-        labels: [0],
-        datasets: [{
-            label: "",
-            data: [],
-            fill : true,
-            tension : 0.2,
-            borderColor: "rgba(23,114,203,0.8)",
-            backgroundColor: "rgba(104,104,104,0.25)"
-        }]
-    },
-    plugins: [ChartDataLabels],
-    options: {
-        plugins:{
-            title: { display: false },
-            legend: { display: false },
-            tooltip: {
-                displayColors: false,
-                callbacks: {
-                    label: function(context) {
-                        let label = "";
-                        if (context.label % 1 == 0)
-                            label += (context.label) + " Days";
-                        else
-                            label += (context.label*1).toFixed(2) + " Days";
-                        return label;
-                    },
-                    title: function(context) {
-                        let title = "";
-                        if (context[0].parsed.y == 0 || context[0].parsed.y >= 99.9999999999999){
-                            title += (context[0].parsed.y).toFixed(0) + " %";
-                        } else if(context[0].parsed.y <= 99.8 && context[0].parsed.y >= 0.2){
-                            title += (context[0].parsed.y).toFixed(1) + " %";
-                        } else if (context[0].parsed.y > 99.98 || context[0].parsed.y < 0.02) {
-                            title += (context[0].parsed.y).toFixed(3) + " %";
-                        } else {
-                            title += (context[0].parsed.y).toFixed(2) + " %";
-                        }
-                        return title;
-                    }
-                },
-                titleFont: { weight: "normal" }
-            },
-            datalabels: {
-                display: function(e) {
-                    let data = e.dataset.data, close = [], goal = [10, 25, 50, 75, 90];
-                    for (let i=0; i<5; i++){
-                        close [i] = data.reduce(function(prev, curr) {
-                            return (Math.abs(curr - goal[i]) < Math.abs(prev - goal[i]) ? curr : prev);
-                        });
-                        goal[i] = data.indexOf(close[i]);
-                    }
-                    return goal.includes(e.dataIndex)?'auto':false;
-                },
-                formatter: function(e, t) {
-                    var fract = simulChart.data.labels[t.dataIndex];
-                    if (fract % 1 == 0)
-                        return (e).toFixed(1) + " %\n" + (fract).toFixed(0) + " Days"
-                    else
-                        return (e).toFixed(1) + " %\n" + (fract).toFixed(2) + " Days"
-                },
-                align: "45",
-                anchor: "center",
-                offset: 0,
-                backgroundColor: "#000",
-                borderRadius: 4,
-                color: "#fff",
-                opacity: 0.8,
-                padding: {
-                    top: 4,
-                    right: 4,
-                    bottom: 0,
-                    left: 4
-                }
-            }
-        },
-        scales:{
-            y: {
-                ticks: {
-                    stepSize: 10,
-                    callback: function(value) {
-                        return value + "%";
-                    }
-                },
-                max: 99.99,
-                beginAtZero: true
-            },
-            x: {
-                title: {
-                    display: true,
-                    text: "Days"
-                }
-            }
-        },
-        interaction: {
-            intersect: false,
-            mode: 'nearest',
-            axis: 'x'
-        },
-        elements:{
-            point:{
-                radius: 0,
-                hoverRadius: 4,
-            }
-        }
-    }
-});
+MYCHART =  document.getElementById("myChart");
+
+var trace = { x: [], y: [], name:"", mode: 'line', line: { color: '#1772CB', size: 2}, hovertemplate: "<b> %{y:.2f}% <br>" + " %{x:.0f} Days <br>" };
+var data = [trace];
+var layout = {
+    xaxis: { title: 'Days', mirror: true, ticks: 'outside', showline: true, zeroline: false },
+    yaxis: { title: '', range: [0,102], mirror: true, autotick: false, ticks: 'outside', tick0: 0, dtick: 10, showline: true, showticksuffix: 'all', ticksuffix: "%", zeroline: false },
+    showlegend: true,
+    margin:{ l: 55, r: 30, b: 50, t: 36, pad: 4 },
+    showlegend: false,
+    hovermode: "x",
+    hoverlabel: { bgcolor: "#F8F9FA" },
+    plot_bgcolor: "#F8F9FA",
+    paper_bgcolor: "#F8F9FA"
+};
+Plotly.newPlot(MYCHART, data, layout);
