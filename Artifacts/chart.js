@@ -6,7 +6,7 @@ var layout = {
     xaxis: { title: 'Days', mirror: true, ticks: 'outside', showline: true, zeroline: false },
     yaxis: { title: '', range: [0,102], mirror: true, autotick: false, ticks: 'outside', tick0: 0, dtick: 10, showline: true, showticksuffix: 'all', ticksuffix: "%", zeroline: false },
     showlegend: true,
-    margin:{ l: 55, r: 5, b: 50, t: 36, pad: 4 },
+    margin:{ l: 55, r: 25, b: 50, t: 36, pad: 4 },
     showlegend: false,
     hovermode: "x",
     hoverlabel: { bgcolor: "#F8F9FA" },

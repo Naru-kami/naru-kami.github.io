@@ -15,6 +15,7 @@ self.onmessage = function (e) {
     var n = 0;
     const artichance = e.data.artichance;
     const trials = e.data.trials;
+    const r = 1/trials*Math.max(1, Math.round(1e-5/artichance));
     while (chance <= 0.99) { // 90% - 97% - 99%
         chance = 1-Math.exp(n*Math.log(1-artichance));
         data.push(chance*100);
@@ -22,7 +23,7 @@ self.onmessage = function (e) {
         if ( (chance*1000).toFixed(1) % 1 == 0) {
             postMessage({progress: chance*100});
         }
-        n += 1/trials;
+        n += r;
     }
     postMessage({
         data : data,
@@ -170,7 +171,7 @@ self.onmessage = function (e) {
             <div id="myBar" style="position : absolute; top:0; left:0;"></div>
             <div id="myBarText" style="position : absolute; top:0; left:0;">0%</div>
         </div>
-        <div style="margin-bottom: 25px; margin-top: 5px;">
+        <div style="margin-bottom: 25px; margin-top: 5px; margin-right: 20px;">
             <button type="button" id="stat" class="btn">▼</button>
             <div id="showchance" style="display: none; margin: 5px 0px 0px 20px; border: 1px solid; border-radius: 6px; border-color: #686868;"> 
                 <div id="basestat" style="margin-left: 5px;">Base Artifact Chance: </div>
