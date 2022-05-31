@@ -13,4 +13,19 @@ var layout = {
     plot_bgcolor: "#F8F9FA",
     paper_bgcolor: "#F8F9FA"
 };
-Plotly.newPlot(MYCHART, data, layout, {responsive: true});
+Plotly.newPlot(MYCHART, data, layout, {responsive: true, displaylogo: false});
+
+function datalabels(arr){
+    layout.annotations = [
+        {
+            x: arr[0][0],
+            y: arr[0][1],
+            xref: 'x',
+            yref: 'y',
+            text: arr[0][1]+'%<br>'+arr[0][0]+' Days',
+            showarrow: true,
+            arrowhead: 0,
+            xanchor: 'left'
+        }
+    ]
+}

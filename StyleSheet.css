@@ -168,3 +168,6 @@ img {
 #myChart .axistext {
   display: none;
 }
+#myChart .modebar.modebar--hover.ease-bg{
+  margin-right: 17px;
+}

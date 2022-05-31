@@ -146,6 +146,67 @@ function MultinomPDF( stat ){
     return chance;
 }
 
+function upgrade(){
+    var sub1 = [], sub2 = [], sub3 = [], sub4 = [];
+    var sub1value = Number(document.getElementById("roll1").value);
+    switch( Number(document.getElementById("compare1").value) ) {
+        case 2: {
+            sub1.length = 1;
+            sub1[0] = sub1value;
+            break;
+        } case 1: {
+            sub1.length = 6-sub1value;
+            for(let i = 0; i < sub1.length; i++) sub1[i] = sub1value+i;
+            break;
+        } case 3: {
+            sub1.length = sub1value+1;
+            for(let i = 0; i < sub1.length; i++) sub1[i] = i;
+            break; } }
+    var sub2value = Number(document.getElementById("roll2").value);
+    switch( Number(document.getElementById("compare2").value) ) {
+        case 2: {
+            sub2.length = 1;
+            sub2[0] = sub2value;
+            break;
+        } case 1: {
+            sub2.length = 6-sub2value;
+            for(let i = 0; i < sub2.length; i++) sub2[i] = sub2value+i;
+            break;
+        } case 3: {
+            sub2.length = sub2value+1;
+            for(let i = 0; i < sub2.length; i++) sub2[i] = i;
+            break; } }
+    var sub3value = Number(document.getElementById("roll3").value);
+    switch( Number(document.getElementById("compare3").value) ) {
+        case 2: {
+            sub3.length = 1;
+            sub3[0] = sub3value;
+            break;
+        } case 1: {
+            sub3.length = 6-sub3value;
+            for(let i = 0; i < sub3.length; i++) sub3[i] = sub3value+i;
+            break;
+        } case 3: {
+            sub3.length = sub3value+1;
+            for(let i = 0; i < sub3.length; i++) sub3[i] = i;
+            break; } }
+        var sub4value = Number(document.getElementById("roll4").value);
+        switch( Number(document.getElementById("compare4").value) ) {
+            case 2: {
+                sub4.length = 1;
+                sub4[0] = sub4value;
+                break;
+            } case 1: {
+                sub4.length = 6-sub4value;
+                for(let i = 0; i < sub4.length; i++) sub4[i] = sub4value+i;
+                break;
+            } case 3: {
+                sub4.length = sub4value+1;
+                for(let i = 0; i < sub4.length; i++) sub4[i] = i;
+                break; } }
+    console.log(sub1);console.log(sub2);console.log(sub3);console.log(sub4);
+}
+
 function populate(){
     var trials = document.getElementById('resinA').value/document.getElementById('resinD').value;
     if (worker)
@@ -191,6 +252,7 @@ function main(){
     document.getElementById("subconfig").innerHTML = "Substat Config Chance: " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     artichance *= calcmainodds(mainbase);
     document.getElementById("basestat").innerHTML = "Base Artifact chance:  " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
+    upgrade();
     populate();
 }
 
