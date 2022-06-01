@@ -23,7 +23,6 @@ function datalabels(){
         });
         goal[i] = trace.x[data.indexOf(close[i])];
     }
-    console.log(close,goal);
     layout.annotations = [
         {
             x: goal[0],

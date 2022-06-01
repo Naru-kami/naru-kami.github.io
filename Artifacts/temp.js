@@ -190,21 +190,40 @@ function upgrade(){
             sub3.length = sub3value+1;
             for(let i = 0; i < sub3.length; i++) sub3[i] = i;
             break; } }
-        var sub4value = Number(document.getElementById("roll4").value);
-        switch( Number(document.getElementById("compare4").value) ) {
-            case 2: {
-                sub4.length = 1;
-                sub4[0] = sub4value;
-                break;
-            } case 1: {
-                sub4.length = 6-sub4value;
-                for(let i = 0; i < sub4.length; i++) sub4[i] = sub4value+i;
-                break;
-            } case 3: {
-                sub4.length = sub4value+1;
-                for(let i = 0; i < sub4.length; i++) sub4[i] = i;
-                break; } }
-    console.log(sub1);console.log(sub2);console.log(sub3);console.log(sub4);
+    var sub4value = Number(document.getElementById("roll4").value);
+    switch( Number(document.getElementById("compare4").value) ) {
+        case 2: {
+            sub4.length = 1;
+            sub4[0] = sub4value;
+            break;
+        } case 1: {
+            sub4.length = 6-sub4value;
+            for(let i = 0; i < sub4.length; i++) sub4[i] = sub4value+i;
+            break;
+        } case 3: {
+            sub4.length = sub4value+1;
+            for(let i = 0; i < sub4.length; i++) sub4[i] = i;
+            break; } }
+    var chance = 0;
+    const hlen = sub1.length, ilen = sub2.length, jlen = sub3.length, klen = sub4.length;
+    if(hlen==6 && ilen==6 && jlen==6 && klen==6){
+        chance = 1;
+    } else {
+        for(let h = sub1[0]; h < hlen; h++){
+            for(let i = sub2[0]; i < ilen; i++){
+                for(let j = sub3[0]; j < jlen; j++){
+                    for(let k = sub4[0]; k < klen; k++){
+                        if(sub1[h]+sub2[i]+sub3[j]+sub4[k] == 5)
+                            chance += MultinomPDF([].concat(sub1[h]).concat(sub2[i]).concat(sub3[j]).concat(sub4[k]));
+                        if(sub1[h]+sub2[i]+sub3[j]+sub4[k] > 5)
+                            break;
+                        console.log(chance);
+                    }
+                }
+            }
+        }
+    }
+    return chance;
 }
 
 function populate(){
@@ -253,7 +272,7 @@ function main(){
     document.getElementById("subconfig").innerHTML = "Substat Config Chance: " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     artichance *= calcmainodds(mainbase);
     document.getElementById("basestat").innerHTML = "Base Artifact chance:  " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
-    upgrade();
+    artichance*=upgrade();
     populate();
 }
 
