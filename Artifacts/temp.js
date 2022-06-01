@@ -227,6 +227,7 @@ function populate(){
             }
             trace.x = e.data.label;
             trace.y = e.data.data;
+            datalabels();
             Plotly.redraw(MYCHART);
             document.getElementById("myProgress").style.display = "none";
         }
