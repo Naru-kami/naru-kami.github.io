@@ -148,7 +148,7 @@ function MultinomPDF( stat ){
 
 function upgrade(){
     var sub1 = [], sub2 = [], sub3 = [], sub4 = [];
-    var sub1value = Number(document.getElementById("roll1").value);
+    const sub1value = Number(document.getElementById("roll1").value);
     switch( Number(document.getElementById("compare1").value) ) {
         case 2: {
             sub1.length = 1;
@@ -162,7 +162,7 @@ function upgrade(){
             sub1.length = sub1value+1;
             for(let i = 0; i < sub1.length; i++) sub1[i] = i;
             break; } }
-    var sub2value = Number(document.getElementById("roll2").value);
+    const sub2value = Number(document.getElementById("roll2").value);
     switch( Number(document.getElementById("compare2").value) ) {
         case 2: {
             sub2.length = 1;
@@ -176,7 +176,7 @@ function upgrade(){
             sub2.length = sub2value+1;
             for(let i = 0; i < sub2.length; i++) sub2[i] = i;
             break; } }
-    var sub3value = Number(document.getElementById("roll3").value);
+    const sub3value = Number(document.getElementById("roll3").value);
     switch( Number(document.getElementById("compare3").value) ) {
         case 2: {
             sub3.length = 1;
@@ -190,7 +190,7 @@ function upgrade(){
             sub3.length = sub3value+1;
             for(let i = 0; i < sub3.length; i++) sub3[i] = i;
             break; } }
-    var sub4value = Number(document.getElementById("roll4").value);
+    const sub4value = Number(document.getElementById("roll4").value);
     switch( Number(document.getElementById("compare4").value) ) {
         case 2: {
             sub4.length = 1;
@@ -205,21 +205,19 @@ function upgrade(){
             for(let i = 0; i < sub4.length; i++) sub4[i] = i;
             break; } }
     console.log(sub1,sub2,sub3,sub4)
-    var chance = 0;
+    var chance = 0, k;
     const hlen = sub1.length, ilen = sub2.length, jlen = sub3.length, klen = sub4.length;
     if(hlen==6 && ilen==6 && jlen==6 && klen==6){
         chance = 1;
     } else {
         for(let h = sub1[0]; h < sub1[0]+hlen; h++){
             for(let i = sub2[0]; i < sub2[0]+ilen; i++){
+                if(h+i>5) break;
                 for(let j = sub3[0]; j < sub3[0]+jlen; j++){
-                    for(let k = sub4[0]; k < sub4[0]+klen; k++){
-                        if( h+i+j+k == 5){
-                            chance += MultinomPDF([].concat(h).concat(i).concat(j).concat(k));
-                            break;
-                        }
-                        console.log(h,i,j,k,chance);
-                    }
+                    if(h+i+j>5) break;
+                    k = 5-h-i-j;
+                    if( sub4.includes(k) )
+                        chance += MultinomPDF([h,i,j,k]);
                 }
             }
         }
