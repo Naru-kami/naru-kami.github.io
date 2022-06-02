@@ -204,20 +204,21 @@ function upgrade(){
             sub4.length = sub4value+1;
             for(let i = 0; i < sub4.length; i++) sub4[i] = i;
             break; } }
+    console.log(sub1,sub2,sub3,sub4)
     var chance = 0;
     const hlen = sub1.length, ilen = sub2.length, jlen = sub3.length, klen = sub4.length;
     if(hlen==6 && ilen==6 && jlen==6 && klen==6){
         chance = 1;
     } else {
-        for(let h = sub1[0]; h < hlen; h++){
-            for(let i = sub2[0]; i < ilen; i++){
-                for(let j = sub3[0]; j < jlen; j++){
-                    for(let k = sub4[0]; k < klen; k++){
-                        if(sub1[h]+sub2[i]+sub3[j]+sub4[k] == 5)
-                            chance += MultinomPDF([].concat(sub1[h]).concat(sub2[i]).concat(sub3[j]).concat(sub4[k]));
-                        if(sub1[h]+sub2[i]+sub3[j]+sub4[k] > 5)
+        for(let h = sub1[0]; h < sub1[0]+hlen; h++){
+            for(let i = sub2[0]; i < sub2[0]+ilen; i++){
+                for(let j = sub3[0]; j < sub3[0]+jlen; j++){
+                    for(let k = sub4[0]; k < sub4[0]+klen; k++){
+                        if( h+i+j+k == 5){
+                            chance += MultinomPDF([].concat(h).concat(i).concat(j).concat(k));
                             break;
-                        console.log(chance);
+                        }
+                        console.log(h,i,j,k,chance);
                     }
                 }
             }
@@ -272,7 +273,9 @@ function main(){
     document.getElementById("subconfig").innerHTML = "Substat Config Chance: " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     artichance *= calcmainodds(mainbase);
     document.getElementById("basestat").innerHTML = "Base Artifact chance:  " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
-    artichance*=upgrade();
+    const up = upgrade();
+    artichance*=up;
+    document.getElementById("upgrade").innerHTML = "Upgrade Chance: " + (up*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     populate();
 }
 
