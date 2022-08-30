@@ -34,10 +34,9 @@ function frac(k){
 }
 
 function swap(arr, a, b){
-    var c = arr[a];
+    let c = arr[a];
     arr[a] = arr[b];
     arr[b] = c;
-    return arr;
 }
 
 function permutate(k, sub, mainstat){
@@ -206,7 +205,8 @@ function upgrade(){
             break; } }
     console.log(sub1,sub2,sub3,sub4)
     var chance = 0, k;
-    const hlen = sub1.length, ilen = sub2.length, jlen = sub3.length, klen = sub4.length;
+    const hlen = sub1.length, ilen = sub2.length, jlen = sub3.length, klen = sub4.length,
+    starter = document.getElementById("starter").value;
     if(hlen==6 && ilen==6 && jlen==6 && klen==6){
         chance = 1;
     } else {
@@ -216,8 +216,15 @@ function upgrade(){
                 for(let j = sub3[0]; j < sub3[0]+jlen; j++){
                     if(h+i+j>5) break;
                     k = 5-h-i-j;
-                    if( sub4.includes(k) )
-                        chance += MultinomPDF([h,i,j,k]);
+                    if( sub4.includes(k) && (starter == 1 || starter == 2) ){
+                        chance += MultinomPDF([h,i,j,k])*0.25;
+                        console.log(h,i,j,k,chance);
+                    }
+                    k = 4-h-i-j;
+                    if( sub4.includes(k) && (starter == 1 || starter == 3) ){
+                        chance += MultinomPDF([h,i,j,k])*0.75;
+                        console.log(h,i,j,k,chance);
+                    }
                 }
             }
         }
@@ -238,7 +245,7 @@ function populate(){
             trials: trials
         })
         worker.onmessage = function (e) {
-            if ( e.data.progress != null){
+            if ( e.data.progress != null ){
                 document.getElementById("myBar").style.width = (e.data.progress/99*100).toFixed(1) + "%";
                 document.getElementById("myBarText").innerHTML = (e.data.progress/99*100).toFixed(1) + "%";
                 return;
@@ -271,9 +278,13 @@ function main(){
     document.getElementById("subconfig").innerHTML = "Substat Config Chance: " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     artichance *= calcmainodds(mainbase);
     document.getElementById("basestat").innerHTML = "Base Artifact chance:  " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
+    document.getElementById("basestat2").innerHTML = "Base Artifact chance:  " + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
     const up = upgrade();
     artichance*=up;
     document.getElementById("upgrade").innerHTML = "Upgrade Chance: " + (up*100).toLocaleString(undefined, {minimumFractionDigits: 6, maximumFractionDigits: 6}) + " %";
+    artichance/=document.getElementById("onset").value;
+    document.getElementById("set").innerHTML = "Artifact Set Chance: " + (1/document.getElementById("onset").value*100).toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0}) + " %";
+    document.getElementById("final").innerHTML = "<b>Final Artifact Chance</b>: <strong>" + (artichance*100).toLocaleString(undefined, {minimumFractionDigits: 7, maximumFractionDigits: 7}) + " %</strong>";    
     populate();
 }
 
