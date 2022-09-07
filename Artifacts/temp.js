@@ -112,7 +112,8 @@ function calcmainodds(mainstat){
             break;
         }
         case 3: {
-            mainweights = [0, 0, 0, 850, 850, 800, 0, 100, 0, 0, 200, 200, 200, 200, 200, 200, 200];
+            // mainweights = [0, 0, 0, 850, 850, 800, 0, 100, 0, 0, 200, 200, 200, 200, 200, 200, 200]; prior 3.0
+            mainweights = [0, 0, 0, 767, 767, 766, 0, 100, 0, 0, 200, 200, 200, 200, 200, 200, 200, 200];
             let x = mainweights[mainstat[1]] / (mainweights.reduce( (a,b) => a + b, 0));
             document.getElementById("mainstat").innerHTML = "Mainstat Chance: " + (x*100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + " %";
             mainchance *= x;
@@ -127,13 +128,6 @@ function calcmainodds(mainstat){
         }
     }
     return mainchance;
-}
-
-function exit(){
-    if (worker) {
-        worker.terminate();
-        document.getElementById("myProgress").style.display = "none";
-    }
 }
 
 function MultinomPDF( stat ){
@@ -210,10 +204,10 @@ function upgrade(){
     if(hlen==6 && ilen==6 && jlen==6 && klen==6){
         chance = 1;
     } else {
-        for(let h = sub1[0]; h < sub1[0]+hlen; h++){
-            for(let i = sub2[0]; i < sub2[0]+ilen; i++){
+        for(let h = sub1[0]; h < sub1[0] + hlen; h++){
+            for(let i = sub2[0]; i < sub2[0] + ilen; i++){
                 if(h+i>5) break;
-                for(let j = sub3[0]; j < sub3[0]+jlen; j++){
+                for(let j = sub3[0]; j < sub3[0] + jlen; j++){
                     if(h+i+j>5) break;
                     k = 5-h-i-j;
                     if( sub4.includes(k) && (starter == 1 || starter == 2) ){
@@ -246,8 +240,8 @@ function populate(){
         })
         worker.onmessage = function (e) {
             if ( e.data.progress != null ){
-                document.getElementById("myBar").style.width = (e.data.progress/99*100).toFixed(1) + "%";
-                document.getElementById("myBarText").innerHTML = (e.data.progress/99*100).toFixed(1) + "%";
+                document.getElementById("myBar").style.width = (e.data.progress).toFixed(0) + "%";
+                document.getElementById("myBarText").innerHTML = (e.data.progress).toFixed(0) + "%";
                 return;
             }
             trace.x = e.data.label;
