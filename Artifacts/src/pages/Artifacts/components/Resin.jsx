@@ -2,6 +2,7 @@ import React from 'react'
 import { Input, Card, Slider } from '@mui/material';
 
 export default function Resin({passResin, resins}) {
+  console.log('resin');
   const [RpA, setRpA] = React.useState(() => resins[0]);
   const [RpD, setRpD] = React.useState(() => resins[1]);
   const [RpASlider, setRpASlider] = React.useState(() => resins[0]);

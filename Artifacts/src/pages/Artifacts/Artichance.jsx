@@ -124,6 +124,8 @@ function upgrade(starter, slidervals) {
 }
 
 export default function Artichance({ mainstats, substats, starter, slidervals, trials, pass, updateartichance, updateTrials }) {
+  console.log('artichance');
+
   const artichance = React.useRef({ permut: 0, mains: 0, upgrade: 0, set: 0, final: 0 });
 
   const permutate = React.useCallback((k, sub, mainstat) => {

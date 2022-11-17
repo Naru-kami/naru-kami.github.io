@@ -63,7 +63,8 @@ const data = {
 };
 
 export default function SubIcon({icon}) {
-    return (
+  console.log('subicons');
+  return (
     <svg focusable="false" width="14" height="14" color="#FFF" aria-hidden="true" viewBox="0 0 14 14" style={{paddingRight: "10px"}}>
         {data[icon]}
     </svg>

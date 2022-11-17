@@ -34,6 +34,8 @@ function RESET_ALL() {
 }
 
 export default function RangeSlider() {
+  console.log('main');
+
   const [sliderVals, setsliderVals] = useLocalStorage( "storage.sliderVals", () => [[0,1],[0,0],[0,5],[0,5]])
   const [subvals, setsubvals] = useLocalStorage('storage.subvals', () => [4,7,8,9] );
   const [mainvals, setmainvals] = useLocalStorage('storage.mainvals', () => [0, 0] );
@@ -68,7 +70,7 @@ export default function RangeSlider() {
   function passPlotdata(val) {setPlotdata(p => ({...p, x: val.x, y: val.y})); }
   function updateartichance(val) { artidistr.current = val; }
   function updateTrials(val) {settrials(val); }
-  console.log(localStorage.getItem('storage.goblet'))
+  
   React.useEffect(() => {
     if(misc[1]===2)
       setsliderMax(4);

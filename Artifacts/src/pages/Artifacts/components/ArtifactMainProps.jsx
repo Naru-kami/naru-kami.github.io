@@ -6,6 +6,7 @@ import MainIcon from '../assets/MainIcon';
 const order = ["HP", "ATK", "DEF", "HP %", "ATK %", "DEF %", "Energy Recharge", "Elemental Mastery", "CRIT Rate", "CRIT DMG", "Healing Bonus", "Elemental DMG Bonus"];
 
 export default function ArtifactMainProps({passMainvals, mainprops}) {
+  console.log('mainprops');
   const [type, settype] = React.useState( () => mainprops[0] );
   const [main, setMain] = React.useState( () => mainprops[1] );
   const changeType = event => { settype(event.target.value); };

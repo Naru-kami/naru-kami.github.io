@@ -2,6 +2,7 @@ import React from 'react'
 import { Card, Slider, Input, FormGroup } from "@mui/material"
 
 export default function ArtifactUpgradeSlider({startMin, startMax, setMin=0, setMax, passValues, id}) {
+  console.log('slider');
   const [lowerValue, setLowerValue] = React.useState(() => startMin);
   const [upperValue, setUpperValue] = React.useState(() => startMax);
   const [sliderVals, setSliderVals] = React.useState(() => [startMin, startMax]);

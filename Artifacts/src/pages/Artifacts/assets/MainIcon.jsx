@@ -19,6 +19,7 @@ const data = {
 };
 
 export default function MainIcon({icon}) {
+  console.log('mainicons');
   return (
     <svg focusable="false" width="14" height="14" color="#FFF" style={{paddingRight: "10px"}}>
       {data[icon]}

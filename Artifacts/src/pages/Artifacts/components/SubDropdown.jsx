@@ -6,6 +6,7 @@ import FormControl from '@mui/material/FormControl';
 const order = ["HP", "ATK", "DEF", "HP %", "ATK %", "DEF %", "Energy Recharge", "Elemental Mastery", "CRIT Rate", "CRIT DMG"];
 
 export default function SubDropdown({mainval, startval, passSubvals, id}) {
+  console.log('subdropdown');
 
   const [sublist, setSublist] = React.useState(() => [0,1,2,3,4,5,6,7,8,9]);
   const [val, setval] = React.useState(startval);

@@ -2,6 +2,7 @@ import React from 'react'
 import {Select, MenuItem, InputLabel, FormControl} from '@mui/material';
 
 export default function MiscSettings({passMisc, misc}) {
+  console.log('misc');
   const [set, setSet] = React.useState(() => misc[0]);
   const [starting, setStarting] = React.useState(() => misc[1]);
   const changeSet = event => setSet(event.target.value);
