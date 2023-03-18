@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { Card, CardActionArea, Modal, IconButton, Typography } from '@mui/material'
 import { Close } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
@@ -13,20 +13,23 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
 }));
 
 export default function Info() {
-
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = useCallback(() => {
+    setOpen(true)
+  }, [setOpen]);
+  const handleClose = useCallback(() => {
+    setOpen(false)
+  }, [setOpen]);
 
   return (
     <Card sx={{ height: '100%', bgcolor: '#242734', backgroundImage: 'none' }}>
-      <CardActionArea onClick={handleOpen} sx={{ height: '100%', p:2 }}>
-        <Typography variant='body1' sx={{ textAlign: 'center'}} >
-          Enter the mainstats and substats of the artifact you want to look up. The sliders represent the <strong>acceptable range</strong> of substat upgrade rolls. <br/>
+      <CardActionArea onClick={handleOpen} sx={{ height: '100%', p: 2 }}>
+        <Typography variant='body1' sx={{ textAlign: 'center' }} >
+          Enter the mainstats and substats of the artifact you want to look up. The sliders represent the <strong>acceptable range</strong> of substat upgrade rolls. <br />
           <u>Click for more information.</u>
         </Typography>
       </CardActionArea>
-      <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Modal open={open} onClose={handleClose} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Card variant='outlined' sx={{ backgroundImage: 'none', bgcolor: '#242734', p: 2, width: '75%', minWidth: '250px', display: 'flex' }}>
           <Typography>
             TEST TEXT

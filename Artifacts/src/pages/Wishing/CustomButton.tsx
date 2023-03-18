@@ -11,7 +11,7 @@ const RunButton = styled(Button)(({ theme }) => ({
     },
   }));
 
-export default function CustomButton({state, click}) {
+export default function CustomButton({state, click}: {state: Boolean, click: () => void}) {
   return (
     <RunButton variant="contained" onClick={click} sx={{mt: 3, pl:'6px', ml:1}}>
         <span style={{fontVariant: 'small-caps', height: '24px'}}><strong>&nbsp;

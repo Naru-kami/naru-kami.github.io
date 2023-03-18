@@ -18,8 +18,7 @@ export default function Main() {
   const [populeted, setpopulated] = React.useState(false)
   const pop = () => setpopulated(true);
 
-  const [plotdata, setPlotdata] = React.useState({x:[], y:[]});
-  function passPlotdata(val) {setPlotdata(p => ({...p, x: val.x, y: val.y})); }
+  const [plotdata, setPlotdata] = React.useState({ x: [1, 2, 3, 4], y: [1, 2, 3, 4] });
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -29,7 +28,7 @@ export default function Main() {
       <Guarantee />
       <Starglitter />
       <CustomButton state={populeted} click={pop} />
-      <Chart plotdata={plotdata}/>
+      <Chart plotdata={plotdata} />
     </ThemeProvider>
   )
 }
