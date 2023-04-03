@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate, HashRouter } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import Navbar from './components/NavBar';
 import Home from './pages/Home/Main';
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
       <React.StrictMode>
         <ThemeProvider theme={darkTheme}>
           <CssBaseline />
-          <BrowserRouter>
+          <HashRouter>
             <Navbar />
             <Suspense fallback={null}>
               <Routes>
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function (event) {
                 <Route path='*' element={<Navigate to='/' />} />
               </Routes>
             </Suspense>
-          </BrowserRouter>
+          </HashRouter>
         </ThemeProvider>
       </React.StrictMode>
     );

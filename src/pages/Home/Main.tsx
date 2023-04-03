@@ -10,7 +10,8 @@ const sx = {
   maxWidth: 500,
   minWidth: 250,
   borderRadius: 3,
-  backgroundColor: 'rgb(18, 18, 18)'
+  backgroundColor: 'rgb(18, 18, 18)',
+  border: '4px solid #101426',
 }
 
 export default function ActionAreaCard() {
@@ -24,7 +25,7 @@ export default function ActionAreaCard() {
           <CardMedia
             component="img"
             height="250"
-            image="Wishing.png"
+            image="Wishing2.png"
             alt="Wishing"
           />
           <CardContent>
@@ -44,7 +45,7 @@ export default function ActionAreaCard() {
           <CardMedia
             component="img"
             height="250"
-            image="Artifacts.png"
+            image="Artifact2.png"
             alt="Artifacts"
           />
           <CardContent>
@@ -53,9 +54,8 @@ export default function ActionAreaCard() {
             </Typography>
             <Typography variant="body2" color="text.secondary">
               Farming for a certain artifact?
-              Specify the main- and substats and enter the range for the upgrade rolls you accept on the artifact.
-              The amount of runs are converted to days.
-              Expect to farm X amount of days to get a certain chance at your desired artifact.
+              Here, you can specify the main- and stubstats and enter the range for the upgrade rolls you are willing to accept on the artifact.
+              The graph will tell you the probability based on the number of days you spend on farming it.
             </Typography>
           </CardContent>
         </CardActionArea>
