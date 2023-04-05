@@ -12,7 +12,7 @@ export default function Guarantee({ id, ns }: { id: string, ns: "char" | "weap" 
       t.plotdataSim.changed = true;
       return t;
     })
-  }, []);
+  }, [setStore]);
 
   return (
     <Checkbox checked={check} onChange={updatecheck} id={id} sx={{ width: '24px', height: '24px' }} />

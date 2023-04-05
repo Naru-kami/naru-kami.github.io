@@ -59,7 +59,7 @@ export default function Starglitter() {
       t.plotdataSim.changed = true;
       return t;
     })
-  }, []);
+  }, [setStore]);
 
   return (
     <Card sx={{ bgcolor: '#1B1D2A', backgroundImage: 'none', width: '100%' }}>

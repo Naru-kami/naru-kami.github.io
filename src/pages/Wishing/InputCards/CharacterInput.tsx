@@ -76,7 +76,8 @@ function Enabler() {
       }
       return t;
     })
-  }, [])
+  }, [setStore]);
+
   return (
     <>
       {!enable && <div style={{

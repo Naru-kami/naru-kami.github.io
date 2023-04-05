@@ -38,7 +38,7 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
       return t;
     });
     return c;
-  }, []);
+  }, [mode, setStore]);
 
   const handeSlider = useCallback((event: Event, value: number | number[]) => {
     setStore(prev => {
@@ -47,7 +47,7 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
       t.plotdataSim.changed = true;
       return t;
     });
-  }, []);
+  }, [setStore]);
 
   return (
     <StyledCard>

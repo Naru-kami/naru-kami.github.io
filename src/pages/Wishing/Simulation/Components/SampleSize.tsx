@@ -38,7 +38,7 @@ function SampleInterval() {
       t.samplesize = clamp(t.samplesize - 500000, 0);
       return t;
     });
-  }, []);
+  }, [setStore]);
 
   const onPlus = useCallback(() => {
     setStore(prev => {
@@ -46,7 +46,7 @@ function SampleInterval() {
       t.samplesize = clamp(t.samplesize + 500000, 0);
       return t;
     });
-  }, []);
+  }, [setStore]);
 
   const handleSample = useCallback((newVal: number) => {
     const c = clamp(newVal, 0);
@@ -56,7 +56,7 @@ function SampleInterval() {
       return t;
     });
     return c;
-  }, []);
+  }, [setStore, clamp]);
 
   return (
     <>

@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes, Navigate, HashRouter } from "react-router-dom";
+import { Route, Routes, Navigate, HashRouter } from "react-router-dom";
 import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
 import Navbar from './components/NavBar';
 import Home from './pages/Home/Main';

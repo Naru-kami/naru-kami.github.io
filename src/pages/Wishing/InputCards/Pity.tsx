@@ -24,7 +24,7 @@ export default function Pity({ max, ns }: { max: number, ns: "char" | "weap" }) 
       return t;
     });
     return c;
-  }, []);
+  }, [max, setStore]);
 
   const handeSlider = useCallback((event: Event, value: number | number[]) => {
     setStore(prev => {
@@ -33,7 +33,7 @@ export default function Pity({ max, ns }: { max: number, ns: "char" | "weap" }) 
       t.plotdataSim.changed = true;
       return t;
     });
-  }, []);
+  }, [setStore]);
 
   return (
     <StyledCard>
