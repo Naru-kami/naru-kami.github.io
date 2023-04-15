@@ -63,6 +63,6 @@ body::-webkit-scrollbar-thumb{
   background-color: transparent;
 }
 
-/* .Mui-selected img{ 
-  filter: sepia(70%) hue-rotate(180deg) saturate(90000%);
-} */
+div[role=tablist] {
+  gap: 8px;
+}
