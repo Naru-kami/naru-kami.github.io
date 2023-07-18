@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { Box, Card, Grid, Skeleton, Typography } from '@mui/material';
+import { Box, Card, Grid, Paper, Skeleton, Typography } from '@mui/material';
 import Provider from './Data/Store';
 
 const ArtifactMainProps = lazy(() => import('./components/ArtifactMainProps'));
@@ -73,10 +73,10 @@ export default function Main() {
             </Grid>
             <Grid item xs={12}>
               <Suspense fallback={<Skeleton variant="rounded" sx={{ height: '68px', bgcolor: '#FFFFFF21', my: '1em' }} />}>
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 8, marginTop: 24 }}>
+                <Paper variant='outlined' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 3.5, mb: 1, p: 1 }}>
                   <Artichance />
                   <StorageResetter />
-                </div>
+                </Paper>
               </Suspense>
             </Grid>
           </Grid>

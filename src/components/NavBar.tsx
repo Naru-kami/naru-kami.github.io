@@ -24,8 +24,8 @@ function DynamicTabs({ location }: { location: Location }) {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <AppBar component="nav" sx={{ bgcolor: '#1B1D2A', backgroundImage: 'none', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+    <Box style={{ display: 'flex' }}>
+      <AppBar component="nav" style={{ backgroundColor: '#1B1D2A', backgroundImage: 'none', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
         <Tab
           label={<Typography fontWeight={600} fontSize={16} variant="h2" letterSpacing={1}> Genshin Statistics </Typography>}
           component={Link}
@@ -62,7 +62,7 @@ function DynamicTabs({ location }: { location: Location }) {
           </Box>
         </Drawer>
       </Box>
-      <Box component="main" sx={{ p: 0 }}>
+      <Box component="main" style={{ padding: 0 }}>
         <Toolbar />
       </Box>
     </Box>

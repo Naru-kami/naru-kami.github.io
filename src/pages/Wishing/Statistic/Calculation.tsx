@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import RunButton from './Components/RunButton';
 import Chart from './Components/chart';
-import { Button, Card, Grid, styled, Tooltip, Typography } from '@mui/material';
+import { Button, Card, Grid, Paper, styled, Tooltip, Typography } from '@mui/material';
 import CachedIcon from '@mui/icons-material/Cached';
 import CharacterInput from '../InputCards/CharacterInput';
 import StorageResetter from '../StoreResetter';
@@ -44,10 +44,10 @@ export default function Calculation() {
             </Card>
           </Grid>
         </Grid >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: "24px", marginBottom: "8px" }}>
+        <Paper variant='outlined' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 3.5, mb: 1, p: 1 }}>
           <RunButton />
           <StorageResetter />
-        </div>
+        </Paper>
       </Grid>
 
       <Grid item xs={12} xl={8} >

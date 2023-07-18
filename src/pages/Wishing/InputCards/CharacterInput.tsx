@@ -82,7 +82,7 @@ function Enabler() {
     <>
       {!enable && <div style={{
         position: 'absolute',
-        top: 0, bottom: 0, left: 0, right: 0,
+        inset: 0,
         opacity: 0.7,
         backgroundColor: '#1B1D2A',
         zIndex: 100

@@ -1,7 +1,7 @@
 import React from 'react'
 import RunButton from './Components/RunButton';
 import Chart from './Components/chart';
-import { Grid } from '@mui/material';
+import { Grid, Paper } from '@mui/material';
 import SampleSize from './Components/SampleSize';
 import CharacterInput from '../InputCards/CharacterInput';
 import StorageResetter from '../StoreResetter';
@@ -29,10 +29,10 @@ export default function Simulation() {
             <Starglitter />
           </Grid>
         </Grid >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginTop: "24px", marginBottom: "8px" }}>
+        <Paper variant='outlined' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 3.5, mb: 1, p: 1 }}>
           <RunButton />
           <StorageResetter />
-        </div>
+        </Paper>
       </Grid>
 
       <Grid item xs={12} xl={8}>

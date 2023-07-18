@@ -61,7 +61,7 @@ export default function RunButton() {
   }, [store, setStore]);
 
   return (
-    <StyledButton variant="contained" onClick={pop} disabled={(!store.char.enabled && !store.weap.enabled)} sx={{ pl: 1, ml: 1 }}>
+    <StyledButton variant="contained" onClick={pop} disabled={(!store.char.enabled && !store.weap.enabled)} sx={{ pl: 1 }}>
       <CalculateIcon />
       <Typography variant='body1' letterSpacing={1} sx={{ display: 'flex', alignItems: 'center', pl: 1 }}>
         <strong>

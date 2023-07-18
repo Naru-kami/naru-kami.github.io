@@ -11,6 +11,7 @@ const RunButton = styled(Button)(({ theme }) => ({
   '&:hover': {
     backgroundColor: green[900],
   },
+  height: '40px'
 }));
 
 function fact(k: number): number {
@@ -185,10 +186,12 @@ export default function Artichance() {
   }, [artichance.current, states, setStates]);
 
   return (
-    <RunButton variant="contained" onClick={calc} sx={{ pl: 1, ml: 1 }}>
+    <RunButton variant="contained" onClick={calc} sx={{ pl: 1 }}>
       <CalculateIcon />
       <Typography variant='body1' letterSpacing={1} sx={{ display: 'flex', alignItems: 'center', pl: 1 }}>
-        <strong> calculate</strong>
+        <strong>
+          calculate
+        </strong>
       </Typography>
     </RunButton>
   )

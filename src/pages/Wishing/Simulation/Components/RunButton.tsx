@@ -18,7 +18,6 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
   height: '40px',
   paddingLeft: 8,
-  marginLeft: 8,
   gap: 8
 }));
 

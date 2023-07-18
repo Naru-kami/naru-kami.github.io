@@ -17,8 +17,9 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
 function createData(
   name: string,
   data: number,
+  inactive?: boolean,
 ) {
-  return { name, data };
+  return { name, data, inactive };
 }
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -33,6 +34,7 @@ export default function Breakdown() {
   const [artichance] = useStore((store: ArtifactStore) => store.artichance);
   const [final] = useStore((store: ArtifactStore) => store.artichance.final);
   const [resin] = useStore((store: ArtifactStore) => store.resin);
+  const [starter] = useStore((store: ArtifactStore) => store.starter);
 
   const trials = resin[1] / resin[0];
   const avg = final ? 1 / final / trials : 0;
@@ -47,13 +49,13 @@ export default function Breakdown() {
 
   const data = useMemo(() => {
     return [
-      createData('Substat configuration', artichance.permut),
       createData('Mainstat configuration', artichance.mains),
+      createData('Substat configuration', artichance.permut),
       createData('Upgrade Rolls', artichance.upgrade),
+      createData('├─ 4 starting substats', 0.25, starter[1] == 2),
+      createData('└─ 3 starting substats', 0.75, starter[1] == 1),
       createData('On/off-set Artifact', artichance.set),
       createData('Double drop rate', resin[0] == 40 ? 0 : 0.07),
-      createData('4 starting substats', 0.25),
-      createData('3 starting substats', 0.75),
       createData('Final Artifact chance', artichance.final)
     ]
   }, [artichance]);
@@ -84,7 +86,7 @@ export default function Breakdown() {
                 </TableHead>
                 <TableBody>
                   {data.map((row, i) => (
-                    <StyledTableRow key={i} >
+                    <StyledTableRow key={i} className={row.inactive ? 'inactive-row' : ''}>
                       <TableCell component="th" scope="row">{row.name}</TableCell>
                       <TableCell align="right">{roundSigfig(row.data * 100)} %</TableCell>
                     </StyledTableRow>
@@ -94,7 +96,7 @@ export default function Breakdown() {
               </Table>
             </TableContainer>
           </div>
-          <CloseButton onClick={handleClose} sx={{ width: '30px', height: '30px', borderRadius: 1, marginLeft: 'auto', bgcolor: 'A00' }}>
+          <CloseButton onClick={handleClose} sx={{ width: '30px', height: '30px', borderRadius: 1, ml: 'auto' }}>
             <Close />
           </CloseButton>
         </Card>

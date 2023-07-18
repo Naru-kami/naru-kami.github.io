@@ -110,13 +110,13 @@ if (storedWish) {
       tab: 0,
       plotdataSim: {
         changed: false,
-        cumulative: false,
+        cumulative: true,
         progress: 0,
         x: [],
         y: []
       },
       plotdataCalc: {
-        cumulative: false,
+        cumulative: true,
         x: [],
         y: []
       }
@@ -149,13 +149,13 @@ if (storedWish) {
     tab: 0,
     plotdataSim: {
       changed: false,
-      cumulative: false,
+      cumulative: true,
       progress: 0,
       x: [],
       y: []
     },
     plotdataCalc: {
-      cumulative: false,
+      cumulative: true,
       x: [],
       y: []
     }

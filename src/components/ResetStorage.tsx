@@ -12,7 +12,6 @@ const ResetButton = styled(Button)(({ theme }) => ({
   },
   minWidth: '36px',
   height: '40px',
-  marginRight: 8,
 }));
 
 export default function ResetStorage({ storageKey, executeFunction }: { storageKey?: string[], executeFunction?: () => void }) {
