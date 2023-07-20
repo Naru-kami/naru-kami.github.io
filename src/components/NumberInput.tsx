@@ -25,25 +25,25 @@ export default function NumberInput({ onChange, value, format = false, ...props 
   const { inputProps, ...restprops } = props as InputProps;
 
   const [val, setval] = useState(value + '');
-  const bu = useRef(val);
+  const placeholder = useRef(val);
 
   const onFocus = useCallback(() => {
-    bu.current = val;
+    placeholder.current = val;
     setval("");
-  }, [setval, bu.current]);
+  }, [setval, placeholder.current]);
 
   const onBlur = useCallback(() => {
-    (val === "") && setval(bu.current) || (val !== "") && (bu.current = val);
-    const returnedValue = onChange(val === "" ? Number(bu.current) : Number(val));
+    (val === "") && setval(placeholder.current) || (val !== "") && (placeholder.current = val);
+    const returnedValue = onChange(val === "" ? Number(placeholder.current) : Number(val));
 
     if (typeof returnedValue === 'undefined') {
       return;
     } else {
-      bu.current = returnedValue.toString();
+      placeholder.current = returnedValue.toString();
       setval(returnedValue.toString());
       return;
     }
-  }, [onChange, val, setval, bu.current]);
+  }, [onChange, val, setval, placeholder.current]);
 
   const changeInput = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const newval = format ? convertNumber(e.target.value).toString() : e.target.value;
@@ -53,13 +53,13 @@ export default function NumberInput({ onChange, value, format = false, ...props 
 
   useEffect(() => {
     setval(value + '')
-    bu.current = value + '';
+    placeholder.current = value + '';
   }, [value, setval]);
 
   const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     e.key === "Enter" && onBlur();
-    e.key === "ArrowUp" && val === "" && setval(bu.current);
-    e.key === "ArrowDown" && val === "" && setval(bu.current);
+    e.key === "ArrowUp" && val === "" && setval(placeholder.current);
+    e.key === "ArrowDown" && val === "" && setval(placeholder.current);
   }, [onBlur, setval])
 
   return (
