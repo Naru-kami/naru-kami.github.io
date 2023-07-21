@@ -38,11 +38,6 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
   const [MaxVal, setMaxVal] = useState(starter != 2 ? 5 : 4);
 
   useEffect(() => {
-    setlowerVal(value[0]);
-    setupperVal(value[1]);
-  }, [value])
-
-  useEffect(() => {
     const m = starter != 2 ? 5 : 4;
     setMaxVal(m);
     setupperVal(p => Math.min(p, m));
