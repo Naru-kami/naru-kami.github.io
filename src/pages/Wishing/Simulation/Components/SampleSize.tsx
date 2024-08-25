@@ -59,44 +59,42 @@ function SampleInterval() {
   }, [setStore, clamp]);
 
   return (
-    <>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <Typography sx={{ mr: 2 }}>
-          Sample interval:
-        </Typography>
-        <StyledCard sx={{ backgroundColor: sample >= 1e8 && '#d32f2fbb' || sample >= 1e7 && '#f57c00aa' || "#242734" }}>
-          <StyledButton onClick={onMinus}>
-            <RemoveIcon />
-          </StyledButton>
-          <NumberInput value={sample}
-            format
-            onChange={handleSample}
-            sx={{
-              mx: 1, minWidth: '100px',
-              width: (sample.toString().length + 1) * 12 + 'px',
-              backgroundColor: 'transparent'
-            }}
-          />
-          <StyledButton onClick={onPlus}>
-            <AddIcon />
-          </StyledButton>
-        </StyledCard>
-      </div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+      <Typography>
+        Sample interval:
+      </Typography>
+      <StyledCard sx={{ backgroundColor: sample >= 1e8 && '#d32f2fbb' || sample >= 1e7 && '#f57c00aa' || "#242734" }}>
+        <StyledButton onClick={onMinus} sx={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}>
+          <RemoveIcon />
+        </StyledButton>
+        <NumberInput value={sample}
+          format
+          onChange={handleSample}
+          sx={{
+            mx: 1, minWidth: '100px',
+            width: (sample.toString().length + 1) * 12 + 'px',
+            backgroundColor: 'transparent'
+          }}
+        />
+        <StyledButton onClick={onPlus} sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}>
+          <AddIcon />
+        </StyledButton>
+      </StyledCard>
       {
-        sample >= 1e8 && <StyledCard sx={{ width: '100%', p: 1, backgroundColor: '#d32f2fbb', my: 2 }}>
+        sample >= 1e8 && <StyledCard sx={{ flex: 1, backgroundColor: '#d32f2fbb', p: 0.5, minWidth: 'max-content' }}>
           <ErrorOutlineIcon />
           <Typography variant='body2' sx={{ px: 1 }}>
-            Such high sample intervals are not recommended and take a long time to execute. Only do this if need higher precision.
+            Such high sample intervals are not recommended. Only do this if you need to.
           </Typography>
         </StyledCard> ||
-        sample >= 1e7 && <StyledCard sx={{ width: '100%', p: 1, backgroundColor: '#f57c00aa', my: 2 }}>
+        sample >= 1e7 && <StyledCard sx={{ flex: 1, backgroundColor: '#f57c00aa', p: 0.5, minWidth: 'max-content' }}>
           <ErrorOutlineIcon />
           <Typography variant='body2' sx={{ px: 1 }}>
             High sample intervals may take a long execution time
           </Typography>
         </StyledCard>
       }
-    </>
+    </div>
   )
 }
 

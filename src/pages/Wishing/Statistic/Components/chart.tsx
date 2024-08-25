@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import Plot from 'react-plotly.js';
-import { Box, LinearProgress, Paper, Typography } from '@mui/material';
-import { useStore, WishingStore } from '../../Store';
+import { Paper } from '@mui/material';
+import { useStore } from '../../Store';
 import { pdfToCdf, roundSigfig } from '../../utils';
 
 const config = {

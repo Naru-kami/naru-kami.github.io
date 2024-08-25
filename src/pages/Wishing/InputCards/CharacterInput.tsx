@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 import { Grid, Card, Typography, styled, ListItemButton, Switch, SelectChangeEvent, FormControl, Select, MenuItem } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { yellow } from '@mui/material/colors'
@@ -6,7 +6,7 @@ import Goal from './Goal';
 import Guarantee from './Guarantee';
 import Pity from './Pity';
 import character from '../assets/character.png';
-import { useStore } from '../Store';
+import { useStore, WishingStore } from '../Store';
 
 const StyledListItemButton = styled(ListItemButton)(() => ({
   display: "flex",
@@ -20,9 +20,11 @@ const StyledListItemButton = styled(ListItemButton)(() => ({
 }));
 
 export default function Input() {
+  const [enabled, setStore] = useStore(store => store.char.enabled);
   return (
     <Card sx={{ p: 2, bgcolor: '#1B1D2A', backgroundImage: 'none', mx: 'auto', position: 'relative' }}>
-      <Grid container spacing={2}>
+      <Enabler enabled={enabled} setStore={setStore} />
+      <Grid ref={node => !enabled ? node?.setAttribute('inert', '') : node?.removeAttribute('inert')} container spacing={2}>
         <Grid item xs={12} textAlign='center'>
           <Typography variant="h6" style={{ textDecoration: 'underline' }} >
             <img src={character} width='20px' height='20px' /> Character Banner
@@ -59,13 +61,11 @@ export default function Input() {
           </StyledListItemButton>
         </Grid>
       </Grid >
-      <Enabler />
     </Card >
   )
 }
 
-function Enabler() {
-  const [enable, setStore] = useStore(store => store.char.enabled);
+function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Partial<WishingStore> | ((prev: WishingStore) => WishingStore)) => void }) {
   const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setStore(prev => {
       var t = { ...prev };
@@ -80,7 +80,7 @@ function Enabler() {
 
   return (
     <>
-      {!enable && <div style={{
+      {!enabled && <div style={{
         position: 'absolute',
         inset: 0,
         opacity: 0.7,
@@ -93,7 +93,7 @@ function Enabler() {
         top: 0, left: 0, padding: 5,
         zIndex: 101
       }}>
-        <Switch checked={enable} onChange={handleChange} color="primary" />
+        <Switch checked={enabled} onChange={handleChange} color="primary" />
       </label>
     </>
   );

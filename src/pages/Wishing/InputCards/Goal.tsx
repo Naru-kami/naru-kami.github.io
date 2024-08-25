@@ -56,8 +56,8 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
         value={goal}
         onChange={handleNumber}
         startAdornment={
-          <InputAdornment position="start" sx={{ mr: '-0.425rem', ml: '.425rem' }}>
-            <label htmlFor={ns + 'Goal'}>
+          <InputAdornment position="start" sx={{ mr: '-0.5rem', ml: '.5rem' }}>
+            <label htmlFor={ns + 'Goal'} style={{ cursor: 'text' }}>
               {mode == 'fixed' && ' ' || adornment}
             </label>
           </InputAdornment>

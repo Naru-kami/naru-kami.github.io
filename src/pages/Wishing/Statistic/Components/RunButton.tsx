@@ -52,11 +52,10 @@ export default function RunButton() {
   const pop = useCallback(() => {
     var ydata: number[] = (store.mode == 'distribution' ? new Array(
       (store.char.enabled ? (90 * (2 * store.char.goal + 2 - (+store.char.guaranteed)) - store.char.pity) : 0) +
-      (store.weap.enabled ? (77 * 3 * store.weap.goal - store.weap.pity) : 0) + 1
+      (store.weap.enabled ? (77 * 2 * store.weap.goal - store.weap.pity) : 0) + 1
     ).fill(0) : new Array(
       (+store.char.enabled) * 7 + (+store.weap.enabled) * 5
     ).fill(0));
-
     createWorkers(store, setStore, ydata);
   }, [store, setStore]);
 

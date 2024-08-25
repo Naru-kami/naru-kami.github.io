@@ -10,7 +10,7 @@ self.onmessage = function (e: MessageEvent<DataMessage>) {
   self.close();
 }
 
-function GetStarglitter(star: 4 | 5, count: number): number {
+function GetStarglitter(star: 4 | 5, count: number) {
   return +(star == 5) && (+(count == -1) * 0 + +(count >= 0 && count < 6) * 10 + +(!(count == -1) && !(count >= 0 && count < 6)) * 25) || +(star == 4) && (+(count == -1) * 0 + +(count >= 0 && count < 6) * 2 + +(!(count == -1) && !(count >= 0 && count < 6)) * 5);
 }
 
@@ -40,7 +40,7 @@ function SimDist({ char, weap, starglitter, samplesize }: DataMessage) {
         prob4 = Math.min(1, 0.051 + Math.max(0, (counter4 - 8) * 0.51));
         let x = Math.random();
         if (x < prob5) {
-          if (x <= (prob5 / 2) || guaranteed) {
+          if (x <= (prob5 * 0.55) || guaranteed) {
             guaranteed = false;
             starglitterCount += GetStarglitter(5, promoted + starglitter.cons[0]);
             promoted++;
@@ -71,7 +71,6 @@ function SimDist({ char, weap, starglitter, samplesize }: DataMessage) {
         }
       }
     }
-
     if (weap.enabled) {
       let gc = 0;
       let counter5 = weap.pity + 1;
@@ -81,14 +80,14 @@ function SimDist({ char, weap, starglitter, samplesize }: DataMessage) {
       while (promoted < weap.goal) {
         pulls++;
         if (starglitter.enabled && starglitterCount >= 5) {
-          pulls -= 1;
+          pulls--;
           starglitterCount -= 5;
         }
         prob5 = Math.min(1, 0.007 + Math.max(0, (counter5 - 62) * 0.07));
         prob4 = Math.min(1, 0.06 + Math.max(0, (counter4 - 7) * 0.6));
         let x = Math.random();
         if (x < prob5) {
-          if (x <= prob5 * (offbanner ? 0.5 : 0.375) || gc == 2) {
+          if (x <= prob5 * (offbanner ? 0.5 : 0.375) || gc === 1) {
             gc = 0;
             promoted++;
             offbanner = false;
@@ -156,7 +155,7 @@ function SimFixed({ char, weap, starglitter, samplesize }: DataMessage) {
         prob4 = Math.min(1, 0.051 + Math.max(0, (counter4 - 8) * 0.51));
         x = Math.random();
         if (x < prob5) {
-          if (x <= (prob5 / 2) || guaranteed) {
+          if (x <= (prob5 * 0.55) || guaranteed) {
             guaranteed = false;
             starglitterCount += GetStarglitter(5, promoted + starglitter.cons[0]);
             promoted++;
@@ -212,7 +211,7 @@ function SimFixed({ char, weap, starglitter, samplesize }: DataMessage) {
         prob4 = Math.min(1, 0.06 + Math.max(0, (counter4 - 7) * 0.6));
         x = Math.random();
         if (x < prob5) {
-          if (x <= prob5 * (guaranteed ? 0.5 : 0.375) || gc == 2) {
+          if (x <= prob5 * (guaranteed ? 0.5 : 0.375) || gc === 1) {
             gc = 0;
             promoted++;
             guaranteed = false;

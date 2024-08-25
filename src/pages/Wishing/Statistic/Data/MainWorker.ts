@@ -2,8 +2,7 @@ import { DataMessage } from '../Components/RunButton';
 import fftjs from 'fft.js';
 
 self.onmessage = function (e: MessageEvent<DataMessage>) {
-  const { data } = e,
-    { char, weap, mode } = data;
+  const { char, weap, mode } = e.data;
 
   const t = performance.now();
   if (mode == 'distribution') {
@@ -95,48 +94,57 @@ function Pn(n: number, pity: number, d: (num: number) => number) {
 }
 
 function characterDistribution(i: number, pity: number, g: boolean) {
-  var cdf: number[] = new Array(90 * (2 * i + 2 - (+g)) - pity + 1).fill(0);
+  var cdf: number[] = new Array(90 * (2 * i + 2 - (+g)) - pity + 1).fill(0),
+    a1 = g ? 1 : 0.55,
+    a2 = 1 - a1,
+    convolution = [0, a1, a2];
 
+  for (let k = 0; k < i; k++) {
+    convolution = multiplyFFTjs(convolution, [0, 0.55, 0.45]);
+  }
   for (let k = i + 1; k <= 2 * i + 2 - (+g); k++) {
-    var c = binomial(i + 1 - (+g) * 1, k - (i + 1)) / (1 << (i + 1 - (+g)));
+    // var c = binomial(i + 1 - (+g), k - (i + 1)) * Math.pow(0.55, i + 1 - (+g) - (k - (i + 1))) * Math.pow(0.45, k - (i + 1));
     var dist = Pn(k, pity, character);
     for (let x = 1; x <= 90 * (2 * i + 2 - (+g)) - pity; x++) {
-      cdf[x] += 100 * c * (dist[x] === undefined ? 1 : dist[x]);
+      cdf[x] += 100 * convolution[k] * (dist[x] ?? 1);
     }
   }
   return cdf;
 }
 
 function getC(pulls: number, pity: number, g: boolean) {
-  var con = [0, 0, 0, 0, 0, 0, 0];
+  var con = [0, 0, 0, 0, 0, 0, 0],
+    a1 = g ? 1 : 0.55,
+    a2 = 1 - a1;
   if (pulls <= 0) {
     return con;
   }
+  var convolution = [0, a1, a2];
   for (let i = 0; i <= 6; i++) {
     for (let k = i + 1; k <= 2 * i + 2 - (+g); k++) {
-      var l = binomial(i + 1 - (+g) * 1, k - (i + 1)) / (1 << (i + 1 - (+g)));
+      // var l = binomial(i + 1 - (+g), k - (i + 1)) * Math.pow(0.55, i + 1 - (+g) - (k - (i + 1))) * Math.pow(0.45, k - (i + 1));
       var dist = Pn(k, pity, character);
-      con[i] += 100 * l * (dist[pulls] === undefined ? 1 : dist[pulls]);
+      con[i] += 100 * convolution[k] * (dist[pulls] ?? 1);
     }
+    convolution = multiplyFFTjs(convolution, [0, 0.55, 0.45]);
   }
   return con;
 }
 
 function weaponDistribution(i: number, pity: number, g: boolean) {
-  var cdf: number[] = new Array(77 * 3 * i - pity + 1).fill(0),
-    a1 = (+!g) * 0.375 + (+g) * 0.5,
-    a2 = (+!g) * 0.265625 + (+g) * 0.1875,
-    a3 = 1 - (a1 + a2);
-  var convolution = [0, a1, a2, a3];
+  var cdf: number[] = new Array(77 * 2 * i - pity + 1).fill(0),
+    a1 = g ? 0.5 : 0.375,
+    a2 = 1 - a1,
+    convolution = [0, a1, a2];
 
   for (let k = 1; k < i; k++) {
-    convolution = multiplyFFTjs(convolution, [0, 0.375, 0.265625, 0.359375]);
+    convolution = multiplyFFTjs(convolution, [0, 0.375, 0.625]);
   }
-
-  for (let k = 1; k <= 3 * i; k++) {
+  for (let k = 1; k <= 2 * i; k++) {
+    // var c = binomial(i + 1 - (+g), k - (i + 1)) * Math.pow(0.375, i + 1 - (+g) - (k - (i + 1))) * Math.pow(0.625, k - (i + 1));
     var dist = Pn(k, pity, weapon);
-    for (let x = 1; x <= 77 * 3 * i - pity; x++) {
-      cdf[x] += 100 * convolution[k] * (dist[x] === undefined ? 1 : dist[x]);
+    for (let x = 1; x <= 77 * 2 * i - pity; x++) {
+      cdf[x] += 100 * convolution[k] * (dist[x] ?? 1);
     }
   }
   return cdf;
@@ -144,19 +152,19 @@ function weaponDistribution(i: number, pity: number, g: boolean) {
 
 function getR(pulls: number, pity: number, g: boolean) {
   var ref = [0, 0, 0, 0, 0],
-    a1 = (+!g) * 0.375 + (+g) * 0.5,
-    a2 = (+!g) * 0.265625 + (+g) * 0.1875,
-    a3 = 1 - (a1 + a2);
+    a1 = g ? 0.5 : 0.375,
+    a2 = 1 - a1;
   if (pulls <= 0) {
     return ref;
   }
-  var convolution = [0, a1, a2, a3];
+  var convolution = [0, a1, a2];
   for (let i = 1; i <= 5; i++) {
-    for (let k = 1; k <= 3 * i; k++) {
+    for (let k = 1; k <= 2 * i; k++) {
+      // var l = binomial(i + 1 - (+g), k - (i + 1)) * Math.pow(0.375, i + 1 - (+g) - (k - (i + 1))) * Math.pow(0.625, k - (i + 1));
       var dist = Pn(k, pity, weapon);
-      ref[i - 1] += 100 * convolution[k] * (dist[pulls] === undefined ? 1 : dist[pulls]);
+      ref[i - 1] += 100 * convolution[k] * (dist[pulls] ?? 1);
     }
-    convolution = multiplyFFTjs(convolution, [0, 0.375, 0.265625, 0.359375]);
+    convolution = multiplyFFTjs(convolution, [0, 0.375, 0.625]);
   }
   return ref;
 }

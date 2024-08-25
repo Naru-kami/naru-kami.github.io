@@ -1,6 +1,5 @@
-import React, { lazy, Suspense } from 'react'
+import React, { lazy, Suspense, useState } from 'react'
 import { Tabs, Box, Tab, Typography, Skeleton } from '@mui/material';
-import { useLocalStorage } from '../../hooks/useLocalStorage';
 import Provider from './Store';
 
 const Simulation = lazy(() => import('./Simulation/Simulation'));
@@ -27,7 +26,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 export default function Main() {
-  const [value, setValue] = useLocalStorage("Wishing.Tab", 0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
