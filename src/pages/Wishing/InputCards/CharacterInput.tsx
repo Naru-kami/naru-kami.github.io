@@ -1,5 +1,5 @@
-import { useCallback, useRef } from 'react';
-import { Grid, Card, Typography, styled, ListItemButton, Switch, SelectChangeEvent, FormControl, Select, MenuItem } from '@mui/material';
+import { useCallback } from 'react';
+import { Grid, Card, Typography, styled, ListItemButton, Switch, SelectChangeEvent, FormControl, Select, MenuItem, Slider, Tooltip, Link, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { yellow } from '@mui/material/colors'
 import Goal from './Goal';
@@ -7,6 +7,8 @@ import Guarantee from './Guarantee';
 import Pity from './Pity';
 import character from '../assets/character.png';
 import { useStore, WishingStore } from '../Store';
+import NumberInput from '../../../components/NumberInput';
+import { clamp } from '../utils';
 
 const StyledListItemButton = styled(ListItemButton)(() => ({
   display: "flex",
@@ -30,35 +32,34 @@ export default function Input() {
             <img src={character} width='20px' height='20px' /> Character Banner
           </Typography>
         </Grid>
-        <Grid item xs={5} display='flex' alignItems='flex-end'>
+        <Grid item xs={5} sm={4} display='flex' alignItems='flex-end'>
           <ModeSwitcher />
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={7} sm={8}>
           <Goal adornment={"C"} max={6} ns='char' />
         </Grid>
-        <Grid item xs={5}>
-          <label htmlFor="charPity" style={{ width: '100%', height: '100%', borderBottom: '1px solid #FFFFFF33', display: 'flex', alignItems: 'center' }}>
+        <Grid item xs={5} sm={4}>
+          <label htmlFor="charPity" style={{ width: '100%', height: '100%', borderBottom: '1px solid #FFFFFF33', display: 'flex', alignItems: 'center', paddingInline: '0.5rem' }}>
             <Typography variant='body1' style={{ display: 'flex', alignItems: 'center' }} >
               5 <StarIcon sx={{ color: yellow[700], fontSize: 22, px: '2px', height: 'auto' }} /> Pity
             </Typography>
           </label>
         </Grid>
-        <Grid item xs={7}>
+        <Grid item xs={7} sm={8}>
           <Pity max={89} ns='char' />
         </Grid>
-        <Grid item xs={5}>
-          <label htmlFor='charGuaranteed' style={{ width: '100%', height: '100%', borderBottom: '1px solid #FFFFFF33', display: 'flex', alignItems: 'center' }}>
-            <Typography variant='body1' style={{ display: 'flex', alignItems: 'center' }} >
-              Guarantee
-            </Typography>
-          </label>
-        </Grid>
-        <Grid item xs={7}>
-          <StyledListItemButton>
-            <label style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Grid item xs={5} sm={4}>
+          <StyledListItemButton sx={{ borderBottom: '1px solid #FFFFFF33', borderRadius: '6px 6px 0 0' }}>
+            <label htmlFor='charGuaranteed' style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingInline: '0.5rem' }}>
+              <Typography variant='body1' style={{ display: 'flex', alignItems: 'center' }} >
+                Guarantee
+              </Typography>
               <Guarantee id={"charGuaranteed"} ns='char' />
             </label>
           </StyledListItemButton>
+        </Grid>
+        <Grid item xs={7} sm={8}>
+          <CapturingRadiance />
         </Grid>
       </Grid >
     </Card >
@@ -118,9 +119,9 @@ function ModeSwitcher() {
 
   return (
     <FormControl size="small" sx={{ width: '100%' }}>
-      <Select value={mode} onChange={handleMode} variant="standard" >
+      <Select value={mode} onChange={handleMode} variant="standard" sx={{ pl: 1 }} >
         <MenuItem value={'distribution'}>
-          <Typography variant='body1' >
+          <Typography variant='body1' sx={{ overflow: 'clip', textOverflow: 'ellipsis' }} >
             Constellation
           </Typography>
         </MenuItem>
@@ -132,5 +133,74 @@ function ModeSwitcher() {
       </Select>
     </FormControl>
   )
+}
 
+const StyledCard = styled(Card)(() => ({
+  display: "flex",
+  alignItems: "center",
+  height: "40px",
+  width: '100%',
+  backgroundColor: "#242734",
+  borderRadius: "6px",
+  backgroundImage: "none",
+}));
+
+function CapturingRadiance() {
+  const [radiance, setStore] = useStore(store => store.char.radiance);
+
+  const handleNumber = useCallback((e: number) => {
+    const c = clamp(e, 0, 3);
+    setStore(prev => {
+      prev.char.radiance = c;
+      prev.plotdataSim.changed = true;
+      return { ...prev }
+    });
+    return c;
+  }, [setStore]);
+
+  const handleSlider = useCallback((event: Event, value: number | number[]) => {
+    setStore(prev => {
+      prev.char.radiance = value as number;
+      prev.plotdataSim.changed = true;
+      return { ...prev };
+    })
+  }, [setStore]);
+
+  return (
+    <StyledCard>
+      <NumberInput
+        id='Radiance'
+        value={radiance}
+        onChange={handleNumber}
+        inputProps={{
+          step: 1, min: 0, max: 3,
+          type: 'number',
+          style: { padding: '3px', width: '2rem' }
+        }}
+        sx={{ height: '100%', p: '0 0 0 0.5rem' }}
+        startAdornment={
+          <>
+            <Tooltip title={
+              <Typography>
+                <Link href="https://www.reddit.com/r/Genshin_Impact/comments/1f3ykny/capturing_radiance_details_observations_and/" target="_blank">Capturing Radiance</Link>:<br />Enter the amount of consecutive 50:50 losses
+              </Typography>} arrow placement='top'
+            >
+              <label htmlFor='Radiance'>
+                <Typography variant='body1' sx={{ whiteSpace: 'nowrap', pr: 1, textDecoration: 'underline', textDecorationStyle: 'dotted', textUnderlineOffset: '2px', textDecorationThickness: '1px' }}>
+                  C.R.:
+                </Typography>
+              </label>
+            </Tooltip>
+            <Divider orientation="vertical" flexItem />
+          </>
+        }
+      />
+      <Slider
+        max={3} marks
+        value={radiance}
+        onChange={handleSlider}
+        sx={{ mx: 2 }}
+      />
+    </StyledCard>
+  )
 }

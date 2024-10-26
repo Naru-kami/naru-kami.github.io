@@ -8,7 +8,7 @@ const StyledInput = styled(Input)(() => ({
 }));
 
 export type NumberInputProp = Omit<InputProps, "onChange"> & {
-  onChange: (newValue: number) => number | void,
+  onChange?: (newValue: number) => number | void,
   value?: number
   format?: boolean
 };
@@ -25,6 +25,7 @@ export default function NumberInput({ onChange, value, format = false, ...props 
   const { inputProps, ...restprops } = props as InputProps;
 
   const [val, setval] = useState(value + '');
+  const inputRef = useRef<HTMLInputElement>(null);
   const placeholder = useRef(val);
 
   const onFocus = useCallback(() => {
@@ -34,7 +35,7 @@ export default function NumberInput({ onChange, value, format = false, ...props 
 
   const onBlur = useCallback(() => {
     (val === "") && setval(placeholder.current) || (val !== "") && (placeholder.current = val);
-    const returnedValue = onChange(val === "" ? Number(placeholder.current) : Number(val));
+    const returnedValue = onChange?.(val === "" ? Number(placeholder.current) : Number(val));
 
     if (typeof returnedValue === 'undefined') {
       return;
@@ -51,13 +52,30 @@ export default function NumberInput({ onChange, value, format = false, ...props 
     setval(c);
   }, [setval]);
 
+  const handleWheel = useCallback((e: WheelEvent) => {
+    e.preventDefault();
+    if (document.activeElement === inputRef.current)
+      setval(oldval => {
+        let clamped = Number(oldval || placeholder.current) + (e.deltaY < 0 ? 1 : -1);
+        clamped = typeof inputProps?.min === 'number' ? Math.max(clamped, inputProps.min) : clamped;
+        clamped = typeof inputProps?.max === 'number' ? Math.min(clamped, inputProps.max) : clamped;
+        return clamped.toString();
+      });
+  }, [setval, placeholder.current, inputRef.current, inputProps?.min, inputProps?.max]);
+
   useEffect(() => {
     setval(value + '')
     placeholder.current = value + '';
   }, [value, setval]);
 
+  useEffect(() => {
+    inputRef.current?.addEventListener('wheel', handleWheel);
+    return () => inputRef.current?.removeEventListener('wheel', handleWheel);
+  }, [handleWheel])
+
   const onKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    e.key === "Enter" && onBlur();
+    e.key === "Enter" && (e.target as HTMLInputElement).blur();
+    e.key === "Escape" && (e.target as HTMLInputElement).blur();
     e.key === "ArrowUp" && val === "" && setval(placeholder.current);
     e.key === "ArrowDown" && val === "" && setval(placeholder.current);
   }, [onBlur, setval])
@@ -65,12 +83,12 @@ export default function NumberInput({ onChange, value, format = false, ...props 
   return (
     <StyledInput
       value={(format && val != '') ? Number(val).toLocaleString() : val}
-      inputProps={{ step: 1, type: "text", inputMode: "numeric", pattern: '[0-9,.]+', ...inputProps, style: { ...inputProps?.style, textAlign: 'center', padding: '3px 0px' } }}
+      inputRef={inputRef}
+      inputProps={{ step: 1, type: "text", inputMode: "numeric", pattern: '[0-9,.]+', ...inputProps, style: { textAlign: 'center', padding: '3px 0px', ...inputProps?.style } }}
       onChange={changeInput}
       onBlur={onBlur}
       onKeyDown={onKeyDown}
       onFocus={onFocus}
-      onWheel={(e) => (e.target as HTMLElement).blur()}
       disableUnderline={true}
       size="small"
       {...restprops} />

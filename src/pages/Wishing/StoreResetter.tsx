@@ -14,7 +14,8 @@ export default function StorageResetter() {
           enabled: true,
           goal: 0,
           pity: 0,
-          guaranteed: false
+          guaranteed: false,
+          radiance: 0
         },
         weap: {
           enabled: true,
@@ -29,7 +30,6 @@ export default function StorageResetter() {
         },
         samplesize: 500000,
         threads: prev.threads,
-        tab: prev.tab,
         plotdataSim: {
           changed: false,
           cumulative: false,

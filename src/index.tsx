@@ -1,7 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Route, Routes, Navigate, HashRouter } from "react-router-dom";
-import { createTheme, CssBaseline, ThemeProvider } from '@mui/material';
+import { createTheme, CssBaseline, ThemeProvider, Components } from '@mui/material';
 import Navbar from './components/NavBar';
 import Home from './pages/Home/Main';
 import '../style.css';
@@ -23,6 +23,13 @@ const darkTheme = createTheme({
       main: '#1B1D2A'
     }
   },
+  components: {
+    MuiLink: {
+      defaultProps: {
+        color: '#42a5f5'
+      },
+    }
+  }
 });
 
 let container: HTMLElement | null = null;

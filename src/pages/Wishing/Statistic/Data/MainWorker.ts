@@ -7,23 +7,20 @@ self.onmessage = function (e: MessageEvent<DataMessage>) {
   const t = performance.now();
   if (mode == 'distribution') {
     if (char.enabled && weap.enabled) {
-      const result = getCombined(char.goal, char.pity, char.guaranteed, weap.goal, weap.pity, weap.guaranteed);
+      const result = getCombined(char.goal, char.pity, char.guaranteed, char.radiance, weap.goal, weap.pity, weap.guaranteed);
       postMessage({ pullsResult: result });
-    }
-    if (char.enabled) {
-      const result = cfdToPdf(characterDistribution(char.goal, char.pity, char.guaranteed));
+    } else if (char.enabled) {
+      const result = cfdToPdf(characterDistribution(char.goal, char.pity, char.guaranteed, char.radiance));
       postMessage({ pullsResult: result });
-    }
-    if (weap.enabled) {
+    } else if (weap.enabled) {
       const result = cfdToPdf(weaponDistribution(weap.goal, weap.pity, weap.guaranteed));
       postMessage({ pullsResult: result });
     }
   } else if (mode == 'fixed') {
     if (char.enabled) {
-      const result = getC(char.goal, char.pity, char.guaranteed);
+      const result = getC(char.goal, char.pity, char.guaranteed, char.radiance);
       postMessage({ pullsResult: result });
-    }
-    if (weap.enabled) {
+    } else if (weap.enabled) {
       const result = getR(weap.goal, weap.pity, weap.guaranteed);
       postMessage({ pullsResult: result });
     }
@@ -93,17 +90,12 @@ function Pn(n: number, pity: number, d: (num: number) => number) {
   return res;
 }
 
-function characterDistribution(i: number, pity: number, g: boolean) {
+function characterDistribution(i: number, pity: number, g: boolean, consec_losses: number) {
   var cdf: number[] = new Array(90 * (2 * i + 2 - (+g)) - pity + 1).fill(0),
-    a1 = g ? 1 : 0.55,
-    a2 = 1 - a1,
-    convolution = [0, a1, a2];
+    convolution = fiveStarCR(i + 1, g, consec_losses);
 
-  for (let k = 0; k < i; k++) {
-    convolution = multiplyFFTjs(convolution, [0, 0.55, 0.45]);
-  }
+  console.log(convolution)
   for (let k = i + 1; k <= 2 * i + 2 - (+g); k++) {
-    // var c = binomial(i + 1 - (+g), k - (i + 1)) * Math.pow(0.55, i + 1 - (+g) - (k - (i + 1))) * Math.pow(0.45, k - (i + 1));
     var dist = Pn(k, pity, character);
     for (let x = 1; x <= 90 * (2 * i + 2 - (+g)) - pity; x++) {
       cdf[x] += 100 * convolution[k] * (dist[x] ?? 1);
@@ -112,21 +104,17 @@ function characterDistribution(i: number, pity: number, g: boolean) {
   return cdf;
 }
 
-function getC(pulls: number, pity: number, g: boolean) {
-  var con = [0, 0, 0, 0, 0, 0, 0],
-    a1 = g ? 1 : 0.55,
-    a2 = 1 - a1;
+function getC(pulls: number, pity: number, g: boolean, consec_losses: number) {
+  var con = [0, 0, 0, 0, 0, 0, 0];
   if (pulls <= 0) {
     return con;
   }
-  var convolution = [0, a1, a2];
   for (let i = 0; i <= 6; i++) {
+    var convolution = fiveStarCR(i + 1, g, consec_losses);
     for (let k = i + 1; k <= 2 * i + 2 - (+g); k++) {
-      // var l = binomial(i + 1 - (+g), k - (i + 1)) * Math.pow(0.55, i + 1 - (+g) - (k - (i + 1))) * Math.pow(0.45, k - (i + 1));
       var dist = Pn(k, pity, character);
       con[i] += 100 * convolution[k] * (dist[pulls] ?? 1);
     }
-    convolution = multiplyFFTjs(convolution, [0, 0.55, 0.45]);
   }
   return con;
 }
@@ -169,9 +157,9 @@ function getR(pulls: number, pity: number, g: boolean) {
   return ref;
 }
 
-function getCombined(charConst: number, charPity: number, charGuaranteed: boolean, weapRef: number, weapPity: number, weapGuaranteed: boolean) {
+function getCombined(charConst: number, charPity: number, charGuaranteed: boolean, consec_losses: number, weapRef: number, weapPity: number, weapGuaranteed: boolean) {
   const weapDist = cfdToPdf(weaponDistribution(weapRef, weapPity, weapGuaranteed).map(e => e / 100));
-  const charDist = cfdToPdf(characterDistribution(charConst, charPity, charGuaranteed).map(e => e / 100));
+  const charDist = cfdToPdf(characterDistribution(charConst, charPity, charGuaranteed, consec_losses).map(e => e / 100));
   return multiplyFFTjs(weapDist, charDist).map(e => e * 100);
 }
 
@@ -228,4 +216,43 @@ function cfdToPdf(cdf: number[]) {
     pdf[i] = cdf[i] - cdf[i - 1];
   }
   return pdf;
+}
+
+type BinaryNode<T> = {
+  depth: T,
+  losses: T,
+  wins: T,
+  probability: T
+  left: BinaryNode<T> | null
+  right: BinaryNode<T> | null
+}
+
+function fiveStarCR(k: number, g: boolean, consec_losses: number, node: BinaryNode<number> | null = null, branch_prob: number[] | null = null) {
+  if (node == null)
+    node = { depth: 0, losses: 0, wins: 0, probability: 1, left: null, right: null };
+  if (branch_prob == null)
+    branch_prob = new Array(2 * k + 1).fill(0);
+
+  if (node.depth == k) {
+    branch_prob[node.losses + k] += node.probability;
+    return branch_prob;
+  }
+  if (node.probability == 0)
+    return branch_prob;
+
+  var green_prob: number;
+  if (node.depth == 0 && g)
+    green_prob = 1;
+  else
+    green_prob = [0.5, 0.525, 0.75, 1.0][consec_losses];
+
+  var red_prob = 1 - green_prob;
+
+  node.left = { depth: node.depth + 1, losses: node.losses + 1, wins: node.wins, probability: node.probability * red_prob, left: null, right: null };
+  node.right = { depth: node.depth + 1, losses: node.losses, wins: node.wins + 1, probability: node.probability * green_prob, left: null, right: null };
+
+  fiveStarCR(k, false, consec_losses + 1, node.left, branch_prob);
+  fiveStarCR(k, false, g ? consec_losses : 0, node.right, branch_prob);
+
+  return branch_prob;
 }

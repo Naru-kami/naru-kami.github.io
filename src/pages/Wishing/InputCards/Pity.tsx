@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import { useCallback } from 'react'
 import NumberInput from '../../../components/NumberInput';
 import { Slider, Card, styled } from '@mui/material';
 import { useStore, WishingStore } from '../Store';
@@ -46,13 +46,10 @@ export default function Pity({ max, ns }: { max: number, ns: "char" | "weap" }) 
           min: 0,
           max: 90,
           type: 'number',
-          style: {
-            padding: '3px 0px'
-          }
         }}
         sx={{
           letterSpacing: '1px',
-          width: '64px',
+          width: '54px',
           minWidth: '46px',
           height: "100%",
           m: 0, px: 0.5

@@ -1,6 +1,6 @@
-import React, { useMemo, useCallback, useEffect } from 'react';
+import { useMemo, useCallback, useEffect } from 'react';
 import NumberInput from '../../../components/NumberInput';
-import { Slider, Card, InputAdornment, styled } from '@mui/material';
+import { Slider, Card, styled, Typography } from '@mui/material';
 import { useStore, WishingStore } from '../Store';
 import { clamp } from '../utils';
 
@@ -56,26 +56,22 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
         value={goal}
         onChange={handleNumber}
         startAdornment={
-          <InputAdornment position="start" sx={{ mr: '-0.5rem', ml: '.5rem' }}>
-            <label htmlFor={ns + 'Goal'} style={{ cursor: 'text' }}>
-              {mode == 'fixed' && ' ' || adornment}
-            </label>
-          </InputAdornment>
+          <label htmlFor={ns + 'Goal'} style={{ cursor: 'text' }}>
+            {mode == 'fixed' && ' ' || adornment}
+          </label>
         }
         inputProps={{
           step: 1,
-          min: _min,
-          max: _max,
+          min: _min, max: _max,
           type: 'number',
-          style: {
-            padding: '3px 0px'
-          }
+          style: { width: mode == 'fixed' ? 'auto' : '23px', marginInline: '-5px' },
         }}
         sx={{
-          width: '64px',
+          width: '54px',
           minWidth: '46px',
           height: "100%",
-          m: 0, px: 0.5
+          m: 0, px: 0.5,
+          justifyContent: 'center',
         }}
       />
       <Slider

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { Card, Slider, styled, Typography } from '@mui/material';
+import { Card, Divider, Slider, styled, Typography } from '@mui/material';
 import NumberInput from '../../../components/NumberInput';
 import { ArtifactStore, useStore } from '../Data/Store';
 
@@ -11,19 +11,6 @@ const StyledCard = styled(Card)(() => ({
   boxShadow: "0p",
   margin: "5px 0px",
   borderRadius: "6px",
-}));
-
-const InputLabelCard = styled(Card)(() => ({
-  display: 'flex',
-  alignItems: 'center',
-  width: '130px',
-  whiteSpace: 'nowrap',
-  backgroundColor: '#3A77D7',
-  boxShadow: "0",
-  borderRadius: "4px 0px 0px 4px",
-  padding: '0em 0.125em 0em 0.5em',
-  backgroundImage: 'none',
-  margin: '1px 0px 1px 1px'
 }));
 
 const StyledSlider = styled(Slider)(() => ({
@@ -63,16 +50,20 @@ function ResinPerArtifact() {
   return (
     <StyledDiv>
       <label style={{ display: 'flex' }}>
-        <InputLabelCard>
-          <Typography fontSize={15}>
-            Resin per Artifact:
-          </Typography>
-        </InputLabelCard>
         <NumberInput
           value={RpA}
           onChange={updateRpA}
           inputProps={{ step: 20, min: 20, max: 40, style: { width: 32 } }}
-          sx={{ my: '1px' }} />
+          sx={{ my: '1px', borderRadius: "4px 0px 0px 4px", gap: 1 }}
+          startAdornment={
+            <>
+              <Typography variant='body2' sx={{ whiteSpace: 'nowrap', width: '116px' }}>
+                Resin per Artifact:
+              </Typography>
+              <Divider orientation="vertical" flexItem />
+            </>
+          }
+        />
       </label>
       <StyledSlider
         value={RpA}
@@ -110,16 +101,18 @@ function ResinPerDay() {
   return (
     <StyledDiv>
       <label style={{ display: 'flex' }}>
-        <InputLabelCard>
-          <Typography fontSize={15}>
-            Resin per day:
-          </Typography>
-        </InputLabelCard>
         <NumberInput
           value={RpD}
           onChange={updateRpD}
           inputProps={{ step: 60, min: 180, max: 540, style: { width: 32 } }}
-          sx={{ my: '1px' }} />
+          sx={{ my: '1px', borderRadius: "4px 0px 0px 4px", gap: 1 }}
+          startAdornment={<>
+            <Typography variant='body2' sx={{ whiteSpace: 'nowrap', width: '116px' }}>
+              Resin per day:
+            </Typography>
+            <Divider orientation="vertical" flexItem />
+          </>}
+        />
       </label>
       <StyledSlider
         value={RpD}

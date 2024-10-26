@@ -6,7 +6,8 @@ export type WishingStore = {
     enabled: boolean,
     goal: number,
     pity: number,
-    guaranteed: boolean
+    guaranteed: boolean,
+    radiance: number
   },
   weap: {
     enabled: boolean,
@@ -21,7 +22,6 @@ export type WishingStore = {
   },
   samplesize: number,
   threads: number,
-  tab: 0,
   plotdataSim: {
     changed: boolean,
     cumulative: boolean,
@@ -46,6 +46,7 @@ function isArtifact(wishing: WishingStore): wishing is WishingStore {
     "goal" in wishing.char && typeof wishing.char.goal == 'number' &&
     "pity" in wishing.char && typeof wishing.char.pity == 'number' &&
     "guaranteed" in wishing.char && typeof wishing.char.guaranteed == 'boolean' &&
+    "radiance" in wishing.char && typeof wishing.char.radiance == "number" &&
     "weap" in wishing && typeof wishing.weap === 'object' &&
     "enabled" in wishing.weap && typeof wishing.weap.enabled == 'boolean' &&
     "goal" in wishing.weap && typeof wishing.weap.goal == 'number' &&
@@ -57,7 +58,6 @@ function isArtifact(wishing: WishingStore): wishing is WishingStore {
     "cons" in wishing.starglitter && Array.isArray(wishing.starglitter.cons) &&
     "guaranteed" in wishing.char && typeof wishing.char.guaranteed == 'boolean' &&
     "samplesize" in wishing && typeof wishing.samplesize == 'number' &&
-    "tab" in wishing && typeof wishing.tab == "number" &&
     "plotdataSim" in wishing && typeof wishing.plotdataSim == 'object' &&
     "changed" in wishing.plotdataSim && typeof wishing.plotdataSim.changed == 'boolean' &&
     "cumulative" in wishing.plotdataSim && typeof wishing.plotdataSim.cumulative == 'boolean' &&
@@ -92,7 +92,8 @@ if (storedWish) {
         enabled: true,
         goal: 0,
         pity: 0,
-        guaranteed: false
+        guaranteed: false,
+        radiance: 0
       },
       weap: {
         enabled: true,
@@ -107,7 +108,6 @@ if (storedWish) {
       },
       samplesize: 500000,
       threads: 4,
-      tab: 0,
       plotdataSim: {
         changed: false,
         cumulative: true,
@@ -131,7 +131,8 @@ if (storedWish) {
       enabled: true,
       goal: 0,
       pity: 0,
-      guaranteed: false
+      guaranteed: false,
+      radiance: 0
     },
     weap: {
       enabled: true,
@@ -146,7 +147,6 @@ if (storedWish) {
     },
     samplesize: 500000,
     threads: 4,
-    tab: 0,
     plotdataSim: {
       changed: false,
       cumulative: true,

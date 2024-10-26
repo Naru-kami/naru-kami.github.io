@@ -1,8 +1,8 @@
 import React, { lazy, Suspense, useState } from 'react'
 import { Tabs, Box, Tab, Typography, Skeleton } from '@mui/material';
 import Provider from './Store';
+import Simulation from './Simulation/Simulation';
 
-const Simulation = lazy(() => import('./Simulation/Simulation'));
 const Calculation = lazy(() => import('./Statistic/Calculation'));
 
 type TabPanelProps = {
@@ -47,9 +47,7 @@ export default function Main() {
           </Suspense>
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <Suspense fallback={<Skeleton variant="rounded" sx={{ height: "80vh", width: '100%', backgroundColor: '#FFFFFF21', m: 2 }} />}>
-            <Simulation />
-          </Suspense>
+          <Simulation />
         </TabPanel>
       </Box>
     </Provider>

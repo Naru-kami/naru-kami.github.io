@@ -29,6 +29,7 @@ function SimDist({ char, weap, starglitter, samplesize }: DataMessage) {
       let counter4 = 1;
       let promoted = 0;
       let fs1 = 0, fs2 = 0, fs3 = 0;
+      let radiance = char.radiance;
 
       while (promoted <= char.goal) {
         pulls++;
@@ -40,12 +41,14 @@ function SimDist({ char, weap, starglitter, samplesize }: DataMessage) {
         prob4 = Math.min(1, 0.051 + Math.max(0, (counter4 - 8) * 0.51));
         let x = Math.random();
         if (x < prob5) {
-          if (x <= (prob5 * 0.55) || guaranteed) {
+          if (x <= (prob5 * 0.5) || guaranteed || (radiance == 1 && (x < prob5 * 0.525)) || (radiance == 2 && (x < prob5 * 0.75)) || radiance >= 3) {
+            !guaranteed && (radiance = 0);
             guaranteed = false;
             starglitterCount += GetStarglitter(5, promoted + starglitter.cons[0]);
             promoted++;
           } else {
             guaranteed = true;
+            radiance++;
             starglitterCount += 5;
           }
           counter5 = 1;
@@ -139,6 +142,7 @@ function SimFixed({ char, weap, starglitter, samplesize }: DataMessage) {
   if (char.enabled) {
     let pullsResult: number[] = new Array(8).fill(0);
     for (let k = 0; k < samplesize; k++) {
+      let radiance = char.radiance;
       guaranteed = char.guaranteed;
       counter5 = char.pity + 1;
       counter4 = 1;
@@ -155,7 +159,8 @@ function SimFixed({ char, weap, starglitter, samplesize }: DataMessage) {
         prob4 = Math.min(1, 0.051 + Math.max(0, (counter4 - 8) * 0.51));
         x = Math.random();
         if (x < prob5) {
-          if (x <= (prob5 * 0.55) || guaranteed) {
+          if (x <= (prob5 * 0.5) || guaranteed || (radiance == 1 && (x <= prob5 * 0.525)) || (radiance == 2 && (x <= prob5 * 0.75)) || radiance >= 3) {
+            !guaranteed && (radiance = 0);
             guaranteed = false;
             starglitterCount += GetStarglitter(5, promoted + starglitter.cons[0]);
             promoted++;
@@ -164,6 +169,7 @@ function SimFixed({ char, weap, starglitter, samplesize }: DataMessage) {
             }
           } else {
             guaranteed = true;
+            radiance++;
             starglitterCount += 5;
           }
           counter5 = 1;
