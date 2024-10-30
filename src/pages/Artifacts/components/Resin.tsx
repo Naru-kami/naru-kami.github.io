@@ -3,26 +3,21 @@ import { Card, Divider, Slider, styled, Typography } from '@mui/material';
 import NumberInput from '../../../components/NumberInput';
 import { ArtifactStore, useStore } from '../Data/Store';
 
-const StyledCard = styled(Card)(() => ({
-  display: 'block',
-  width: '100%',
-  alignItems: 'center',
-  backgroundColor: 'inherit',
-  boxShadow: "0p",
-  margin: "5px 0px",
-  borderRadius: "6px",
+const StyledPaper = styled(Card)(({ theme }) => ({
+  marginBlock: 5,
+  borderRadius: 6,
+  outline: '1px solid ' + theme.palette.divider,
+  outlineOffset: -1,
 }));
 
 const StyledSlider = styled(Slider)(() => ({
-  margin: "auto 1em auto 1em",
-  color: '#3A77D7'
+  margin: "auto 1rem",
 }));
 
-const StyledDiv = styled('div')(() => ({
+const StyledCard = styled(Card)(() => ({
   display: 'flex',
   height: '44px',
-  backgroundColor: '#242734',
-  margin: '0.75em',
+  margin: '0.75rem',
   borderRadius: '4px',
 }));
 
@@ -48,21 +43,19 @@ function ResinPerArtifact() {
   }, [setStore]);
 
   return (
-    <StyledDiv>
+    <StyledCard elevation={4} >
       <label style={{ display: 'flex' }}>
         <NumberInput
           value={RpA}
           onChange={updateRpA}
           inputProps={{ step: 20, min: 20, max: 40, style: { width: 32 } }}
           sx={{ my: '1px', borderRadius: "4px 0px 0px 4px", gap: 1 }}
-          startAdornment={
-            <>
-              <Typography variant='body2' sx={{ whiteSpace: 'nowrap', width: '116px' }}>
-                Resin per Artifact:
-              </Typography>
-              <Divider orientation="vertical" flexItem />
-            </>
-          }
+          startAdornment={<>
+            <Typography variant='body2' sx={{ whiteSpace: 'nowrap', width: '116px' }}>
+              Resin per Artifact:
+            </Typography>
+            <Divider orientation="vertical" flexItem />
+          </>}
         />
       </label>
       <StyledSlider
@@ -72,8 +65,8 @@ function ResinPerArtifact() {
         min={20}
         max={40}
         marks
-        getAriaLabel={() => 'Resin Per Artifact Slider'} />
-    </StyledDiv>
+        getAriaLabel={() => 'Resin Per Artifact'} />
+    </StyledCard>
   )
 }
 
@@ -99,7 +92,7 @@ function ResinPerDay() {
   }, [setStore]);
 
   return (
-    <StyledDiv>
+    <StyledCard elevation={4}>
       <label style={{ display: 'flex' }}>
         <NumberInput
           value={RpD}
@@ -122,15 +115,15 @@ function ResinPerDay() {
         max={540}
         marks
         getAriaLabel={() => 'Resin Per Day Slider'} />
-    </StyledDiv>
+    </StyledCard>
   )
 }
 
 export default function Resin() {
   return (
-    <StyledCard variant='outlined'>
+    <StyledPaper elevation={2}>
       <ResinPerArtifact />
       <ResinPerDay />
-    </StyledCard>
+    </StyledPaper>
   )
 }

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import Plot from 'react-plotly.js';
-import { Paper } from '@mui/material';
+import { Card } from '@mui/material';
 import { useStore } from '../../Store';
 import { pdfToCdf, roundSigfig } from '../../utils';
 
@@ -55,9 +55,9 @@ export default function Chart() {
       showlegend: false,
       hovermode: "x",
       dragmode: false,
-      hoverlabel: { bgcolor: "#0C0F1E" },
-      plot_bgcolor: "#0C0F1E",
-      paper_bgcolor: "#0C0F1E"
+      hoverlabel: { bgcolor: "#181c2d" },
+      plot_bgcolor: "#181c2d",
+      paper_bgcolor: "#181c2d"
     } : {
       xaxis: { title: 'Pulls', mirror: true, ticks: 'outside', showline: true, showgrid: true, zeroline: false, color: "#FFF" },
       yaxis: { title: '', mirror: true, ticks: 'outside', showline: true, showgrid: true, showticksuffix: 'all', ticksuffix: "%", zeroline: false, color: "#FFF", rangemode: 'nonnegative' },
@@ -65,25 +65,21 @@ export default function Chart() {
       showlegend: false,
       hovermode: "x",
       dragmode: false,
-      hoverlabel: { bgcolor: "#0C0F1E" },
-      plot_bgcolor: "#0C0F1E",
-      paper_bgcolor: "#0C0F1E"
+      hoverlabel: { bgcolor: "#181c2d" },
+      plot_bgcolor: "#181c2d",
+      paper_bgcolor: "#181c2d"
     };
     return str;
   }, [y]) as Plotly.Layout;
 
   return (
-    <>
-      <Paper variant='outlined' sx={{ background: 'transparent' }}>
-        <div style={{ maxHeight: '620px', maxWidth: '100%', marginInline: 'auto', aspectRatio: 14 / 9 }}>
-          <Plot
-            data={[trace]}
-            layout={layout}
-            config={config}
-            style={{ width: "100%", height: "100%" }}
-          />
-        </div>
-      </Paper>
-    </>
+    <Card elevation={2} style={{ maxHeight: '620px', maxWidth: '100%', marginInline: 'auto', aspectRatio: 16 / 9 }}>
+      <Plot
+        data={[trace]}
+        layout={layout}
+        config={config}
+        style={{ width: "100%", height: "100%" }}
+      />
+    </Card>
   )
 }

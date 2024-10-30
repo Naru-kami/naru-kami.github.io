@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useCallback } from 'react'
-import { Card, Typography, IconButton, CardActions, Modal, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody } from '@mui/material'
+import { useState, useMemo, useCallback } from 'react'
+import { Card, Typography, IconButton, CardActions, Modal, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, Box } from '@mui/material'
 import { Help, Close } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
@@ -61,8 +61,8 @@ export default function Breakdown() {
   }, [artichance]);
 
   return (
-    <Card variant='outlined' sx={{ bgcolor: 'inherit', p: 1 }}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0px 8px 0px 8px' }}>
+    <Card elevation={2} sx={{ px: 1 }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0px 8px' }}>
         <Typography> Average: {Math.round(((avg) + Number.EPSILON) * 1e2) / 1e2} Days </Typography>
         <CardActions style={{ marginLeft: 'auto' }}>
           <IconButton aria-label="help" onClick={handleOpen} >
@@ -72,14 +72,14 @@ export default function Breakdown() {
       </div>
       <Modal open={open} onClose={handleClose} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Card variant='outlined' sx={{ bgcolor: '#242734', px: 2, py: 3, mx: 2, minWidth: '250px', display: 'flex', gap: 2, overflow: 'overlay' }}>
-          <div style={{ minWidth: 300 }}>
+          <Box sx={{ minWidth: 300 }}>
             <Typography variant='subtitle1' sx={{ p: 1 }}>
               A breakdown of the probability of obtaining the desired artifact per run.
             </Typography>
-            <TableContainer component={Paper} sx={{ mt: 2 }}>
+            <TableContainer sx={{ mt: 2, p: 1 }}>
               <Table size="small" aria-label="data table">
                 <TableHead>
-                  <TableRow sx={{ borderBottom: '3px solid rgba(81, 81, 81, 1)' }}>
+                  <TableRow sx={{ borderBottom: '3px solid rgba(81, 81, 81, 1)', backgroundColor: theme => theme.palette.secondary.main }}>
                     <TableCell >Assumption</TableCell>
                     <TableCell align="right">Chance</TableCell>
                   </TableRow>
@@ -95,7 +95,7 @@ export default function Breakdown() {
                 </TableBody>
               </Table>
             </TableContainer>
-          </div>
+          </Box>
           <CloseButton onClick={handleClose} sx={{ width: '30px', height: '30px', borderRadius: 1, ml: 'auto' }}>
             <Close />
           </CloseButton>

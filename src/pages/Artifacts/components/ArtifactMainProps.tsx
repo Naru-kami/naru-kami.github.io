@@ -8,32 +8,11 @@ const order = ["HP", "ATK", "DEF", "HP %", "ATK %", "DEF %", "Energy Recharge", 
 
 const mainnames = ['Flower', 'Plume', 'Sands', 'Goblet', 'Circlet'];
 
-const StyledSelect = styled(Select)(() => ({
-  color: '#FFF',
-  backgroundColor: '#242734',
-  margin: '0.5em 0em',
-  "& .MuiSvgIcon-root": {
-    color: "#CCC"
-  }
+const StyledSelect = styled(Select)(({ theme }) => ({
+  marginBlock: '.5rem',
+  boxShadow: theme.shadows[4],
+  background: 'hsl(230, 65%, 7%) linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))'
 }));
-
-const menuprops = {
-  PaperProps: {
-    sx: {
-      backgroundColor: '#242734',
-      backgroundImage: 'none',
-      "& .MuiMenuItem-root.Mui-selected": {
-        backgroundColor: "#343746"
-      },
-      "& .MuiMenuItem-root:hover": {
-        backgroundColor: "#343746"
-      },
-      "& .MuiMenuItem-root.Mui-selected:hover": {
-        backgroundColor: "#343746"
-      }
-    }
-  }
-}
 
 const SvgIcon = ({ primary, secondary = undefined, c = "#FFF" }: { primary: string, secondary?: string, c?: string }) => {
   return <svg viewBox="0 0 14 14" width="14px" height="14px" style={{ marginRight: '8px' }}>
@@ -143,7 +122,7 @@ export default function ArtifactMainProps() {
       <Typography sx={{ textAlign: 'center' }}> Mainstats </Typography>
       <FormControl size="small" sx={{ width: '100%' }}>
         <InputLabel id="Type" sx={{ color: "#FFF", my: 1 }}> Type </InputLabel>
-        <StyledSelect value={maintype} onChange={changeType} label="Type" MenuProps={menuprops}>
+        <StyledSelect value={maintype} onChange={changeType} label="Type">
           {mainnames.map((e, i) => {
             return <MenuItem key={i} value={i} sx={{ color: '#FFF', my: 1 }}>
               <SvgIcon primary={MainIcon[i.toString() as keyof typeof MainIcon]} />
@@ -154,7 +133,7 @@ export default function ArtifactMainProps() {
       </FormControl>
       <FormControl size="small" sx={{ width: '100%' }}>
         <InputLabel id="Main" sx={{ color: "#FFF", my: 1 }}> Mainstat </InputLabel>
-        <StyledSelect value={mainstat} onChange={changeMain} label="Mainstat" MenuProps={menuprops}>
+        <StyledSelect value={mainstat} onChange={changeMain} label="Mainstat">
           {mainList.map(e => {
             return (
               <MenuItem value={e} key={e}>

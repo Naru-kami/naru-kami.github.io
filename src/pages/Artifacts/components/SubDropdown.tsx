@@ -6,31 +6,10 @@ import { ArtifactStore, useStore } from '../Data/Store';
 
 const order = ["HP", "ATK", "DEF", "HP %", "ATK %", "DEF %", "Energy Recharge", "Elemental Mastery", "CRIT Rate", "CRIT DMG"];
 
-const StyledSelect = styled(Select)(() => ({
-  color: '#FFF',
-  backgroundColor: '#242734',
-  "& .MuiSvgIcon-root": {
-    color: "#CCC"
-  }
+const StyledSelect = styled(Select)(({ theme }) => ({
+  boxShadow: theme.shadows[4],
+  background: 'hsl(230, 65%, 7%) linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))'
 }));
-
-const menuprops = {
-  PaperProps: {
-    sx: {
-      backgroundColor: '#242734',
-      backgroundImage: 'none',
-      "& .MuiMenuItem-root.Mui-selected": {
-        backgroundColor: "#343746"
-      },
-      "& .MuiMenuItem-root:hover": {
-        backgroundColor: "#343746"
-      },
-      "& .MuiMenuItem-root.Mui-selected:hover": {
-        backgroundColor: "#343746"
-      }
-    }
-  }
-}
 
 const SvgIcon = ({ primary, secondary = undefined, c = "#FFF" }: { primary: string, secondary?: string, c?: string }) => {
   return (
@@ -63,7 +42,7 @@ export default function SubDropdown({ id }: { id: number }) {
 
   return (
     <FormControl size="small" sx={{ width: '100%' }}>
-      <StyledSelect value={substat} onChange={selectChange} MenuProps={menuprops}>
+      <StyledSelect value={substat} onChange={selectChange}>
         <MenuItem value={-1} sx={{ color: '#FFF' }}> - - - ANY - - - </MenuItem>
         {sublist.map(e => {
           return (

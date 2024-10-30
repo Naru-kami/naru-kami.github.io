@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import ResetStorage from '../../components/ResetStorage';
 import { useStore } from './Store';
 

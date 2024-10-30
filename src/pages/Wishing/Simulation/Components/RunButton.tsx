@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import { Button, Divider, Typography } from '@mui/material'
+import { Button, Card, Divider, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import { green, orange } from '@mui/material/colors';
 import { useStore, WishingStore } from '../../Store';
@@ -144,31 +144,13 @@ function SimulateButton() {
   }, [store.plotdataSim.progress]);
 
   return (
-    <StyledButton variant="contained" onClick={pop} disabled={(!store.char.enabled && !store.weap.enabled)} sx={{ ...warn }}>
+    <StyledButton onClick={pop} disabled={(!store.char.enabled && !store.weap.enabled)} sx={{ ...warn }}>
       <CalculateIcon />
       <Typography variant='body1' letterSpacing={1} lineHeight={1} fontWeight={600} >
         {store.plotdataSim.progress !== 100 ? 'Terminate' : store.plotdataSim.y.length === 0 && "Simulate" || "More Samples"}
       </Typography>
     </StyledButton >
   )
-}
-
-const menuprops = {
-  PaperProps: {
-    sx: {
-      backgroundColor: '#242734',
-      backgroundImage: 'none',
-      "& .MuiMenuItem-root.Mui-selected": {
-        backgroundColor: "#343746"
-      },
-      "& .MuiMenuItem-root:hover": {
-        backgroundColor: "#343746"
-      },
-      "& .MuiMenuItem-root.Mui-selected:hover": {
-        backgroundColor: "#343746"
-      }
-    }
-  }
 }
 
 function Threads() {
@@ -178,20 +160,22 @@ function Threads() {
   }, [setStore]);
 
   return (
-    <FormControl size='small' sx={{ minWidth: 50, height: '100%' }}>
-      <Select value={threads} onChange={handleThreads} MenuProps={menuprops} >
-        <ListSubheader sx={{ backgroundColor: 'transparent', color: '#fff' }}>
-          <Typography variant='body2' sx={{ py: 1 }}>
-            Workload will be split among threads. <br />
-            More Threads will speed up execution at the cost of higher CPU load.
-          </Typography>
-        </ListSubheader>
-        <Divider sx={{ my: 1 }} />
-        {[10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(e => {
-          return <MenuItem key={e} value={e}> {e} Threads </MenuItem>
-        })}
-      </Select>
-    </FormControl>
+    <Card elevation={4}>
+      <FormControl size='small' sx={{ minWidth: 50, height: '100%' }}>
+        <Select value={threads} onChange={handleThreads}>
+          <ListSubheader sx={{ backgroundColor: 'transparent', color: '#fff' }}>
+            <Typography variant='body2' sx={{ py: 1 }}>
+              Workload will be split among threads. <br />
+              More Threads will speed up execution at the cost of higher CPU load.
+            </Typography>
+          </ListSubheader>
+          <Divider sx={{ my: 1 }} />
+          {[10, 9, 8, 7, 6, 5, 4, 3, 2, 1].map(e => {
+            return <MenuItem key={e} value={e}> {e} Threads </MenuItem>
+          })}
+        </Select>
+      </FormControl>
+    </Card>
   );
 }
 

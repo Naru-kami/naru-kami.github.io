@@ -25,7 +25,7 @@ function DynamicTabs({ location }: { location: Location }) {
 
   return (
     <Box style={{ display: 'flex' }}>
-      <AppBar component="nav" style={{ backgroundColor: '#1B1D2A', backgroundImage: 'none', display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+      <AppBar component="nav" sx={{ position: 'absolute', flexDirection: 'row', justifyContent: 'space-between' }}>
         <Tab
           label={<Typography fontWeight={600} fontSize={16} variant="h2" letterSpacing={1}> Genshin Statistics </Typography>}
           component={Link}
@@ -62,7 +62,7 @@ function DynamicTabs({ location }: { location: Location }) {
           </Box>
         </Drawer>
       </Box>
-      <Box component="main" style={{ padding: 0 }}>
+      <Box component="main" sx={{ p: 0 }}>
         <Toolbar />
       </Box>
     </Box>
@@ -71,17 +71,17 @@ function DynamicTabs({ location }: { location: Location }) {
 
 function Links({ location, orientation }: { location: Location, orientation?: "horizontal" | "vertical" }) {
   const verHeight = orientation === "vertical" ? '36px' : '24px';
-  const bgCol = orientation === "vertical" ? '#307ac3 !important' : '#1B1D2A';
-  const m = orientation === "vertical" ? '0 8px 0 8px' : '0';
-  const indicator = orientation === "vertical" ? 'none' : 'block';
+  const backgroundColor = orientation === "vertical" ? '#307ac3' : 'transparent';
+  const backgroundImage = orientation === "vertical" ? 'linear-gradient(-90deg, #0000, color-mix(in oklch, #307ac3 50%, #0000))' : 'linear-gradient(#0000, color-mix(in oklch, #307ac3 30%, #0000))';
+  const m = orientation === "vertical" ? '0 8px 0 0' : '0';
+  const borderRadius = orientation === "vertical" ? '0 8px 8px 0' : '8px 8px 0 0';
+
   return (
     <Tabs
       value={location.pathname}
       orientation={orientation ?? "horizontal"}
-      TabIndicatorProps={{ sx: { display: indicator } }}
-      sx={{
-        '.Mui-selected': { backgroundColor: '#242734', color: '#FFF !important' }
-      }}
+      TabIndicatorProps={{ sx: { right: 'auto', left: 0 } }}
+      sx={{ '.Mui-selected.Mui-selected': { backgroundColor: '#242734', color: '#FFF', backgroundImage } }}
     >
       <Tab
         label={
@@ -93,37 +93,37 @@ function Links({ location, orientation }: { location: Location, orientation?: "h
         component={Link}
         to="/"
         value="/"
-        sx={{ color: '#FFF', borderRadius: '0px 0px 8px 8px !important', bgcolor: bgCol }} />
+        sx={{ color: '#FFF', borderRadius }}
+        style={{ backgroundColor }}
+      />
       <Tab
         label={
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', paddingInline: 8 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', px: 1 }}>
             <img src={wish} width={24} height={24} style={{ flex: 0 }} />
-            <Typography fontWeight={600} fontSize={16} variant="h2" letterSpacing={1} style={{ flex: 1 }}>
+            <Typography fontWeight={600} fontSize={16} variant="h2" letterSpacing={1} sx={{ flex: 1 }}>
               Wishing
             </Typography>
-          </div>
+          </Box>
         }
         component={Link}
         to="/Wishing"
         value="/Wishing"
-        sx={{
-          color: '#FFF', '&:hover': { bgcolor: '#242734', transition: 'background-color 200ms ' }, borderRadius: 2, m: m
-        }} />
+        sx={{ color: '#FFF', '&:hover': { bgcolor: '#242734' }, transition: 'background-color 200ms cubic-bezier(0.4, 0, 0.2, 1)', borderRadius, m }}
+      />
       <Tab
         label={
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, width: '100%', paddingInline: 8 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', px: 1 }}>
             <img src={artifact} width={24} height={24} style={{ flex: 0 }} />
             <Typography fontWeight={600} fontSize={16} variant="h2" letterSpacing={1} style={{ flex: 1 }}>
               Artifacts
             </Typography>
-          </div>
+          </Box>
         }
         component={Link}
         to="/Artifacts"
         value="/Artifacts"
-        sx={{
-          color: '#FFF', '&:hover': { bgcolor: '#242734', transition: 'background-color 200ms ' }, borderRadius: 2, m: m
-        }} />
+        sx={{ color: '#FFF', '&:hover': { bgcolor: '#242734' }, transition: 'background-color 200ms cubic-bezier(0.4, 0, 0.2, 1)', borderRadius, m }}
+      />
     </Tabs>
   )
 }

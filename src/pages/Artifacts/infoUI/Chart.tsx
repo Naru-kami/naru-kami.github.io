@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Paper } from '@mui/material';
+import { Card, Paper } from '@mui/material';
 import Plot from 'react-plotly.js';
 import { ArtifactStore, useStore } from '../Data/Store';
 
@@ -10,9 +10,9 @@ const layout = {
   showlegend: false,
   hovermode: "x",
   dragmode: false,
-  hoverlabel: { bgcolor: "#0C0F1E" },
-  plot_bgcolor: "#0C0F1E",
-  paper_bgcolor: "#0C0F1E"
+  hoverlabel: { bgcolor: "#181c2d" },
+  plot_bgcolor: "#181c2d",
+  paper_bgcolor: "#181c2d"
 } as Plotly.Layout;
 
 const config = {
@@ -48,15 +48,13 @@ export default function Chart() {
   const trace = useMemo<Plotdata>(() => ({ x: plotx, y: ploty, ...traceconfig }), [plotx, ploty]);
 
   return (
-    <Paper variant='outlined' sx={{ background: 'transparent' }}>
-      <div style={{ maxHeight: '600px', maxWidth: '100%', marginInline: 'auto', aspectRatio: 14 / 9 }}>
-        <Plot
-          data={[trace]}
-          layout={layout}
-          config={config}
-          style={{ width: "100%", height: "100%" }}
-        />
-      </div>
-    </Paper>
+    <Card elevation={2} style={{ maxHeight: '620px', maxWidth: '100%', marginInline: 'auto', aspectRatio: 16 / 9 }}>
+      <Plot
+        data={[trace]}
+        layout={layout}
+        config={config}
+        style={{ width: "100%", height: "100%" }}
+      />
+    </Card>
   )
 }

@@ -8,15 +8,12 @@ import fiveStarCons from '../assets/fiveStarCons.webp';
 import fourStarCons from '../assets/fourStarCons.png';
 
 const StyledListItemButton = styled(ListItemButton)(() => ({
-  backgroundColor: "#1B1D2A",
   height: "40px",
-  backgroundImage: "none",
   padding: 0,
 }));
 
 const StyledSelect = styled(Select)(() => ({
   color: '#FFF',
-  backgroundColor: '#242734',
   "& .MuiSvgIcon-root": {
     color: "#CCC"
   }
@@ -62,7 +59,7 @@ export default function Starglitter() {
   }, [setStore]);
 
   return (
-    <Card sx={{ bgcolor: '#1B1D2A', backgroundImage: 'none', width: '100%' }}>
+    <Card elevation={2} sx={{ width: '100%' }}>
       <StyledListItemButton>
         <label style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', paddingInline: '8px' }}>
           <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -131,7 +128,7 @@ function ConstCount({ adornment, id }: { adornment: string | JSX.Element, ns: st
   }, []);
 
   return (
-    <div style={{ display: 'flex' }}>
+    <Card elevation={4}>
       <FormControl size="small" sx={{ width: '100%' }}>
         <StyledSelect value={cons} onChange={handleCons} MenuProps={menuprops}>
           <MenuItem value={-1}>
@@ -152,6 +149,6 @@ function ConstCount({ adornment, id }: { adornment: string | JSX.Element, ns: st
           })}
         </StyledSelect>
       </FormControl>
-    </div>
+    </Card>
   );
 }

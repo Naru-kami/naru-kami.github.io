@@ -8,15 +8,13 @@ const StyledCard = styled(Card)(() => ({
   display: "flex",
   alignItems: "center",
   height: "40px",
-  backgroundColor: "#242734",
   borderRadius: "6px",
-  backgroundImage: "none",
 }));
 
 export default function Pity({ max, ns }: { max: number, ns: "char" | "weap" }) {
   const [count, setStore] = useStore((store: WishingStore) => store[ns].pity);
   const handleNumber = useCallback((e: number) => {
-    const c = clamp(e, 0, max);
+    const c = clamp(0, e, max);
     setStore(prev => {
       var t = { ...prev };
       t[ns].pity = c;
@@ -36,7 +34,7 @@ export default function Pity({ max, ns }: { max: number, ns: "char" | "weap" }) 
   }, [setStore]);
 
   return (
-    <StyledCard>
+    <StyledCard elevation={4}>
       <NumberInput
         id={ns + 'Pity'}
         value={count}

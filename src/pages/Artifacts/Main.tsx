@@ -1,5 +1,5 @@
-import React, { Suspense, lazy } from 'react';
-import { Box, Card, Grid, Paper, Skeleton, Typography } from '@mui/material';
+import { Suspense, lazy } from 'react';
+import { Box, Card, Grid, Skeleton, Typography } from '@mui/material';
 import Provider from './Data/Store';
 
 const ArtifactMainProps = lazy(() => import('./components/ArtifactMainProps'));
@@ -19,11 +19,11 @@ const Breakdown = lazy(() => import('./infoUI/Breakdown'));
 export default function Main() {
   return (
     <Provider>
-      <Box display="flex" flexDirection="column" gap={1} minWidth={300} sx={{ m: 2 }}>
+      <Card elevation={1} sx={{ p: 1, m: 1, minWidth: 300, display: 'flex', flexDirection: 'column', gap: 1 }}>
         <Grid container spacing={2}>
-          <Grid item xs={12} xl={6} style={{ maxWidth: '1100px', margin: '0px auto 0px auto' }}>
+          <Grid item xs={12} xl={5} style={{ maxWidth: '1100px', margin: '0px auto 0px auto' }}>
             <Grid item xs={12}>
-              <Card sx={{ p: 1, bgcolor: '#1B1D2A', backgroundImage: 'none' }}>
+              <Card elevation={2} sx={{ p: 1.5 }}>
                 <Suspense fallback={<Skeleton variant="rounded" sx={{ height: '384px', bgcolor: '#FFFFFF21' }} />}>
                   <Grid container spacing={1}>
                     <Grid item xs={12} sm={5} order={{ sm: 1, xs: 2 }}>
@@ -33,17 +33,17 @@ export default function Main() {
                       <Info />
                     </Grid>
                     <Grid item xs={12} sm={12} order={{ sm: 3, xs: 3 }}>
-                      <Card sx={{ boxShadow: 0, mt: 1, bgcolor: 'inherit', backgroundImage: 'none' }}>
+                      <Box sx={{ mt: 1 }}>
                         <Typography sx={{ textAlign: 'center' }}>Substats</Typography>
                         <Grid container spacing={2}>
                           {[0, 1, 2, 3].map(e => {
                             return (
                               <Grid key={e} item xs={12}>
                                 <Grid container spacing={'3px'}>
-                                  <Grid item xs={12} sm={5} sx={{ pr: '5px' }}>
+                                  <Grid item xs={12} sm={5} sx={{ pr: { sm: '5px', xs: 0 } }}>
                                     <SubDropdown id={e} />
                                   </Grid>
-                                  <Grid item xs={12} sm={7} sx={{ pr: '5px' }}>
+                                  <Grid item xs={12} sm={7}>
                                     <UpgradeSlider id={e} />
                                   </Grid>
                                 </Grid>
@@ -51,16 +51,16 @@ export default function Main() {
                             )
                           })}
                         </Grid>
-                      </Card>
+                      </Box>
                     </Grid>
                   </Grid>
                 </Suspense>
               </Card>
             </Grid>
-            <Grid item xs={12} sx={{ mt: 3 }}>
-              <Card sx={{ p: 1, bgcolor: '#1B1D2A', backgroundImage: 'none' }}>
+            <Grid item xs={12} sx={{ mt: 2 }}>
+              <Card elevation={2} sx={{ p: 1 }}>
                 <Suspense fallback={<Skeleton variant="rounded" sx={{ height: '136px', bgcolor: '#FFFFFF21' }} />}>
-                  <Grid container spacing={1}>
+                  <Grid container spacing={2}>
                     <Grid item xs={12} sm={8} >
                       <Resin />
                     </Grid>
@@ -72,15 +72,15 @@ export default function Main() {
               </Card>
             </Grid>
             <Grid item xs={12}>
-              <Suspense fallback={<Skeleton variant="rounded" sx={{ height: '68px', bgcolor: '#FFFFFF21', my: '1em' }} />}>
-                <Paper variant='outlined' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 3.5, mb: 1, p: 1 }}>
+              <Suspense fallback={<Skeleton variant="rounded" sx={{ height: '68px', bgcolor: '#FFFFFF21', my: 2 }} />}>
+                <Card elevation={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 2, mb: 1, p: 1 }}>
                   <Artichance />
                   <StorageResetter />
-                </Paper>
+                </Card>
               </Suspense>
             </Grid>
           </Grid>
-          <Grid item xs={12} xl={6} style={{ maxWidth: '1100px', margin: '0px auto 0px auto' }}>
+          <Grid item xs={12} xl={7} style={{ maxWidth: '1100px', margin: '0px auto 0px auto' }}>
             <Suspense fallback={<Skeleton variant="rounded" sx={{ height: '522px', bgcolor: '#FFFFFF21' }} />}>
               <Grid container spacing={1}>
                 <Grid item xs={12} xl={12} order={{ xs: 1, xl: 2 }}>
@@ -93,7 +93,7 @@ export default function Main() {
             </Suspense>
           </Grid>
         </Grid>
-      </Box>
+      </Card>
     </Provider>
   );
 }

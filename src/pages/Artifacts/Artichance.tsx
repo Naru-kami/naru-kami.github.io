@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import { Button, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
@@ -15,10 +15,10 @@ const RunButton = styled(Button)(({ theme }) => ({
 }));
 
 function fact(k: number): number {
-  if (k === 0)
-    return 1;
-  else
-    return k * fact(k - 1);
+  let result = 1;
+  for (let i = 2; i <= k; i++)
+    result *= i;
+  return result;
 }
 
 function calcodds(mainstat: number[], arr: number[]) {

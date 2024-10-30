@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import RunButton from './Components/RunButton';
 import Chart from './Components/chart';
-import { Button, Card, Grid, Paper, styled, Tooltip, Typography } from '@mui/material';
+import { Button, Card, Grid, styled, Tooltip, Typography } from '@mui/material';
 import CachedIcon from '@mui/icons-material/Cached';
 import CharacterInput from '../InputCards/CharacterInput';
 import StorageResetter from '../StoreResetter';
@@ -39,15 +39,15 @@ export default function Calculation() {
             <WeaponInput />
           </Grid>
           <Grid item xs={12}>
-            <Card sx={{ p: 1, backgroundImage: 'none', backgroundColor: "#1B1D2A", color: '#FFFFFF88', height: '40px' }}>
+            <Card elevation={2} sx={{ p: 1, color: '#FFFFFF88' }}>
               Starglitter is not supported
             </Card>
           </Grid>
         </Grid >
-        <Paper variant='outlined' sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 3.5, mb: 1, p: 1 }}>
+        <Card elevation={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 3.5, mb: 1, p: 1 }}>
           <RunButton />
           <StorageResetter />
-        </Paper>
+        </Card>
       </Grid>
 
       <Grid item xs={12} xl={8} >

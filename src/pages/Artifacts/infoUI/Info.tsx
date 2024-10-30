@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import { useState, useCallback } from 'react'
 import { Card, CardActionArea, IconButton, Typography, Dialog, DialogContent, DialogTitle } from '@mui/material'
 import { Close } from '@mui/icons-material';
 import { styled } from '@mui/material/styles';
@@ -22,7 +22,7 @@ export default function Info() {
   }, [setOpen]);
 
   return (
-    <Card sx={{ height: '100%', bgcolor: '#242734', backgroundImage: 'none' }}>
+    <Card elevation={3} sx={{ height: '100%' }}>
       <CardActionArea onClick={handleOpen} sx={{ height: '100%', p: 2 }}>
         <Typography variant='body1' sx={{ textAlign: 'center' }} >
           Enter the mainstats and substats of the artifact you want to look up. The sliders represent the <strong>acceptable range</strong> of substat upgrade rolls. <br />
@@ -30,25 +30,24 @@ export default function Info() {
         </Typography>
       </CardActionArea>
       <Dialog open={open} onClose={handleClose} sx={{ lineHeight: 1.8 }}>
-        <DialogTitle sx={{ bgcolor: '#242734', display: 'flex', alignItems: 'center', justifyContent: 'space-between', textDecoration: 'underline', pl: { sm: '4rem' } }}>
+        <DialogTitle sx={{ bgcolor: '#242734', display: 'flex', alignItems: 'center', justifyContent: 'space-between', textDecoration: 'underline', pl: 4 }}>
           How it works
           <CloseButton onClick={handleClose} sx={{ width: '30px', height: '30px', borderRadius: 1, marginLeft: 'auto' }}>
             <Close />
           </CloseButton>
         </DialogTitle>
-        <DialogContent sx={{ bgcolor: '#242734', px: { sm: '4rem' } }}>
+        <DialogContent sx={{ bgcolor: '#242734', pl: 1, pr: 7 }}>
           <ul>
             <li>
               You can specify a certain substat through the dropdown menu. If you don't care which stat it can take on, select "ANY".
-              Example:
               <div style={{ paddingLeft: '1rem', color: '#ffffffa5' }}>
-                You are searching for a Feather with crit rate and crit damage only, and the rest doesn't matter. Then you'd select 2 of the 4 substats to be "ANY".
+                Example: You are searching for a Feather with crit rate and crit damage, the rest doesn't matter. Then you'd select 2 of the 4 substats to be "ANY".
               </div>
             </li>
             <li>
-              A single substat can receive up to 5 upgrade rolls. To select the number of upgrade rolls, select the range of acceptable upgrade rolls in the slider. Example:
+              A single substat can receive up to 5 upgrade rolls. To select the number of upgrade rolls, select the range of acceptable upgrade rolls in the slider.
               <div style={{ paddingLeft: '1rem', color: '#ffffffa5' }}>
-                You want a Flower with Elemental Mastery (EM). You want at least 1 roll of EM, but no more than 3. Then you'd select the left slider thumb to be 1 and the right to be 3, sice you don't want 0, 4 or 5 upgrade rolls.
+                Example: You want a Flower with Elemental Mastery (EM). You want at least 1 roll of EM, but no more than 3. Then you'd select the left slider thumb to be 1 and the right to be 3, sice you don't want 0, 4 or 5 upgrade rolls.
               </div>
             </li>
             <li>

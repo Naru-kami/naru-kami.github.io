@@ -2,19 +2,14 @@ import React, { useCallback, useState, useEffect, useRef } from "react";
 import { Card, Slider, styled } from "@mui/material";
 import NumberInput from "../../../components/NumberInput";
 import { ArtifactStore, useStore } from "../Data/Store";
+import { clamp } from "../../Wishing/utils";
 
 const StyledCard = styled(Card)(() => ({
   display: "flex",
   alignItems: "center",
-  backgroundColor: "#242734",
   height: "40px",
   borderRadius: "6px",
-  backgroundImage: "none",
 }));
-
-function clamp(num: number, min: number, max: number) {
-  return Math.min(Math.max(num, min), max);
-}
 
 export default function UpgradeSlider({ id }: { id: number }) {
   const [storeSlider, setStore] = useStore((store: ArtifactStore) => store.slidervals[id]);
@@ -59,7 +54,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
   }, [value, onChange])
 
   const updatelowerVal = useCallback((e: number) => {
-    const c = clamp(e, 0, upperVal);
+    const c = clamp(0, e, upperVal);
     setlowerVal(c);
     onChange((prev: ArtifactStore) => {
       var t = { ...prev };
@@ -69,7 +64,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
   }, [upperVal, setlowerVal, onChange]);
 
   const updateupperVal = useCallback((e: number) => {
-    const c = clamp(e, lowerVal, MaxVal);
+    const c = clamp(lowerVal, e, MaxVal);
     setupperVal(c);
     onChange((prev: ArtifactStore) => {
       var t = { ...prev };
@@ -79,7 +74,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
   }, [setupperVal, upperVal, onChange]);
 
   return (
-    <StyledCard>
+    <StyledCard elevation={4}>
       <NumberInput
         value={lowerVal}
         onChange={updatelowerVal}

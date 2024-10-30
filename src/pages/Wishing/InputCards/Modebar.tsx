@@ -1,7 +1,5 @@
 import { useCallback, useState } from 'react';
-import Card from '@mui/material/Card';
-import Typography from '@mui/material/Typography';
-import { CardActionArea, Dialog, DialogContent, DialogTitle, Divider, Grid, IconButton, Link, styled, useMediaQuery } from '@mui/material';
+import { CardActionArea, Dialog, DialogContent, DialogTitle, Divider, Grid, IconButton, Link, styled, useMediaQuery, Typography, Card } from '@mui/material';
 import { red } from '@mui/material/colors';
 import { Close, ErrorOutline } from '@mui/icons-material';
 import 'katex/dist/katex.min.css';
@@ -16,7 +14,7 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
 }));
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
-  backgroundColor: 'inherit',
+  background: 'inherit',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -42,15 +40,15 @@ export default function Modebar({ approach }: { approach: string }) {
   }, [setOpen]);
 
   return (
-    <Card sx={{ backgroundImage: 'none', backgroundColor: "#307ac3aa", color: '#fff' }}>
+    <Card elevation={2} sx={{ backgroundColor: "#307ac3bb" }}>
       <CardActionArea onClick={handleOpen} sx={{ p: 1 }}>
         <Typography variant='body2' sx={{ display: 'flex', alignItems: 'center' }}>
           <ErrorOutline sx={{ fontSize: 'inherit', mr: 0.5 }} /> Updated for 5.1. This approach uses {approach == "calculation" && "probability theory" || "a Monte-Carlo simulation"}.
         </Typography>
       </CardActionArea>
       {approach == 'calculation' &&
-        <Dialog open={open} onClose={handleClose} maxWidth="md" PaperProps={{ style: { backgroundColor: '#242734', backgroundImage: 'none' } }} >
-          <StyledDialogTitle >
+        <Dialog open={open} onClose={handleClose} maxWidth="md" >
+          <StyledDialogTitle>
             How it works
             <CloseButton onClick={handleClose} sx={{ width: '30px', height: '30px', borderRadius: 1, marginLeft: 'auto' }}>
               <Close />
@@ -96,7 +94,7 @@ export default function Modebar({ approach }: { approach: string }) {
           </DialogContent>
         </Dialog>}
       {approach == 'simulation' &&
-        <Dialog open={open} onClose={handleClose} maxWidth="md" PaperProps={{ style: { backgroundColor: '#242734', backgroundImage: 'none' } }} >
+        <Dialog open={open} onClose={handleClose} maxWidth="md" >
           <StyledDialogTitle>
             Basic flowchart
             <CloseButton onClick={handleClose} sx={{ width: '30px', height: '30px', borderRadius: 1, marginLeft: 'auto' }}>

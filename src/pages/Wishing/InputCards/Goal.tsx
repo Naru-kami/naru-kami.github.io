@@ -8,9 +8,7 @@ const StyledCard = styled(Card)(() => ({
   display: "flex",
   alignItems: "center",
   height: "40px",
-  backgroundColor: "#242734",
   borderRadius: "6px",
-  backgroundImage: "none",
 }));
 
 export default function Goal({ adornment, max, ns }: { adornment: string, max: number, ns: "char" | "weap" }) {
@@ -20,7 +18,7 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
   const _min = useMemo(() => mode == 'distribution' && ns == 'weap' ? 1 : 0, [mode]);
 
   useEffect(() => {
-    const c = clamp(goal, _min, _max);
+    const c = clamp(_min, goal, _max);
     setStore(prev => {
       var t = { ...prev };
       t[ns].goal = c;
@@ -30,7 +28,7 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
   }, [mode, _min, _max])
 
   const handleNumber = useCallback((e: number) => {
-    const c = clamp(e, _min, _max);
+    const c = clamp(_min, e, _max);
     setStore(prev => {
       var t = { ...prev };
       t[ns].goal = c;
@@ -50,7 +48,7 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
   }, [setStore]);
 
   return (
-    <StyledCard>
+    <StyledCard elevation={4}>
       <NumberInput
         id={ns + 'Goal'}
         value={goal}

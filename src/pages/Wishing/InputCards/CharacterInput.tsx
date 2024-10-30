@@ -13,18 +13,19 @@ import { clamp } from '../utils';
 const StyledListItemButton = styled(ListItemButton)(() => ({
   display: "flex",
   alignItems: "center",
-  backgroundColor: "#242734",
   height: "40px",
-  boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);",
-  borderRadius: "6px",
-  backgroundImage: "none",
+  backgroundColor: "hsl(230, 65%, 7%)",
+  backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.108), rgba(255, 255, 255, 0.108))',
+  boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)",
   padding: 0,
+  borderBottom: '1px solid #FFFFFF33',
+  borderRadius: '6px 6px 0 0'
 }));
 
 export default function Input() {
   const [enabled, setStore] = useStore(store => store.char.enabled);
   return (
-    <Card sx={{ p: 2, bgcolor: '#1B1D2A', backgroundImage: 'none', mx: 'auto', position: 'relative' }}>
+    <Card elevation={2} sx={{ p: 2, mx: 'auto', position: 'relative' }}>
       <Enabler enabled={enabled} setStore={setStore} />
       <Grid ref={node => !enabled ? node?.setAttribute('inert', '') : node?.removeAttribute('inert')} container spacing={2}>
         <Grid item xs={12} textAlign='center'>
@@ -49,7 +50,7 @@ export default function Input() {
           <Pity max={89} ns='char' />
         </Grid>
         <Grid item xs={5} sm={4}>
-          <StyledListItemButton sx={{ borderBottom: '1px solid #FFFFFF33', borderRadius: '6px 6px 0 0' }}>
+          <StyledListItemButton>
             <label htmlFor='charGuaranteed' style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingInline: '0.5rem' }}>
               <Typography variant='body1' style={{ display: 'flex', alignItems: 'center' }} >
                 Guarantee
@@ -81,14 +82,14 @@ function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Pa
 
   return (
     <>
-      {!enabled && <div style={{
+      {!enabled && <Card elevation={2} sx={{
         position: 'absolute',
         inset: 0,
         opacity: 0.7,
-        backgroundColor: '#1B1D2A',
-        zIndex: 100
+        zIndex: 100,
+        cursor: "not-allowed"
       }}>
-      </div>}
+      </Card>}
       <label style={{
         position: 'absolute',
         top: 0, left: 0, padding: 5,
@@ -140,16 +141,14 @@ const StyledCard = styled(Card)(() => ({
   alignItems: "center",
   height: "40px",
   width: '100%',
-  backgroundColor: "#242734",
   borderRadius: "6px",
-  backgroundImage: "none",
 }));
 
 function CapturingRadiance() {
   const [radiance, setStore] = useStore(store => store.char.radiance);
 
   const handleNumber = useCallback((e: number) => {
-    const c = clamp(e, 0, 3);
+    const c = clamp(0, e, 3);
     setStore(prev => {
       prev.char.radiance = c;
       prev.plotdataSim.changed = true;
@@ -167,7 +166,7 @@ function CapturingRadiance() {
   }, [setStore]);
 
   return (
-    <StyledCard>
+    <StyledCard elevation={4}>
       <NumberInput
         id='Radiance'
         value={radiance}
@@ -178,22 +177,20 @@ function CapturingRadiance() {
           style: { padding: '3px', width: '2rem' }
         }}
         sx={{ height: '100%', p: '0 0 0 0.5rem' }}
-        startAdornment={
-          <>
-            <Tooltip title={
-              <Typography>
-                <Link href="https://www.reddit.com/r/Genshin_Impact/comments/1f3ykny/capturing_radiance_details_observations_and/" target="_blank">Capturing Radiance</Link>:<br />Enter the amount of consecutive 50:50 losses
-              </Typography>} arrow placement='top'
-            >
-              <label htmlFor='Radiance'>
-                <Typography variant='body1' sx={{ whiteSpace: 'nowrap', pr: 1, textDecoration: 'underline', textDecorationStyle: 'dotted', textUnderlineOffset: '2px', textDecorationThickness: '1px' }}>
-                  C.R.:
-                </Typography>
-              </label>
-            </Tooltip>
-            <Divider orientation="vertical" flexItem />
-          </>
-        }
+        startAdornment={<>
+          <Tooltip title={
+            <Typography>
+              <Link href="https://www.reddit.com/r/Genshin_Impact/comments/1f3ykny/capturing_radiance_details_observations_and/" target="_blank">Capturing Radiance</Link>:<br />Enter the amount of consecutive 50:50 losses
+            </Typography>} arrow placement='top'
+          >
+            <label htmlFor='Radiance'>
+              <Typography variant='body1' sx={{ whiteSpace: 'nowrap', pr: 1, textDecoration: 'underline', textDecorationStyle: 'dotted', textUnderlineOffset: '2px', textDecorationThickness: '1px' }}>
+                C.R.:
+              </Typography>
+            </label>
+          </Tooltip>
+          <Divider orientation="vertical" flexItem />
+        </>}
       />
       <Slider
         max={3} marks

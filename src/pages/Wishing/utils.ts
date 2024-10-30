@@ -25,15 +25,6 @@ export function roundSigfig(num: number, sigfigs: number = 4): string {
   return `${num.toFixed(trailingDigits)}`;
 }
 
-export function clamp(num: number, min?: number, max?: number) {
-  if (min !== undefined && max !== undefined) {
-    return Math.min(Math.max(num, min), max);
-  }
-  if (min !== undefined) {
-    return Math.max(num, min);
-  }
-  if (max !== undefined) {
-    return Math.min(num, max);
-  }
-  return num;
+export function clamp(min: number, num: number, max: number) {
+  return Math.min(Math.max(num, min), max);
 }

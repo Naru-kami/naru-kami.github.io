@@ -93,8 +93,6 @@ function Pn(n: number, pity: number, d: (num: number) => number) {
 function characterDistribution(i: number, pity: number, g: boolean, consec_losses: number) {
   var cdf: number[] = new Array(90 * (2 * i + 2 - (+g)) - pity + 1).fill(0),
     convolution = fiveStarCR(i + 1, g, consec_losses);
-
-  console.log(convolution)
   for (let k = i + 1; k <= 2 * i + 2 - (+g); k++) {
     var dist = Pn(k, pity, character);
     for (let x = 1; x <= 90 * (2 * i + 2 - (+g)) - pity; x++) {
