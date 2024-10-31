@@ -24,7 +24,7 @@ export default function ResetStorage({ storageKey, executeFunction }: { storageK
   }, [storageKey, executeFunction]);
 
   return (
-    <Tooltip title={<Typography>Reset all values to its default</Typography>} arrow placement='top'>
+    <Tooltip title={<Typography variant='body2'>Reset all values to its default</Typography>} arrow placement='top'>
       <ResetButton onClick={ResetStorage}>
         <ReplayIcon />
       </ResetButton>
