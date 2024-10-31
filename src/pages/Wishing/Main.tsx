@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useState } from 'react'
 import { Tabs, Box, Tab, Typography, Skeleton, Card, styled } from '@mui/material';
 import Provider from './Store';
 import Simulation from './Simulation/Simulation';
+import { SwitcherProvider } from './InputCards/CurrencySwitcher';
 
 const Calculation = lazy(() => import('./Statistic/Calculation'));
 
@@ -41,26 +42,28 @@ export default function Main() {
 
   return (
     <Provider>
-      <Card elevation={1} sx={{ p: 1, m: 1, minWidth: 360 }}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
-          <StyledTabs
-            value={value} centered
-            onChange={(e, v) => setValue(v)}
-            TabIndicatorProps={{ sx: { boxShadow: "0px 0px 35px 15px rgba(48, 122, 195, .4)", borderRadius: 1, zIndex: -1 } }}
-          >
-            <StyledTab label={<Typography fontWeight={500}> Calculation </Typography>} />
-            <StyledTab label={<Typography fontWeight={500}> Simulation </Typography>} />
-          </StyledTabs>
-        </Box>
-        <TabPanel value={value} index={0}>
-          <Suspense fallback={<Skeleton variant="rounded" sx={{ height: "80vh", width: '100%', backgroundColor: '#FFFFFF21', m: 2 }} />}>
-            <Calculation />
-          </Suspense>
-        </TabPanel>
-        <TabPanel value={value} index={1}>
-          <Simulation />
-        </TabPanel>
-      </Card>
+      <SwitcherProvider>
+        <Card elevation={1} sx={{ p: 1, m: 1, minWidth: 360 }}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
+            <StyledTabs
+              value={value} centered
+              onChange={(e, v) => setValue(v)}
+              TabIndicatorProps={{ sx: { boxShadow: "0px 0px 35px 15px rgba(48, 122, 195, .4)", borderRadius: 1, zIndex: -1 } }}
+            >
+              <StyledTab label={<Typography fontWeight={500}> Calculation </Typography>} />
+              <StyledTab label={<Typography fontWeight={500}> Simulation </Typography>} />
+            </StyledTabs>
+          </Box>
+          <TabPanel value={value} index={0}>
+            <Suspense fallback={<Skeleton variant="rounded" sx={{ height: "80vh", width: '100%', backgroundColor: '#FFFFFF21', m: 2 }} />}>
+              <Calculation />
+            </Suspense>
+          </TabPanel>
+          <TabPanel value={value} index={1}>
+            <Simulation />
+          </TabPanel>
+        </Card>
+      </SwitcherProvider>
     </Provider>
   )
 }

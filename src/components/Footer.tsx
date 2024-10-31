@@ -16,7 +16,9 @@ export default function Footer() {
         backgroundColor: 'hsl(230, 80%, 5%)',
       }}>
       <Typography fontSize={12}>This is a fan made project, and is not affiliated with HoYoverse</Typography>
-      <Typography fontSize={12}>Made with <Link href="https://react.dev/">React</Link> and <Link href="https://mui.com/">MUI</Link>. Build with <Link href="https://vite.dev/">Vite.</Link></Typography>
+      <Typography fontSize={12}>
+        Made with <Link href="https://react.dev/">React</Link> and <Link href="https://mui.com/">MUI</Link>. Build with <Link href="https://vite.dev/">Vite</Link>.
+        Last Update: {new Intl.DateTimeFormat(undefined, { day: '2-digit', month: "short", year: "numeric" }).format(new Date(1730329200000))}</Typography>
     </Card>
   )
 }

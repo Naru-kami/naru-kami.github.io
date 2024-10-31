@@ -9,6 +9,7 @@ import Starglitter from '../InputCards/Starglitter';
 import Modebar from '../InputCards/Modebar';
 import Tabl from './Components/Tabl';
 import { useStore } from '../Store';
+import CurrencySwitcher from '../InputCards/CurrencySwitcher';
 
 export default function Simulation() {
   return (
@@ -30,10 +31,10 @@ export default function Simulation() {
         </Grid >
         <Card elevation={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 3.5, mb: 1, p: 1 }}>
           <RunButton />
+          <CurrencySwitcher sx={{ mr: 'auto' }} />
           <StorageResetter />
         </Card>
       </Grid>
-
       <Grid item xs={12} xl={8}>
         <ModeComponent />
       </Grid>

@@ -10,6 +10,7 @@ import { blue } from '@mui/material/colors';
 import WeaponInput from '../InputCards/WeaponInput';
 import Modebar from '../InputCards/Modebar';
 import Tabl from './Components/Tabl';
+import CurrencySwitcher from '../InputCards/CurrencySwitcher';
 
 const StyledButton = styled(Button)(({ theme }) => ({
   lineHeight: 0,
@@ -46,10 +47,10 @@ export default function Calculation() {
         </Grid >
         <Card elevation={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 3.5, mb: 1, p: 1 }}>
           <RunButton />
+          <CurrencySwitcher sx={{ mr: 'auto' }} />
           <StorageResetter />
         </Card>
       </Grid>
-
       <Grid item xs={12} xl={8} >
         <ModeComponent />
       </Grid>

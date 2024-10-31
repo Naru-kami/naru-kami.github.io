@@ -6,9 +6,7 @@ import { pdfToCdf, roundSigfig } from '../../utils';
 const StyledCard = styled(Card)(() => ({
   padding: 8,
   paddingLeft: 16,
-  backgroundColor: "#242734",
   borderRadius: "6px",
-  backgroundImage: "none",
 }));
 
 export default function Tabl() {
@@ -30,7 +28,7 @@ export default function Tabl() {
   }, [y]);
 
   return (
-    <Card sx={{ p: 2, bgcolor: '#1B1D2A', backgroundImage: 'none', mx: 'auto', mb: 2, position: 'relative' }}>
+    <Card elevation={2} sx={{ p: 2, mx: 'auto', mb: 2, position: 'relative' }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 12 }}>
         {displayTrace.map((e, i) => {
           return <PercentCard key={i} id={`${str.prefix}` + (i + str.offset)} result={e} />
@@ -42,7 +40,7 @@ export default function Tabl() {
 
 function PercentCard({ id, result }: { id: string, result: number }) {
   return (
-    <StyledCard>
+    <StyledCard elevation={4}>
       <Typography variant='subtitle1' fontWeight={800}>
         {id}
       </Typography>

@@ -3,6 +3,7 @@ import Plot from 'react-plotly.js';
 import { Box, Card, LinearProgress, Paper, Typography } from '@mui/material';
 import { useStore, WishingStore } from '../../Store';
 import { pdfToCdf, roundSigfig } from '../../utils';
+import { userPrimogemSwitcher } from '../../InputCards/CurrencySwitcher';
 
 const config = {
   responsive: true,
@@ -49,6 +50,7 @@ export default function Chart() {
   const [char] = useStore(store => store.char.enabled);
   const [weap] = useStore(store => store.weap.enabled);
   const [mode] = useStore(store => store.mode);
+  const [usePrimogem] = userPrimogemSwitcher();
 
   const trace = useMemo(() => {
     var samplesize = y.reduce((p, c) => p + c, 0);
@@ -62,9 +64,9 @@ export default function Chart() {
     const filler: string = mode == 'distribution' ? 'tozeroy' : 'none';
     const customdata = _y.map(e => roundSigfig(e, 4));
     const linemarker = mode == 'distribution' ? 'lines' : 'lines+markers';
-    const hoverTemplate = mode == 'distribution' ? "<b> %{x:.0f} Pulls </b> <br> %{customdata}% <br>" : `<b> ${char ? 'C' : 'R'}%{x:.0f} </b> <br> %{customdata}% <br>`;
-    return { x: x, y: _y, ...traceconfig, mode: linemarker, fill: filler, customdata: customdata, hovertemplate: hoverTemplate }
-  }, [x, y, cum]) as Plotly.Data;
+    const hoverTemplate = mode == 'distribution' ? `<b> %{x:,.0f} ${usePrimogem ? 'Primos' : 'Wishes'} </b> <br> %{customdata}% <br>` : `<b> ${char ? 'C' : 'R'}%{x:,.0f} </b> <br> %{customdata}% <br>`;
+    return { x: usePrimogem && mode == "distribution" ? x.map(e => e * 160) : x, y: _y, ...traceconfig, mode: linemarker, fill: filler, customdata: customdata, hovertemplate: hoverTemplate }
+  }, [x, y, cum, usePrimogem]) as Plotly.Data;
 
   const layout = useMemo(() => {
     const range = (weap ? [0.825, 5.125] : (char ? [-0.125, 6.125] : [0, 0]));
@@ -80,7 +82,7 @@ export default function Chart() {
       plot_bgcolor: "#181c2d",
       paper_bgcolor: "#181c2d"
     } : {
-      xaxis: { title: 'Pulls', mirror: true, ticks: 'outside', showline: true, showgrid: true, zeroline: false, color: "#FFF" },
+      xaxis: { title: usePrimogem && mode == "distribution" ? 'Primogems' : 'Wishes', mirror: true, ticks: 'outside', showline: true, showgrid: true, zeroline: false, color: "#FFF" },
       yaxis: { title: '', mirror: true, ticks: 'outside', showline: true, showgrid: true, showticksuffix: 'all', ticksuffix: "%", zeroline: false, color: "#FFF", rangemode: 'nonnegative' },
       margin: { l: 55, r: 35, b: 70, t: 35, pad: 4 },
       showlegend: false,
@@ -91,7 +93,7 @@ export default function Chart() {
       paper_bgcolor: "#181c2d"
     };
     return str;
-  }, [y]) as Plotly.Layout;
+  }, [y, usePrimogem]) as Plotly.Layout;
 
   return (
     <Card elevation={2} style={{ maxHeight: '620px', maxWidth: '100%', marginInline: 'auto', aspectRatio: 16 / 9, overflow: 'visible' }}>
