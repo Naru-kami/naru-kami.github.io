@@ -7,6 +7,7 @@ import Guarantee from './Guarantee';
 import { useStore, WishingStore } from '../Store';
 import { useCallback } from 'react';
 import weapon from '../assets/weapon.png';
+import { userPrimogemSwitcher } from './CurrencySwitcher';
 
 const StyledListItemButton = styled(ListItemButton)(() => ({
   height: "40px",
@@ -98,6 +99,7 @@ function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Pa
 
 function ModeSwitcher() {
   const [mode, setStore] = useStore(store => store.mode);
+  const [usePrimogems] = userPrimogemSwitcher();
 
   const handleMode = useCallback((event: SelectChangeEvent<"distribution" | "fixed">) => {
     setStore(prev => {
@@ -123,7 +125,7 @@ function ModeSwitcher() {
         </MenuItem>
         <MenuItem value={'fixed'}>
           <Typography variant='body1' >
-            Wishes
+            {usePrimogems ? "Primogems" : "Wishes"}
           </Typography>
         </MenuItem>
       </Select>

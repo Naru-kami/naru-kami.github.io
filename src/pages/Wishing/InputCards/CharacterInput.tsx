@@ -9,6 +9,7 @@ import character from '../assets/character.png';
 import { useStore, WishingStore } from '../Store';
 import NumberInput from '../../../components/NumberInput';
 import { clamp } from '../utils';
+import { userPrimogemSwitcher } from './CurrencySwitcher';
 
 const StyledListItemButton = styled(ListItemButton)(() => ({
   display: "flex",
@@ -103,6 +104,7 @@ function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Pa
 
 function ModeSwitcher() {
   const [mode, setStore] = useStore(store => store.mode);
+  const [usePrimogems] = userPrimogemSwitcher();
 
   const handleMode = useCallback((event: SelectChangeEvent<"distribution" | "fixed">) => {
     setStore(prev => {
@@ -128,7 +130,7 @@ function ModeSwitcher() {
         </MenuItem>
         <MenuItem value={'fixed'}>
           <Typography variant='body1' >
-            Wishes
+            {usePrimogems ? "Primogems" : "Wishes"}
           </Typography>
         </MenuItem>
       </Select>

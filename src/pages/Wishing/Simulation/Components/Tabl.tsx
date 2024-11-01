@@ -29,7 +29,7 @@ export default function Tabl() {
 
   return (
     <Card elevation={2} sx={{ p: 2, mx: 'auto', mb: 2, position: 'relative' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 12 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12 }}>
         {displayTrace.map((e, i) => {
           return <PercentCard key={i} id={`${str.prefix}` + (i + str.offset)} result={e} />
         })}

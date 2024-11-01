@@ -56,7 +56,7 @@ export default function NumberInput({ onChange, value, format = false, ...props 
     e.preventDefault();
     if (document.activeElement === inputRef.current)
       setval(oldval => {
-        let clamped = Number(oldval || placeholder.current) + (e.deltaY < 0 ? 1 : -1);
+        let clamped = Number(oldval || placeholder.current) + (e.deltaY < 0 ? (inputProps?.step ?? 1) : -(inputProps?.step ?? 1));
         clamped = typeof inputProps?.min === 'number' ? Math.max(clamped, inputProps.min) : clamped;
         clamped = typeof inputProps?.max === 'number' ? Math.min(clamped, inputProps.max) : clamped;
         return clamped.toString();
