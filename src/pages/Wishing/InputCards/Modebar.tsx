@@ -11,16 +11,18 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
   '&:hover': {
     backgroundColor: red[900],
   },
+  float: 'right',
+  width: 28,
+  height: 28,
+  borderRadius: 4,
+  marginLeft: 16
 }));
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   background: 'inherit',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-between',
   textDecoration: 'underline',
   position: 'sticky',
-  top: '0px',
+  top: '0',
   zIndex: '1',
   paddingLeft: '1.5rem',
   [theme.breakpoints.up('sm')]: {
@@ -40,19 +42,19 @@ export default function Modebar({ approach }: { approach: string }) {
   }, [setOpen]);
 
   return (
-    <Card elevation={2} sx={{ backgroundColor: "#307ac3bb" }}>
+    <Card elevation={2} sx={{ backgroundColor: "#3472D5B2" }}>
       <CardActionArea onClick={handleOpen} sx={{ p: 1 }}>
         <Typography variant='body2' sx={{ display: 'flex', alignItems: 'center' }}>
-          <ErrorOutline sx={{ fontSize: 'inherit', mr: 0.5 }} /> Updated for 5.1. This approach uses {approach == "calculation" && "probability theory" || "a Monte-Carlo simulation"}.
+          <ErrorOutline sx={{ fontSize: 'inherit', mr: 0.5 }} /> Updated for 5.0! This method uses {approach == "calculation" && "probability theory" || "a Monte-Carlo simulation"}.
         </Typography>
       </CardActionArea>
       {approach == 'calculation' &&
         <Dialog open={open} onClose={handleClose} maxWidth="md" >
           <StyledDialogTitle>
-            How it works
-            <CloseButton onClick={handleClose} sx={{ width: '30px', height: '30px', borderRadius: 1, marginLeft: 'auto' }}>
+            <CloseButton onClick={handleClose}>
               <Close />
             </CloseButton>
+            How it works
           </StyledDialogTitle>
           <DialogContent sx={{ px: { sm: '3rem' }, overflowY: 'visible', transition: 'padding .25s cubic-bezier(0.4, 0, 0.2, 1)' }}>
             <Link href="https://drive.google.com/file/d/1EECcjNVpfiOTqRoS48hHWqH2Ake902vq/view" target="_blank">This document</Link> contains the basis for this work.
@@ -63,10 +65,13 @@ export default function Modebar({ approach }: { approach: string }) {
             </Typography>
             Hoyo promises an increased chance of getting the promoted 5 star character.
             However, it is not a simple increase in odds from a 50:50 to a 55:45. Hoyo loves complicated pity systems.
-            The current leading theory is explained in detail in <Link href="https://www.reddit.com/r/Genshin_Impact/comments/1f3ykny/capturing_radiance_details_observations_and/" target="_blank">this Reddit post</Link>, and backed by observations.
-            In short, it is believed that for every lost 50:50, the chances to trigger Capturing Radiance increases by <InlineMath math="\left[0\%, 5\%, 50\%, 100\% \right]" />, meaning you should not lose more than 3 "50:50" in a row.
+            The current leading theory is explained in detail in <Link href="https://www.reddit.com/r/Genshin_Impact/comments/1hd1sqa/understanding_genshin_impacts_capturing_radiance/" target="_blank">this Reddit post</Link>, and backed by observations.
+            In short, a counter will be introduced, which starts at 1, and increases or decreases by 1 for every 50/50 loss or win, repectively.
+            When the counter reaches 2, the next 50/50 has a small chance to trigger capturing radiance (exact probability is unknown).
+            When the counter reaches 3, it will be guaranteed to trigger capturing radiance, and the counter will reset to 1.
+            Considering the promised consolidated probability of 55%, the lowest probability for each counter is <InlineMath math="[0.5, 0.5, \frac{6}{11}, 1]" />.
             <br /><br />
-            To incorporate Capturing Radiance, we need to properly adjust the weighting for each 5 star pull.
+            To incorporate Capturing Radiance, we need to readjust the weighting for each 5 star pull.
             The weighting cannot be done by a convolution anymore, and since each 5 star pull is not independent anymore, we also cannot use the binomial formula.
             We need to build the entire binary tree and calculate the probability for each branch, where the odds for a win and lose change.
             The generating function to get constellation <InlineMath math='i' /> of the promoted character is
@@ -96,10 +101,10 @@ export default function Modebar({ approach }: { approach: string }) {
       {approach == 'simulation' &&
         <Dialog open={open} onClose={handleClose} maxWidth="md" >
           <StyledDialogTitle>
-            Basic flowchart
-            <CloseButton onClick={handleClose} sx={{ width: '30px', height: '30px', borderRadius: 1, marginLeft: 'auto' }}>
+            <CloseButton onClick={handleClose}>
               <Close />
             </CloseButton>
+            Basic flowchart
           </StyledDialogTitle>
           <DialogContent sx={{ px: { sm: '3rem' }, overflowY: 'visible' }}>
             The basis for this simulation is explained in detail in <Link href="https://www.hoyolab.com/article/497840" target="_blank">this Hoyolab Article</Link>.

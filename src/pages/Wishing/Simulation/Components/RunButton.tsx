@@ -40,11 +40,11 @@ const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStor
   const N = store.threads;
   var workerCount = 0;
 
-  workers = new Array(N).fill(NaN).map((e: number, i) => {
+  workers = Array.from({ length: N }, (_, i) => {
     if (!i)
-      return new Worker(new URL('../Data/MainWorker.ts', import.meta.url));
+      return new Worker(new URL('../Data/MainWorker.ts', import.meta.url), { type: "module" });
     else
-      return new Worker(new URL('../Data/Worker.ts', import.meta.url))
+      return new Worker(new URL('../Data/Worker.ts', import.meta.url), { type: "module" })
   });
 
   workers.forEach((worker: Worker, index) => {

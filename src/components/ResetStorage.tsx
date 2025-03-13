@@ -25,7 +25,7 @@ export default function ResetStorage({ storageKey, executeFunction }: { storageK
 
   return (
     <Tooltip title={<Typography variant='body2'>Reset all values to its default</Typography>} arrow placement='top'>
-      <ResetButton onClick={ResetStorage}>
+      <ResetButton onClick={ResetStorage} aria-label="reset to default values">
         <ReplayIcon />
       </ResetButton>
     </Tooltip>

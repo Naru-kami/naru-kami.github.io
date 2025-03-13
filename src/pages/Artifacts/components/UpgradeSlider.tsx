@@ -89,7 +89,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
         step={1}
         onChangeCommitted={commitSliderVals}
         marks
-        sx={{ mx: 2, color: "#3A77D7" }}
+        sx={{ mx: 2, color: "#3472D5" }}
       />
       <NumberInput
         value={upperVal}

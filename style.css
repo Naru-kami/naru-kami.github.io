@@ -1,10 +1,12 @@
 body {
   font-variant-numeric: normal;
   margin: 0px;
+  padding-right: 0px !important;
 }
 
-html {
+:root {
   background-color: #0c0f1e;
+  scrollbar-gutter: stable;
 }
 
 input::-webkit-outer-spin-button,

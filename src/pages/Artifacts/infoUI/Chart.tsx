@@ -29,9 +29,9 @@ const traceconfig = {
   name: "",
   mode: 'line',
   fill: 'tozeroy',
-  fillcolor: '#1772CB33',
+  fillcolor: '#3472D540',
   line: {
-    color: '#1772CB',
+    color: '#3472D5',
     size: 2
   },
   hovertemplate: "<b> %{y:.2f}% <br> %{x:.0f} Days <br>"

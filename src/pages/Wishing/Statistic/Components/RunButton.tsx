@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@mui/material/styles/styled';
 import green from '@mui/material/colors/green';
@@ -13,7 +13,8 @@ const StyledButton = styled(Button)(({ theme }) => ({
   '&:hover': {
     backgroundColor: green[900],
   },
-  height: '40px'
+  height: 40,
+  paddingLeft: 8,
 }));
 
 export type DataMessage = Omit<WishingStore, 'plotdataCalc' | 'plotdataCalc'>
@@ -60,7 +61,7 @@ export default function RunButton() {
   }, [store, setStore]);
 
   return (
-    <StyledButton variant="contained" onClick={pop} disabled={(!store.char.enabled && !store.weap.enabled)} sx={{ pl: 1 }}>
+    <StyledButton variant="contained" onClick={pop} disabled={!store.char.enabled && !store.weap.enabled}>
       <CalculateIcon />
       <Typography variant='body1' letterSpacing={1} sx={{ display: 'flex', alignItems: 'center', pl: 1 }}>
         <strong>

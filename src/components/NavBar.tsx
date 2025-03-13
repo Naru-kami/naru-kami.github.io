@@ -99,7 +99,7 @@ function Links({ location, orientation }: { location: Location, orientation?: "h
       <Tab
         label={
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', px: 1 }}>
-            <img src={wish} width={24} height={24} style={{ flex: 0 }} />
+            <img src={wish} width={24} height={24} alt="wishing distribution" style={{ flex: 0 }} />
             <Typography fontWeight={600} fontSize={16} variant="h2" letterSpacing={1} sx={{ flex: 1 }}>
               Wishing
             </Typography>
@@ -113,7 +113,7 @@ function Links({ location, orientation }: { location: Location, orientation?: "h
       <Tab
         label={
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%', px: 1 }}>
-            <img src={artifact} width={24} height={24} style={{ flex: 0 }} />
+            <img src={artifact} width={24} height={24} alt="artifact distribution" style={{ flex: 0 }} />
             <Typography fontWeight={600} fontSize={16} variant="h2" letterSpacing={1} style={{ flex: 1 }}>
               Artifacts
             </Typography>

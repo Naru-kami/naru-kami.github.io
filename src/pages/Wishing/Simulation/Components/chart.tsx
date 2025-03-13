@@ -17,9 +17,9 @@ const config = {
 
 const traceconfig = {
   name: "",
-  fillcolor: '#1772CB33',
+  fillcolor: '#3472D540',
   line: {
-    color: '#1772CB',
+    color: '#3472D5',
   },
   marker: {
     size: 10,
@@ -77,7 +77,7 @@ export default function Chart() {
       margin: { l: 55, r: 35, b: 70, t: 35, pad: 4 },
       showlegend: false,
       hovermode: "x",
-      dragmode: false,
+      dragmode: matchMedia("(pointer: fine)").matches && "zoom",
       hoverlabel: { bgcolor: "#181c2d" },
       plot_bgcolor: "#181c2d",
       paper_bgcolor: "#181c2d"
@@ -87,7 +87,7 @@ export default function Chart() {
       margin: { l: 55, r: 35, b: 70, t: 35, pad: 4 },
       showlegend: false,
       hovermode: "x",
-      dragmode: false,
+      dragmode: matchMedia("(pointer: fine)").matches && "zoom",
       hoverlabel: { bgcolor: "#181c2d" },
       plot_bgcolor: "#181c2d",
       paper_bgcolor: "#181c2d"

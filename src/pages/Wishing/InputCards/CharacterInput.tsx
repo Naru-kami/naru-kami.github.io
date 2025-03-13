@@ -23,6 +23,12 @@ const StyledListItemButton = styled(ListItemButton)(() => ({
   borderRadius: '6px 6px 0 0'
 }));
 
+const Image = styled('img')(() => ({
+  margin: '0 8px 4px 0',
+  verticalAlign: 'middle',
+  height: 22
+}))
+
 export default function Input() {
   const [enabled, setStore] = useStore(store => store.char.enabled);
   return (
@@ -30,8 +36,8 @@ export default function Input() {
       <Enabler enabled={enabled} setStore={setStore} />
       <Grid ref={node => !enabled ? node?.setAttribute('inert', '') : node?.removeAttribute('inert')} container spacing={2}>
         <Grid item xs={12} textAlign='center'>
-          <Typography variant="h6" style={{ textDecoration: 'underline' }} >
-            <img src={character} width='20px' height='20px' /> Character Banner
+          <Typography variant="h6" component="h3" style={{ textDecoration: 'underline' }} >
+            <Image src={character} alt='character banner' />Character Banner
           </Typography>
         </Grid>
         <Grid item xs={5} sm={4} display='flex' alignItems='flex-end'>
@@ -42,7 +48,7 @@ export default function Input() {
         </Grid>
         <Grid item xs={5} sm={4}>
           <label htmlFor="charPity" style={{ width: '100%', height: '100%', borderBottom: '1px solid #FFFFFF33', display: 'flex', alignItems: 'center', paddingInline: '0.5rem' }}>
-            <Typography variant='body1' style={{ display: 'flex', alignItems: 'center' }} >
+            <Typography variant='body1' component="span" style={{ display: 'flex', alignItems: 'center' }} >
               5 <StarIcon sx={{ color: yellow[700], fontSize: 22, px: '2px', height: 'auto' }} /> Pity
             </Typography>
           </label>
@@ -53,7 +59,7 @@ export default function Input() {
         <Grid item xs={5} sm={4}>
           <StyledListItemButton>
             <label htmlFor='charGuaranteed' style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingInline: '0.5rem' }}>
-              <Typography variant='body1' style={{ display: 'flex', alignItems: 'center' }} >
+              <Typography variant='body1' component="span" style={{ display: 'flex', alignItems: 'center' }} >
                 Guarantee
               </Typography>
               <Guarantee id={"charGuaranteed"} ns='char' />
@@ -91,13 +97,13 @@ function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Pa
         cursor: "not-allowed"
       }}>
       </Card>}
-      <label style={{
+      <div style={{
         position: 'absolute',
         top: 0, left: 0, padding: 5,
         zIndex: 101
       }}>
-        <Switch checked={enabled} onChange={handleChange} color="primary" />
-      </label>
+        <Switch checked={enabled} onChange={handleChange} color="primary" inputProps={{ "aria-label": 'enable character banner' }} />
+      </div>
     </>
   );
 }

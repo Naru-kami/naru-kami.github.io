@@ -1,3 +1,4 @@
+import { clamp } from '../../utils';
 import { DataMessage } from '../Components/RunButton';
 import fftjs from 'fft.js';
 
@@ -90,9 +91,9 @@ function Pn(n: number, pity: number, d: (num: number) => number) {
   return res;
 }
 
-function characterDistribution(i: number, pity: number, g: boolean, consec_losses: number) {
+function characterDistribution(i: number, pity: number, g: boolean, cr_counter: number) {
   var cdf: number[] = new Array(90 * (2 * i + 2 - (+g)) - pity + 1).fill(0),
-    convolution = fiveStarCR(i + 1, g, consec_losses);
+    convolution = fiveStarCR(i + 1, g, cr_counter);
   for (let k = i + 1; k <= 2 * i + 2 - (+g); k++) {
     var dist = Pn(k, pity, character);
     for (let x = 1; x <= 90 * (2 * i + 2 - (+g)) - pity; x++) {
@@ -102,13 +103,13 @@ function characterDistribution(i: number, pity: number, g: boolean, consec_losse
   return cdf;
 }
 
-function getC(pulls: number, pity: number, g: boolean, consec_losses: number) {
+function getC(pulls: number, pity: number, g: boolean, cr_counter: number) {
   var con = [0, 0, 0, 0, 0, 0, 0];
   if (pulls <= 0) {
     return con;
   }
   for (let i = 0; i <= 6; i++) {
-    var convolution = fiveStarCR(i + 1, g, consec_losses);
+    var convolution = fiveStarCR(i + 1, g, cr_counter);
     for (let k = i + 1; k <= 2 * i + 2 - (+g); k++) {
       var dist = Pn(k, pity, character);
       con[i] += 100 * convolution[k] * (dist[pulls] ?? 1);
@@ -155,9 +156,9 @@ function getR(pulls: number, pity: number, g: boolean) {
   return ref;
 }
 
-function getCombined(charConst: number, charPity: number, charGuaranteed: boolean, consec_losses: number, weapRef: number, weapPity: number, weapGuaranteed: boolean) {
+function getCombined(charConst: number, charPity: number, charGuaranteed: boolean, cr_counter: number, weapRef: number, weapPity: number, weapGuaranteed: boolean) {
   const weapDist = cfdToPdf(weaponDistribution(weapRef, weapPity, weapGuaranteed).map(e => e / 100));
-  const charDist = cfdToPdf(characterDistribution(charConst, charPity, charGuaranteed, consec_losses).map(e => e / 100));
+  const charDist = cfdToPdf(characterDistribution(charConst, charPity, charGuaranteed, cr_counter).map(e => e / 100));
   return multiplyFFTjs(weapDist, charDist).map(e => e * 100);
 }
 
@@ -220,37 +221,32 @@ type BinaryNode<T> = {
   depth: T,
   losses: T,
   wins: T,
-  probability: T
-  left: BinaryNode<T> | null
-  right: BinaryNode<T> | null
+  probability: T,
+  left?: BinaryNode<T>,
+  right?: BinaryNode<T>,
 }
 
-function fiveStarCR(k: number, g: boolean, consec_losses: number, node: BinaryNode<number> | null = null, branch_prob: number[] | null = null) {
-  if (node == null)
-    node = { depth: 0, losses: 0, wins: 0, probability: 1, left: null, right: null };
-  if (branch_prob == null)
-    branch_prob = new Array(2 * k + 1).fill(0);
-
-  if (node.depth == k) {
-    branch_prob[node.losses + k] += node.probability;
+function fiveStarCR(
+  cons: number,
+  guaranteed: boolean,
+  cr_counter: number,
+  node: BinaryNode<number> = { depth: 0, losses: 0, wins: 0, probability: 1 },
+  branch_prob: number[] = new Array(2 * cons + 1).fill(0)
+) {
+  if (node.depth == cons) {
+    branch_prob[node.losses + cons] += node.probability;
     return branch_prob;
   }
   if (node.probability == 0)
     return branch_prob;
 
-  var green_prob: number;
-  if (node.depth == 0 && g)
-    green_prob = 1;
-  else
-    green_prob = [0.5, 0.525, 0.75, 1.0][consec_losses];
+  const win_prob = node.depth == 0 && guaranteed ? 1 : [0.5, 0.5, 6 / 11, 1][cr_counter];
 
-  var red_prob = 1 - green_prob;
+  node.left = { depth: node.depth + 1, losses: node.losses + 1, wins: node.wins, probability: node.probability * (1 - win_prob) };
+  node.right = { depth: node.depth + 1, losses: node.losses, wins: node.wins + 1, probability: node.probability * win_prob };
 
-  node.left = { depth: node.depth + 1, losses: node.losses + 1, wins: node.wins, probability: node.probability * red_prob, left: null, right: null };
-  node.right = { depth: node.depth + 1, losses: node.losses, wins: node.wins + 1, probability: node.probability * green_prob, left: null, right: null };
-
-  fiveStarCR(k, false, consec_losses + 1, node.left, branch_prob);
-  fiveStarCR(k, false, g ? consec_losses : 0, node.right, branch_prob);
+  fiveStarCR(cons, false, cr_counter + 1, node.left, branch_prob); // left: lose 50/50
+  fiveStarCR(cons, false, guaranteed ? cr_counter : clamp(0, cr_counter - 1, 1), node.right, branch_prob); // right: win 50/50
 
   return branch_prob;
 }

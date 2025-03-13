@@ -73,7 +73,7 @@ function Switcher() {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingInline: '8px', paddingBlock: '16px' }}>
       <Tooltip title={<Typography variant='body2'>Switch to {cum && 'density' || 'cumulative'} distribution</Typography>} arrow placement='top'>
-        <StyledButton onClick={handleDistribution}>
+        <StyledButton onClick={handleDistribution} aria-label={cum ? "switch to PDF" : "switch to CDF"}>
           <CachedIcon sx={{ transform: 'rotate(75deg)' }} />
         </StyledButton>
       </Tooltip>

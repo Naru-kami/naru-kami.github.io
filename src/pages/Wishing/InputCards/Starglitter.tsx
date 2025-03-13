@@ -63,7 +63,7 @@ export default function Starglitter() {
       <StyledListItemButton>
         <label style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', paddingInline: '8px' }}>
           <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            {<img src={starglitter} width='24px' height='24px' />} Use Starglitter?
+            {<img src={starglitter} width='24px' height='24px' alt="starglitter" />} Use Starglitter?
           </Typography>
           <Checkbox checked={check} onChange={updatecheck} />
         </label>
@@ -80,7 +80,7 @@ export default function Starglitter() {
                 <InputAdornment position="start" sx={{ mr: '-0.125rem', ml: '.125rem' }}>
                   <label htmlFor={'starglitterCount'}>
                     <Typography variant='body2' sx={{ display: 'flex', alignItems: 'center' }}>
-                      {<img src={starglitter} width={29} height={29} />}
+                      {<img src={starglitter} width={29} height={29} alt="starglitter" />}
                     </Typography>
                   </label>
                 </InputAdornment>
@@ -91,14 +91,14 @@ export default function Starglitter() {
           </Grid>
           <Grid item xs={6}>
             <ConstCount ns='fiveStar' id={0} adornment={
-              <img src={fiveStarCons} width={24} height={24} />
+              <img src={fiveStarCons} width={24} height={24} alt="five star constellation" />
             } />
           </Grid>
           {[1, 2, 3].map(e => {
             return (
               <Grid item xs={4} key={e}>
                 <ConstCount ns='first' id={e} adornment={
-                  <img src={fourStarCons} width={24} height={24} />
+                  <img src={fourStarCons} width={24} height={24} alt="four star constellation" />
                 } />
               </Grid>
             )

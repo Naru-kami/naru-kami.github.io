@@ -1,3 +1,4 @@
+import { clamp } from '../../utils';
 import { DataMessage } from '../Components/RunButton';
 
 self.onmessage = function (e: MessageEvent<DataMessage>) {
@@ -45,8 +46,8 @@ function SimDist({ char, weap, starglitter, samplesize }: DataMessage) {
         prob4 = Math.min(1, 0.051 + Math.max(0, (counter4 - 8) * 0.51));
         let x = Math.random();
         if (x < prob5) {
-          if (x <= (prob5 * 0.5) || guaranteed || (radiance == 1 && (x < prob5 * 0.525)) || (radiance == 2 && (x < prob5 * 0.75)) || radiance >= 3) {
-            !guaranteed && (radiance = 0);
+          if (x <= (prob5 * 0.5) || guaranteed || (radiance == 2 && (x < prob5 * 6 / 11)) || radiance >= 3) {
+            !guaranteed && (radiance = clamp(0, radiance - 1, 1));
             guaranteed = false;
             starglitterCount += GetStarglitter(5, promoted + starglitter.cons[0]);
             promoted++;

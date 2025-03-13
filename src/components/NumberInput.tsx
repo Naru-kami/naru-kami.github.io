@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Input, styled, InputProps } from '@mui/material'
 
 const StyledInput = styled(Input)(() => ({
-  backgroundColor: '#3A77D7',
+  backgroundColor: '#3472D5',
   color: '#FFF',
   padding: '0 .5rem',
 }));

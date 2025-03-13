@@ -106,7 +106,7 @@ if (storedWish) {
         count: 0,
         cons: [-1, -1, -1, -1]
       },
-      samplesize: 500000,
+      samplesize: 1000000,
       threads: 4,
       plotdataSim: {
         changed: false,
