@@ -188,7 +188,7 @@ function CapturingRadiance() {
         startAdornment={<>
           <Tooltip title={
             <Typography>
-              <Link href="https://www.reddit.com/r/Genshin_Impact/comments/1f3ykny/capturing_radiance_details_observations_and/" target="_blank">Capturing Radiance</Link>:<br />Enter the amount of consecutive 50:50 losses
+              <Link href="https://www.reddit.com/r/Genshin_Impact/comments/1hd1sqa/understanding_genshin_impacts_capturing_radiance/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1" target="_blank">Capturing Radiance</Link>:<br />Enter the counter for 50:50 losses. See reference for more info.
             </Typography>} arrow placement='top'
           >
             <label htmlFor='Radiance'>
