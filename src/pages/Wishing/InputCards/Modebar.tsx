@@ -27,8 +27,7 @@ const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   paddingLeft: '1.5rem',
   [theme.breakpoints.up('sm')]: {
     paddingLeft: '3rem',
-  },
-  transition: 'padding .25s cubic-bezier(0.4, 0, 0.2, 1)',
+  }
 }))
 
 export default function Modebar({ approach }: { approach: string }) {
@@ -50,17 +49,17 @@ export default function Modebar({ approach }: { approach: string }) {
       </CardActionArea>
       {approach == 'calculation' &&
         <Dialog open={open} onClose={handleClose} maxWidth="md" >
-          <StyledDialogTitle>
+          <StyledDialogTitle variant="h5">
             <CloseButton onClick={handleClose}>
               <Close />
             </CloseButton>
             How it works
           </StyledDialogTitle>
-          <DialogContent sx={{ px: { sm: '3rem' }, overflowY: 'visible', transition: 'padding .25s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+          <DialogContent sx={{ px: { sm: '3rem' }, overflowY: 'visible' }}>
             <Link href="https://drive.google.com/file/d/1EECcjNVpfiOTqRoS48hHWqH2Ake902vq/view" target="_blank">This document</Link> contains the basis for this work.
             <br />Since the 5.0 update, Hoyo has introduced few changes to the wishing system.
             <br /><br />
-            <Typography component='div' variant='h5' sx={{ textDecoration: 'underline', textAlign: 'center', mb: 1 }}>
+            <Typography variant='h6' sx={{ textDecoration: 'underline', mb: 1 }}>
               Character Banner
             </Typography>
             Hoyo promises an increased chance of getting the promoted 5 star character.
@@ -79,7 +78,7 @@ export default function Modebar({ approach }: { approach: string }) {
             <InlineMath math='p^{w}_{l}' /> denotes the probabiliy of winning <InlineMath math='w' />-times and losing <InlineMath math='l' />-times.
             This includes every possible permutation of wins and loses, where the probability for each sequence is added together.
             <br /><br />
-            <Typography component='div' variant='h5' sx={{ textDecoration: 'underline', textAlign: 'center', mb: 1 }}>
+            <Typography variant='h6' sx={{ textDecoration: 'underline', mb: 1 }}>
               Weapon Banner
             </Typography>
             The weapon banner now has its Epitomized Path reduced from 2 to 1.
@@ -89,7 +88,7 @@ export default function Modebar({ approach }: { approach: string }) {
             and <InlineMath math='\widetilde{a}_2 = 1 - \widetilde{a}_1' />, as the epitomized path guarantees the desired 5 star weapon. <br />
             Therefore, the generating function to get refinement R<InlineMath math='i' /> is
             <BlockMath math='\widetilde{r}(x) \cdot \left( r(x) \right)^{i-1} = \sum_{k=1}^{2i} c_k x^k' /> <br />
-            <Typography component='div' variant='h5' sx={{ textDecoration: 'underline', textAlign: 'center', mb: 1 }}>
+            <Typography variant='h6' sx={{ textDecoration: 'underline', mb: 1 }}>
               Combined Banners
             </Typography>
             The distribution to pull on both banners to get C<InlineMath math='i' /> and R<InlineMath math='j' /> is the convolution of the two:

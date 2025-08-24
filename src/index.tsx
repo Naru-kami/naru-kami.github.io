@@ -10,6 +10,12 @@ import Footer from './components/Footer';
 const Artifacts = lazy(() => import('./pages/Artifacts/Main'));
 const Wishing = lazy(() => import('./pages/Wishing/Main'));
 
+declare module '@mui/material/styles' {
+  interface BreakpointOverrides {
+    laptop: true;
+  }
+}
+
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -29,6 +35,16 @@ const darkTheme = createTheme({
       defaultProps: {
         color: '#42a5f5'
       },
+    }
+  },
+  breakpoints: {
+    values: {
+      laptop: 1080,
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
     }
   }
 });

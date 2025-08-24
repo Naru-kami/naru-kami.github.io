@@ -74,17 +74,3 @@ input[type="number"] {
 div[role=tablist] {
   gap: 8px;
 }
-
-.inactive-row {
-  position: relative;
-  opacity: 0.4
-}
-
-.inactive-row::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 8%;
-  border-bottom: 1px solid #fff;
-  width: 90%;
-}

@@ -200,15 +200,6 @@ function nextpower(v: number) {
   return v;
 }
 
-function binomial(n: number, k: number) {
-  var c = 1;
-  k = Math.min(k, n - k);
-  for (let i = 1; i <= k; i++, n--) {
-    c = ((c / i) >> 0) * n + c % i * n / i;
-  }
-  return c;
-}
-
 function cfdToPdf(cdf: number[]) {
   var pdf = [cdf[0]];
   for (let i = cdf.length - 1; i >= 1; i--) {

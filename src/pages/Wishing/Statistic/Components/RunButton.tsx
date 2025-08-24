@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@mui/material/styles/styled';
 import green from '@mui/material/colors/green';
-import { useStore, WishingStore } from '../../Store';
+import { useStore, WishingStore, readStore } from '../../Store';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import { Typography } from '@mui/material';
 import { draw } from '../../utils';
@@ -37,7 +37,7 @@ const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStor
 
     setData(prev => {
       var t = { ...prev };
-      t.plotdataCalc.x = draw(ydata, store.weap.enabled && !store.char.enabled && store.mode == 'fixed' && 1 || 0);
+      t.plotdataCalc.x = draw(ydata, prev.weap.enabled && !prev.char.enabled && prev.mode == 'fixed' ? 1 : 0);
       t.plotdataCalc.y = [...ydata];
       return t;
     });
@@ -48,7 +48,8 @@ const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStor
 }
 
 export default function RunButton() {
-  const [store, setStore] = useStore(store => store);
+  const [_, setStore] = useStore(store => store.plotdataCalc);
+  const store = readStore(store => store);
 
   const pop = useCallback(() => {
     var ydata: number[] = (store.mode == 'distribution' ? new Array(

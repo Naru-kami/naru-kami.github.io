@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
-import { Select, MenuItem, InputLabel, FormControl, Card, Typography, styled, SelectChangeEvent } from '@mui/material';
+import { Select, MenuItem, InputLabel, FormControl, Box, Typography, styled, SelectChangeEvent } from '@mui/material';
 import SubIcon from '../assets/SubIcon.json';
 import MainIcon from '../assets/MainIcon.json';
 import { ArtifactStore, useStore } from '../Data/Store';
@@ -118,9 +118,9 @@ export default function ArtifactMainProps() {
   }, [maintype, setStore]);
 
   return (
-    <Card sx={{ bgcolor: 'inherit', boxShadow: 0, borderRadius: 2, height: '100%', backgroundImage: 'none' }}>
-      <Typography sx={{ textAlign: 'center' }}> Mainstats </Typography>
-      <FormControl size="small" sx={{ width: '100%' }}>
+    <Box sx={{ height: '100%' }}>
+      <Typography sx={{ textAlign: 'center' }}> Main affixes </Typography>
+      <FormControl size="small" fullWidth>
         <InputLabel id="Type" sx={{ color: "#FFF", my: 1 }}> Type </InputLabel>
         <StyledSelect value={maintype} onChange={changeType} label="Type">
           {mainnames.map((e, i) => {
@@ -131,9 +131,9 @@ export default function ArtifactMainProps() {
           })}
         </StyledSelect>
       </FormControl>
-      <FormControl size="small" sx={{ width: '100%' }}>
-        <InputLabel id="Main" sx={{ color: "#FFF", my: 1 }}> Mainstat </InputLabel>
-        <StyledSelect value={mainstat} onChange={changeMain} label="Mainstat">
+      <FormControl size="small" fullWidth>
+        <InputLabel id="Main" sx={{ color: "#FFF", my: 1 }}> Main affix </InputLabel>
+        <StyledSelect value={mainstat} onChange={changeMain} label="Main affix">
           {mainList.map(e => {
             return (
               <MenuItem value={e} key={e}>
@@ -159,6 +159,6 @@ export default function ArtifactMainProps() {
           })}
         </StyledSelect>
       </FormControl>
-    </Card>
+    </Box>
   )
 }

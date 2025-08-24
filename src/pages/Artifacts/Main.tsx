@@ -7,10 +7,9 @@ const Info = lazy(() => import('./infoUI/Info'));
 const SubDropdown = lazy(() => import('./components/SubDropdown'));
 const UpgradeSlider = lazy(() => import('./components/UpgradeSlider'));
 
-const Resin = lazy(() => import('./components/Resin'));
 const MiscSettings = lazy(() => import('./components/MiscSettings'));
 
-const Artichance = lazy(() => import('./Artichance'));
+const RunButton = lazy(() => import('./RunButton'));
 const StorageResetter = lazy(() => import('./Data/StoreResetter'));
 
 const Chart = lazy(() => import('./infoUI/Chart'));
@@ -33,25 +32,26 @@ export default function Main() {
                       <Info />
                     </Grid>
                     <Grid item xs={12} sm={12} order={{ sm: 3, xs: 3 }}>
-                      <Box sx={{ mt: 1 }}>
-                        <Typography sx={{ textAlign: 'center' }}>Substats</Typography>
-                        <Grid container spacing={2}>
-                          {[0, 1, 2, 3].map(e => {
-                            return (
-                              <Grid key={e} item xs={12}>
-                                <Grid container spacing={'3px'}>
-                                  <Grid item xs={12} sm={5} sx={{ pr: { sm: '5px', xs: 0 } }}>
-                                    <SubDropdown id={e} />
-                                  </Grid>
-                                  <Grid item xs={12} sm={7}>
-                                    <UpgradeSlider id={e} />
-                                  </Grid>
+                      <Grid item xs={12} sm={5} >
+                        <Typography sx={{ textAlign: 'center', my: 1 }}>Minor affixes</Typography>
+                      </Grid>
+                      <Grid item xs={12} sm={7}></Grid>
+                      <Grid container spacing={2}>
+                        {[0, 1, 2, 3].map(e => {
+                          return (
+                            <Grid key={e} item xs={12}>
+                              <Grid container spacing={'3px'}>
+                                <Grid item xs={12} sm={5} sx={{ pr: { sm: '5px', xs: 0 } }}>
+                                  <SubDropdown id={e} />
+                                </Grid>
+                                <Grid item xs={12} sm={7}>
+                                  <UpgradeSlider id={e} />
                                 </Grid>
                               </Grid>
-                            )
-                          })}
-                        </Grid>
-                      </Box>
+                            </Grid>
+                          )
+                        })}
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Suspense>
@@ -60,21 +60,14 @@ export default function Main() {
             <Grid item xs={12} sx={{ mt: 2 }}>
               <Card elevation={2} sx={{ p: 1 }}>
                 <Suspense fallback={<Skeleton variant="rounded" sx={{ height: '136px', bgcolor: '#FFFFFF21' }} />}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} sm={8} >
-                      <Resin />
-                    </Grid>
-                    <Grid item xs={12} sm={4} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                      <MiscSettings />
-                    </Grid>
-                  </Grid>
+                  <MiscSettings />
                 </Suspense>
               </Card>
             </Grid>
             <Grid item xs={12}>
               <Suspense fallback={<Skeleton variant="rounded" sx={{ height: '68px', bgcolor: '#FFFFFF21', my: 2 }} />}>
                 <Card elevation={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 1, mt: 2, mb: 1, p: 1 }}>
-                  <Artichance />
+                  <RunButton />
                   <StorageResetter />
                 </Card>
               </Suspense>

@@ -1,169 +1,109 @@
+import _ from "lodash";
 import createFastContext from "../../components/FastContext";
+import { z, ZodError } from "zod";
 
-export type WishingStore = {
-  mode: "distribution" | "fixed",
+const STORE_KEY = "Wishing.Parameters";
+
+const WishingStoreSchema = z.object({
+  mode: z.enum(["distribution", "fixed"]),
+  char: z.object({
+    enabled: z.boolean(),
+    goal: z.number(),
+    pity: z.number(),
+    guaranteed: z.boolean(),
+    radiance: z.number()
+  }),
+  weap: z.object({
+    enabled: z.boolean(),
+    goal: z.number(),
+    pity: z.number(),
+    guaranteed: z.boolean()
+  }),
+  starglitter: z.object({
+    enabled: z.boolean(),
+    count: z.number(),
+    cons: z.array(z.number())
+  }),
+  samplesize: z.number(),
+  threads: z.number(),
+  plotdataSim: z.object({
+    changed: z.boolean(),
+    cumulative: z.boolean(),
+    progress: z.number(),
+    x: z.array(z.number()),
+    y: z.array(z.number())
+  }),
+  plotdataCalc: z.object({
+    cumulative: z.boolean(),
+    x: z.array(z.number()),
+    y: z.array(z.number())
+  })
+});
+
+export type WishingStore = z.infer<typeof WishingStoreSchema>;
+
+function validStore(store: unknown): WishingStore {
+  return WishingStoreSchema.parse(store);
+}
+
+export const defaultWishConfig = Object.freeze({
+  mode: "distribution",
   char: {
-    enabled: boolean,
-    goal: number,
-    pity: number,
-    guaranteed: boolean,
-    radiance: number
+    enabled: true,
+    goal: 0,
+    pity: 0,
+    guaranteed: false,
+    radiance: 0
   },
   weap: {
-    enabled: boolean,
-    goal: number,
-    pity: number,
-    guaranteed: boolean
+    enabled: true,
+    goal: 1,
+    pity: 0,
+    guaranteed: false
   },
   starglitter: {
-    enabled: boolean,
-    count: number,
-    cons: number[]
+    enabled: false,
+    count: 0,
+    cons: [-1, -1, -1, -1]
   },
-  samplesize: number,
-  threads: number,
+  samplesize: 1_000_000,
+  threads: 4,
   plotdataSim: {
-    changed: boolean,
-    cumulative: boolean,
-    progress: number
-    x: number[],
-    y: number[]
+    changed: false,
+    cumulative: false,
+    progress: 0,
+    x: [],
+    y: []
   },
   plotdataCalc: {
-    cumulative: boolean,
-    x: number[],
-    y: number[]
+    cumulative: false,
+    x: [],
+    y: []
   }
-}
-const StoreKey = "Wishing.Parameters";
-
-function isArtifact(wishing: WishingStore): wishing is WishingStore {
-  return (
-    typeof wishing === "object" && wishing !== null &&
-    "mode" in wishing && (wishing.mode === "distribution" || wishing.mode === "fixed") &&
-    "char" in wishing && typeof wishing.char === 'object' &&
-    "enabled" in wishing.char && typeof wishing.char.enabled == 'boolean' &&
-    "goal" in wishing.char && typeof wishing.char.goal == 'number' &&
-    "pity" in wishing.char && typeof wishing.char.pity == 'number' &&
-    "guaranteed" in wishing.char && typeof wishing.char.guaranteed == 'boolean' &&
-    "radiance" in wishing.char && typeof wishing.char.radiance == "number" &&
-    "weap" in wishing && typeof wishing.weap === 'object' &&
-    "enabled" in wishing.weap && typeof wishing.weap.enabled == 'boolean' &&
-    "goal" in wishing.weap && typeof wishing.weap.goal == 'number' &&
-    "pity" in wishing.weap && typeof wishing.weap.pity == 'number' &&
-    "guaranteed" in wishing.weap && typeof wishing.weap.guaranteed == 'boolean' &&
-    "starglitter" in wishing && typeof wishing.starglitter == 'object' &&
-    "enabled" in wishing.starglitter && typeof wishing.starglitter.enabled == 'boolean' &&
-    "count" in wishing.starglitter && typeof wishing.starglitter.count == 'number' &&
-    "cons" in wishing.starglitter && Array.isArray(wishing.starglitter.cons) &&
-    "guaranteed" in wishing.char && typeof wishing.char.guaranteed == 'boolean' &&
-    "samplesize" in wishing && typeof wishing.samplesize == 'number' &&
-    "plotdataSim" in wishing && typeof wishing.plotdataSim == 'object' &&
-    "changed" in wishing.plotdataSim && typeof wishing.plotdataSim.changed == 'boolean' &&
-    "cumulative" in wishing.plotdataSim && typeof wishing.plotdataSim.cumulative == 'boolean' &&
-    "progress" in wishing.plotdataSim && typeof wishing.plotdataSim.progress == 'number' &&
-    "x" in wishing.plotdataSim && Array.isArray(wishing.plotdataSim.x) &&
-    "y" in wishing.plotdataSim && Array.isArray(wishing.plotdataSim.y) &&
-    "plotdataCalc" in wishing && typeof wishing.plotdataCalc == 'object' &&
-    "cumulative" in wishing.plotdataSim && typeof wishing.plotdataSim.cumulative == 'boolean' &&
-    "x" in wishing.plotdataCalc && Array.isArray(wishing.plotdataCalc.x) &&
-    "y" in wishing.plotdataCalc && Array.isArray(wishing.plotdataCalc.y) &&
-    "threads" in wishing && typeof wishing.threads == 'number'
-  );
-}
+} satisfies WishingStore);
 
 const storedWish = localStorage.getItem('Wishing.Parameters');
-let Wish: WishingStore;
+let WishConfig: WishingStore = _.cloneDeep(defaultWishConfig);
 
 if (storedWish) {
   try {
-    console.log("Try parsing stored values.");
-    Wish = JSON.parse(storedWish);
-    if (!isArtifact(Wish)) {
-      console.log("Failed parsing.");
-      throw new Error('Stored invalid object');
-    }
+    console.log("Try to parse stored values.");
+    WishConfig = validStore(JSON.parse(storedWish));
     console.log("Successful parsing.");
   } catch (e) {
-    console.log(`${e}. Resetting to default values.`);
-    Wish = {
-      mode: "distribution",
-      char: {
-        enabled: true,
-        goal: 0,
-        pity: 0,
-        guaranteed: false,
-        radiance: 0
-      },
-      weap: {
-        enabled: true,
-        goal: 1,
-        pity: 0,
-        guaranteed: false
-      },
-      starglitter: {
-        enabled: false,
-        count: 0,
-        cons: [-1, -1, -1, -1]
-      },
-      samplesize: 1000000,
-      threads: 4,
-      plotdataSim: {
-        changed: false,
-        cumulative: false,
-        progress: 0,
-        x: [],
-        y: []
-      },
-      plotdataCalc: {
-        cumulative: false,
-        x: [],
-        y: []
-      }
-    };
-    localStorage.setItem(StoreKey, JSON.stringify(Wish));
+    if (e instanceof ZodError) {
+      e.issues.forEach(issue => console.error(issue.message));
+    }
+
+    console.error(`Stored invalid object. Resetting to default values.`);
+    localStorage.setItem(STORE_KEY, JSON.stringify(WishConfig));
   }
 } else {
   console.log("No stored values found. Using default values.");
-  Wish = {
-    mode: "distribution",
-    char: {
-      enabled: true,
-      goal: 0,
-      pity: 0,
-      guaranteed: false,
-      radiance: 0
-    },
-    weap: {
-      enabled: true,
-      goal: 1,
-      pity: 0,
-      guaranteed: false
-    },
-    starglitter: {
-      enabled: false,
-      count: 0,
-      cons: [-1, -1, -1, -1]
-    },
-    samplesize: 500000,
-    threads: 4,
-    plotdataSim: {
-      changed: false,
-      cumulative: false,
-      progress: 0,
-      x: [],
-      y: []
-    },
-    plotdataCalc: {
-      cumulative: false,
-      x: [],
-      y: []
-    }
-  };
-  localStorage.setItem(StoreKey, JSON.stringify(Wish));
+  localStorage.setItem(STORE_KEY, JSON.stringify(WishConfig));
 }
 
-const { Provider, useStore } = createFastContext(Wish, StoreKey);
+const { Provider, useStore, readStore } = createFastContext(WishConfig, STORE_KEY);
 
-export { useStore };
+export { useStore, readStore };
 export default Provider;

@@ -12,8 +12,8 @@ const StyledCard = styled(Card)(() => ({
 }));
 
 export default function UpgradeSlider({ id }: { id: number }) {
-  const [storeSlider, setStore] = useStore((store: ArtifactStore) => store.slidervals[id]);
-  const [starter] = useStore((store: ArtifactStore) => store.starter[1]);
+  const [storeSlider, setStore] = useStore((store: ArtifactStore) => store.substatBounds[id]);
+  const [starter] = useStore((store: ArtifactStore) => store.supplementary[1]);
 
   return (
     <NumberSlider id={id} onChange={setStore} value={storeSlider} starter={starter} />
@@ -28,15 +28,20 @@ type NumberSliderProps = {
 }
 
 function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
-  const [lowerVal, setlowerVal] = useState(value[0]);
-  const [upperVal, setupperVal] = useState(value[1]);
-  const [MaxVal, setMaxVal] = useState(starter != 2 ? 5 : 4);
+  const [lowerVal, setlowerVal] = useState(() => value[0]);
+  const [upperVal, setupperVal] = useState(() => value[1]);
+  const [MaxVal, setMaxVal] = useState(() => starter != 2 ? 5 : 4);
 
   useEffect(() => {
     const m = starter != 2 ? 5 : 4;
     setMaxVal(m);
     setupperVal(p => Math.min(p, m));
   }, [starter]);
+
+  useEffect(() => {
+    setlowerVal(value[0]);
+    setupperVal(value[1]);
+  }, [value]);
 
   const updateSlider = useCallback((event: Event, newValue: number | number[]) => {
     const [l, u] = newValue as number[];
@@ -47,8 +52,8 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
   const commitSliderVals = useCallback((event: Event | React.SyntheticEvent<Element, Event>, newValue: number | number[]) => {
     onChange((prev: ArtifactStore) => {
       var t = { ...prev };
-      t.slidervals[id][0] = (newValue as number[])[0];
-      t.slidervals[id][1] = (newValue as number[])[1];
+      t.substatBounds[id][0] = (newValue as number[])[0];
+      t.substatBounds[id][1] = (newValue as number[])[1];
       return t;
     });
   }, [value, onChange])
@@ -58,7 +63,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
     setlowerVal(c);
     onChange((prev: ArtifactStore) => {
       var t = { ...prev };
-      t.slidervals[id][0] = c;
+      t.substatBounds[id][0] = c;
       return t;
     });
   }, [upperVal, setlowerVal, onChange]);
@@ -68,7 +73,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
     setupperVal(c);
     onChange((prev: ArtifactStore) => {
       var t = { ...prev };
-      t.slidervals[id][1] = c;
+      t.substatBounds[id][1] = c;
       return t;
     });
   }, [setupperVal, upperVal, onChange]);

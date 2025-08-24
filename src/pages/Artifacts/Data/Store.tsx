@@ -1,85 +1,82 @@
+import _ from "lodash";
 import createFastContext from "../../../components/FastContext";
+import { z, ZodError } from "zod";
 
-export type ArtifactStore = {
-  mainstats: number[],
-  substats: number[],
-  starter: number[],
-  slidervals: number[][],
-  resin: number[],
-  artichance: {
-    permut: number,
-    mains: number,
-    upgrade: number,
-    set: number,
-    final: number
-  },
-  plotdata: {
-    x: number[],
-    y: number[]
-  }
-}
 const StoreKey = "Artifact.Parameters";
 
-function isArtifact(artifact: ArtifactStore): artifact is ArtifactStore {
-  return (
-    typeof artifact === "object" && artifact !== null &&
-    "mainstats" in artifact && artifact.mainstats.constructor === Array &&
-    "substats" in artifact && artifact.substats.constructor === Array &&
-    "starter" in artifact && artifact.starter.constructor === Array &&
-    "slidervals" in artifact && artifact.slidervals.constructor === Array && artifact.slidervals[0].constructor === Array &&
-    "resin" in artifact && artifact.resin.constructor === Array &&
-    "artichance" in artifact && typeof artifact.artichance === 'object' &&
-    "permut" in artifact.artichance && !isNaN(artifact.artichance.permut) &&
-    "mains" in artifact.artichance && !isNaN(artifact.artichance.mains) &&
-    "upgrade" in artifact.artichance && !isNaN(artifact.artichance.upgrade) &&
-    "set" in artifact.artichance && !isNaN(artifact.artichance.set) &&
-    "final" in artifact.artichance && !isNaN(artifact.artichance.final) &&
-    "plotdata" in artifact && typeof artifact.plotdata === 'object' &&
-    "x" in artifact.plotdata && artifact.plotdata.x.constructor === Array &&
-    "y" in artifact.plotdata && artifact.plotdata.y.constructor === Array
-  );
+const ArtifactStoreSchema = z.object({
+  mainstats: z.array(z.number()),
+  substats: z.array(z.number()),
+  supplementary: z.array(z.number()),
+  substatBounds: z.array(z.array(z.number())),
+  unit: z.number().min(0).max(2),
+  chances: z.object({
+    mainstatConfig: z.number(),
+    substatConfig: z.number(),
+    fourLinerUpgrade: z.number(),
+    threeLinerUpgrade: z.number(),
+    onsetChance: z.number(),
+    doubleDropRate: z.number(),
+    initialAffixCount: z.object({
+      3: z.number(),
+      4: z.number()
+    }),
+    final: z.number()
+  }),
+  plotdata: z.object({
+    x: z.array(z.number()),
+    y: z.array(z.number())
+  })
+});
+
+export type ArtifactStore = z.infer<typeof ArtifactStoreSchema>
+
+function validStore(store: ArtifactStore): ArtifactStore {
+  return ArtifactStoreSchema.parse(store);
 }
 
+export const defaultArtifact = Object.freeze({
+  mainstats: [0, 0],
+  substats: [4, 7, 8, 9],
+  //      set, initial, source, resin
+  supplementary: [2, 0, 0, 180],
+  substatBounds: [[0, 1], [0, 0], [0, 5], [0, 5]],
+  unit: 0,
+  chances: {
+    mainstatConfig: 0,
+    substatConfig: 0,
+    fourLinerUpgrade: 0,
+    threeLinerUpgrade: 0,
+    onsetChance: 0,
+    doubleDropRate: 0,
+    initialAffixCount: { 3: 0, 4: 0 },
+    final: 0
+  },
+  plotdata: { x: [], y: [] }
+} satisfies ArtifactStore);
+
 const storedArtifact = localStorage.getItem('Artifact.Parameters');
-let Artifact: ArtifactStore;
+let Artifact: ArtifactStore = _.cloneDeep(defaultArtifact);
 
 if (storedArtifact) {
   try {
-    console.log("Try parsing stored values.");
-    Artifact = JSON.parse(storedArtifact);
-    if (!isArtifact(Artifact)) {
-      console.log("Failed parsing.");
-      throw new Error('Stored invalid object');
-    }
+    console.log("Parsing stored values.");
+    Artifact = validStore(JSON.parse(storedArtifact));
     console.log("Successful parsing.");
   } catch (e) {
+    if (e instanceof ZodError) {
+      e.issues.forEach(issue => console.error(issue.message));
+    }
+
     console.log(`${e}. Resetting to default values.`);
-    Artifact = {
-      mainstats: [0, 0],
-      substats: [4, 7, 8, 9],
-      starter: [2, 0],
-      slidervals: [[0, 1], [0, 0], [0, 5], [0, 5]],
-      resin: [20, 180],
-      artichance: { permut: 0, mains: 0, upgrade: 0, set: 0, final: 0 },
-      plotdata: { x: [], y: [] }
-    };
     localStorage.setItem(StoreKey, JSON.stringify(Artifact));
   }
 } else {
   console.log("No stored values found. Using default values.");
-  Artifact = {
-    mainstats: [0, 0],
-    substats: [4, 7, 8, 9],
-    starter: [2, 0],
-    slidervals: [[0, 1], [0, 0], [0, 5], [0, 5]],
-    resin: [20, 180],
-    artichance: { permut: 0, mains: 0, upgrade: 0, set: 0, final: 0 },
-    plotdata: { x: [], y: [] }
-  };
   localStorage.setItem(StoreKey, JSON.stringify(Artifact));
 }
 
-const { Provider, useStore } = createFastContext(Artifact, StoreKey);
+const { Provider, useStore, readStore } = createFastContext(Artifact, StoreKey);
 
-export { useStore };
+export { useStore, readStore };
 export default Provider;

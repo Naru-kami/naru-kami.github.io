@@ -83,8 +83,20 @@ export default function createFastContext<Store>(initialState: Store, storageKey
     return [state, store.set];
   }
 
+  function readStore<SelectorOutput>(
+    selector: (store: Store) => SelectorOutput
+  ): SelectorOutput {
+    const store = useContext(StoreContext);
+    if (!store) {
+      throw new Error("Store not found");
+    }
+
+    return selector(store.get());
+  }
+
   return {
     Provider,
-    useStore
+    useStore,
+    readStore
   };
 }

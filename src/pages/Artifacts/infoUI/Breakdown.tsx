@@ -1,15 +1,19 @@
-import { useState, useMemo, useCallback } from 'react'
-import { Card, Typography, IconButton, CardActions, Modal, TableContainer, Table, TableHead, TableRow, TableCell, Paper, TableBody, Box } from '@mui/material'
-import { Help, Close } from '@mui/icons-material';
-import { styled } from '@mui/material/styles';
-import { red } from '@mui/material/colors';
-import { useStore, ArtifactStore } from '../Data/Store';
-import { roundSigfig } from '../../Wishing/utils';
+import { useState, useMemo, useCallback, useEffect } from "react"
+import {
+  Card, Typography, IconButton, CardActions, TableContainer, Table,
+  TableHead, TableRow, TableCell, TableBody, Box, Dialog, DialogTitle,
+  DialogContent, Select, FormControl, MenuItem, SelectChangeEvent
+} from "@mui/material"
+import { Help, Close } from "@mui/icons-material";
+import { styled } from "@mui/material/styles";
+import { red } from "@mui/material/colors";
+import { useStore, readStore } from "../Data/Store";
+import { roundSigfig } from "../../Wishing/utils";
 
 const CloseButton = styled(IconButton)(({ theme }) => ({
   color: theme.palette.getContrastText(red[700]),
   backgroundColor: red[700],
-  '&:hover': {
+  "&:hover": {
     backgroundColor: red[900],
   },
 }));
@@ -17,90 +21,108 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
 function createData(
   name: string,
   data: number,
-  inactive?: boolean,
+  subsection?: boolean
 ) {
-  return { name, data, inactive };
+  return { name, data, subsection };
 }
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: theme.palette.secondary.main,
-  '&:last-child td, &:last-child th': {
+  "&:last-child td, &:last-child th": {
     border: 0,
-    borderTop: '3px solid rgba(81, 81, 81, 1)'
+    borderTop: "3px solid rgb(81, 81, 81)"
   },
 }));
 
 export default function Breakdown() {
-  const [artichance] = useStore((store: ArtifactStore) => store.artichance);
-  const [final] = useStore((store: ArtifactStore) => store.artichance.final);
-  const [resin] = useStore((store: ArtifactStore) => store.resin);
-  const [starter] = useStore((store: ArtifactStore) => store.starter);
-
-  const trials = resin[1] / resin[0];
-  const avg = final ? 1 / final / trials : 0;
-
   const [open, setOpen] = useState(false);
-  const handleOpen = useCallback(() => {
-    setOpen(true)
-  }, [setOpen]);
-  const handleClose = useCallback(() => {
-    setOpen(false)
-  }, [setOpen]);
+  const toggleOpen = useCallback(() => setOpen(o => !o), [setOpen]);
 
-  const data = useMemo(() => {
-    return [
-      createData('Mainstat configuration', artichance.mains),
-      createData('Substat configuration', artichance.permut),
-      createData('Upgrade Rolls', artichance.upgrade),
-      createData('├─ 4 starting substats', 0.25, starter[1] == 2),
-      createData('└─ 3 starting substats', 0.75, starter[1] == 1),
-      createData('On/off-set Artifact', artichance.set),
-      createData('Double drop rate', resin[0] == 40 ? 0 : 0.07),
-      createData('Final Artifact chance', artichance.final)
-    ]
-  }, [artichance]);
+  const [unit, setStore] = useStore(store => store.unit);
+  const [chances] = useStore(store => store.chances);
+  const [resinPerDay] = useStore(store => store.supplementary[3]);
+  const source = readStore(store => store.supplementary[2]);
+
+  const dropSource = useMemo(() => source, [chances]);
+
+  const handleUnitChange = useCallback((event: SelectChangeEvent<number>) => {
+    setStore(p => {
+      p.unit = Number(event.target.value);
+      return p;
+    });
+  }, [setStore]);
+
+  const resinCost = useMemo(() => [20, 20, 40, 60, 0, 0][dropSource], [chances, unit]);
+
+  const E = useMemo(() => {
+    const single = (() => {
+      if (!chances.final) return 0;
+
+      if (dropSource) {
+        return 1 / (chances.final * (1 + chances.doubleDropRate * (1 - chances.final)));
+      } else { // Stygian onslaught
+        let f = (1 - chances.final) * (1 - chances.final * chances.doubleDropRate);
+        return (1 - f ** 6) / ((1 - f) * (1 - f ** 6 * (1 - chances.final)));
+      }
+    })();
+    return single * [resinCost / resinPerDay, resinCost, 1][unit];
+  }, [chances, unit, resinPerDay]);
+
+  const tabledata = useMemo(() => [
+    createData("Main affix configuration", chances.mainstatConfig),
+    createData("Minor affix configuration", chances.substatConfig),
+    createData("Upgrade Rolls", chances.fourLinerUpgrade + chances.threeLinerUpgrade),
+    createData("├─ 4 initial minor affixes", chances.fourLinerUpgrade, true),
+    createData("└─ 3 initial minor affixes", chances.threeLinerUpgrade, true),
+    createData("On/off-set Artifact", chances.onsetChance),
+    createData("Artifact chance per drop", chances.final)
+  ], [chances]);
 
   return (
     <Card elevation={2} sx={{ px: 1 }}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '0px 8px' }}>
-        <Typography> Average: {Math.round(((avg) + Number.EPSILON) * 1e2) / 1e2} Days </Typography>
-        <CardActions style={{ marginLeft: 'auto' }}>
-          <IconButton aria-label="help" onClick={handleOpen} >
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0px 8px" }}>
+        <Typography> Average: {Math.round((E + Number.EPSILON) * 100) / 100} </Typography>
+        <FormControl variant="standard" sx={{ m: 1, mr: "auto" }}>
+          <Select id="Select-Unit" value={unit} onChange={handleUnitChange} sx={{ px: 0.5 }}>
+            {dropSource in [0, 0, 0, 0] && <MenuItem value={0}>Days</MenuItem>}
+            {dropSource in [0, 0, 0, 0] && <MenuItem value={1}>Resin</MenuItem>}
+            <MenuItem value={2}>Artifacts</MenuItem>
+          </Select>
+        </FormControl>
+        <CardActions>
+          <IconButton aria-label="help" onClick={toggleOpen} >
             <Help />
           </IconButton>
         </CardActions>
-      </div>
-      <Modal open={open} onClose={handleClose} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Card variant='outlined' sx={{ bgcolor: '#242734', px: 2, py: 3, mx: 2, minWidth: '250px', display: 'flex', gap: 2, overflow: 'overlay' }}>
-          <Box sx={{ minWidth: 300 }}>
-            <Typography variant='subtitle1' sx={{ p: 1 }}>
-              A breakdown of the probability of obtaining the desired artifact per run.
-            </Typography>
-            <TableContainer sx={{ mt: 2, p: 1 }}>
-              <Table size="small" aria-label="data table">
-                <TableHead>
-                  <TableRow sx={{ borderBottom: '3px solid rgba(81, 81, 81, 1)', backgroundColor: theme => theme.palette.secondary.main }}>
-                    <TableCell >Assumption</TableCell>
-                    <TableCell align="right">Chance</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data.map((row, i) => (
-                    <StyledTableRow key={i} className={row.inactive ? 'inactive-row' : ''}>
-                      <TableCell component="th" scope="row">{row.name}</TableCell>
-                      <TableCell align="right">{roundSigfig(row.data * 100)} %</TableCell>
-                    </StyledTableRow>
-                  ))
-                  }
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Box>
-          <CloseButton onClick={handleClose} sx={{ width: '30px', height: '30px', borderRadius: 1, ml: 'auto' }}>
+      </Box>
+      <Dialog open={open} onClose={toggleOpen}>
+        <DialogTitle variant="subtitle1">
+          <CloseButton onClick={toggleOpen} sx={{ width: "30px", height: "30px", borderRadius: 1, float: "right", ml: 3 }}>
             <Close />
           </CloseButton>
-        </Card>
-      </Modal>
+          A breakdown of the probability of obtaining the desired artifact per run.
+        </DialogTitle>
+        <DialogContent>
+          <TableContainer sx={{ mt: 2 }}>
+            <Table size="small" aria-label="data table">
+              <TableHead>
+                <TableRow sx={{ borderBottom: "3px solid rgb(81, 81, 81)", backgroundColor: theme => theme.palette.secondary.main }}>
+                  <TableCell >Assumption</TableCell>
+                  <TableCell align="right">Chance</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {tabledata.map((row, i) => (
+                  <StyledTableRow key={i} sx={{ opacity: row.subsection ? 0.6 : undefined }}>
+                    <TableCell sx={{ pl: row.subsection ? 4 : undefined }}>{row.name}</TableCell>
+                    <TableCell align="right">{roundSigfig(row.data * 100)} %</TableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </DialogContent>
+      </Dialog>
     </Card>
   )
 }
