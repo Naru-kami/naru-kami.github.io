@@ -74,7 +74,7 @@ export default function Breakdown() {
     createData("Upgrade Rolls", chances.fourLinerUpgrade + chances.threeLinerUpgrade),
     createData("├─ 4 initial minor affixes", chances.fourLinerUpgrade, true),
     createData("└─ 3 initial minor affixes", chances.threeLinerUpgrade, true),
-    createData("On/off-set Artifact", chances.onsetChance),
+    createData("Artifact set", chances.onsetChance),
     createData("Artifact chance per drop", chances.final)
   ], [chances]);
 
