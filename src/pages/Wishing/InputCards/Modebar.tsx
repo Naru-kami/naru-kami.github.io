@@ -44,7 +44,7 @@ export default function Modebar({ approach }: { approach: string }) {
     <Card elevation={2} sx={{ backgroundColor: "#3472D5B2" }}>
       <CardActionArea onClick={handleOpen} sx={{ p: 1 }}>
         <Typography variant='body2' sx={{ display: 'flex', alignItems: 'center' }}>
-          <ErrorOutline sx={{ fontSize: 'inherit', mr: 0.5 }} /> Updated for 5.0! This method uses {approach == "calculation" && "probability theory" || "a Monte-Carlo simulation"}.
+          <ErrorOutline sx={{ fontSize: 'inherit', mr: 0.5 }} /> This method uses {approach == "calculation" && "probability theory" || "a Monte-Carlo simulation"}.
         </Typography>
       </CardActionArea>
       {approach == 'calculation' &&
