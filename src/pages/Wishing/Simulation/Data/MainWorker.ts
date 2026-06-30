@@ -1,15 +1,12 @@
+/// <reference lib="webworker" />
 import { clamp } from '../../utils';
 import { DataMessage } from '../Components/RunButton';
 
 self.onmessage = function (e: MessageEvent<DataMessage>) {
   const { data } = e
 
-  const timer = performance.now();
   const pullsResult = data.mode == 'distribution' ? SimDist(data) : SimFixed(data);
-  console.log(performance.now() - timer);
-  postMessage({
-    pullsResult: pullsResult
-  });
+  self.postMessage({ pullsResult: pullsResult }, [pullsResult.buffer]);
   self.close();
 }
 
@@ -22,7 +19,10 @@ function SimDist({ char, weap, starglitter, samplesize }: DataMessage) {
   var progress = 0;
   var prob5 = 0;
   var prob4 = 0;
-  var pullsResult = [0];
+  const pullsResult = new Uint32Array(
+    (char.enabled ? (90 * (2 * char.goal + 2 - (+char.guaranteed)) - char.pity) : 0) +
+    (weap.enabled ? (77 * 2 * weap.goal - weap.pity) : 0) + 1
+  );
 
   for (let j = 0; j < samplesize; j++) {
     let pulls = 0;
@@ -120,12 +120,6 @@ function SimDist({ char, weap, starglitter, samplesize }: DataMessage) {
       }
     }
 
-    if (pullsResult[pulls] == null) {
-      for (let k = pullsResult.length; k <= pulls; k++) {
-        pullsResult.push(0);
-      }
-    }
-
     pullsResult[pulls]++;
 
     if (((j / samplesize * 100) > progress + 1) && (Date.now() - debounce) > 350) {
@@ -153,7 +147,7 @@ function SimFixed({ char, weap, starglitter, samplesize }: DataMessage) {
   var progress = 0;
 
   if (char.enabled) {
-    let pullsResult: number[] = new Array(8).fill(0);
+    const pullsResult = new Uint32Array(8).fill(0);
     for (let k = 0; k < samplesize; k++) {
       let radiance = char.radiance;
       guaranteed = char.guaranteed;
@@ -172,8 +166,8 @@ function SimFixed({ char, weap, starglitter, samplesize }: DataMessage) {
         prob4 = Math.min(1, 0.051 + Math.max(0, (counter4 - 8) * 0.51));
         x = Math.random();
         if (x < prob5) {
-          if (x <= (prob5 * 0.5) || guaranteed || (radiance == 1 && (x <= prob5 * 0.525)) || (radiance == 2 && (x <= prob5 * 0.75)) || radiance >= 3) {
-            !guaranteed && (radiance = 0);
+          if (x <= (prob5 * 0.5) || guaranteed || (radiance == 2 && (x < prob5 * 6 / 11)) || radiance >= 3) {
+            !guaranteed && (radiance = clamp(0, radiance - 1, 1));
             guaranteed = false;
             starglitterCount += GetStarglitter(5, promoted + starglitter.cons[0]);
             promoted++;
@@ -216,7 +210,7 @@ function SimFixed({ char, weap, starglitter, samplesize }: DataMessage) {
     }
     return pullsResult;
   } else if (weap.enabled) {
-    let pullsResult: number[] = new Array(6).fill(0);
+    const pullsResult = new Uint32Array(6).fill(0);
     let gc: number;
     for (let k = 0; k < samplesize; k++) {
       guaranteed = weap.guaranteed;
@@ -270,5 +264,5 @@ function SimFixed({ char, weap, starglitter, samplesize }: DataMessage) {
     }
     return pullsResult;
   }
-  return [];
+  return new Uint32Array();
 }

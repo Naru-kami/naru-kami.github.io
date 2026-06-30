@@ -1,14 +1,13 @@
 import { useCallback } from 'react';
 import ResetStorage from '../../components/ResetStorage';
-import { defaultWishConfig, useStore } from './Store';
-import _ from 'lodash';
+import { getDefaultWishConfig, useStore } from './Store';
 
 const storageKeys = ["Wishing.Parameters"];
 
 export default function StorageResetter() {
   const setStorage = useStore(() => { return })[1];
   const resetContext = useCallback(() => {
-    setStorage(() => _.cloneDeep(defaultWishConfig));
+    setStorage(getDefaultWishConfig);
   }, [setStorage]);
 
   return (

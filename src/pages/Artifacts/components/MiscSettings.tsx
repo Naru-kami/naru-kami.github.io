@@ -1,5 +1,5 @@
 import { Select, MenuItem, InputLabel, FormControl, styled, SelectChangeEvent, Card, Box, Slider, Typography, Divider, Grid } from '@mui/material';
-import { readStore, useStore } from '../Data/Store';
+import { useStore } from '../Data/Store';
 import { useCallback, useId } from 'react';
 import NumberInput from '../../../components/NumberInput';
 
@@ -24,14 +24,8 @@ function DropSource() {
   const [source, setStates] = useStore(store => store.supplementary[2]);
 
   const changeSource = useCallback((e: SelectChangeEvent<unknown>) => {
-    setStates(p => {
-      const value = Number(e.target.value);
-      if (value === 4) {
-        p.supplementary[0] = 2;
-      }
-      p.supplementary[2] = value;
-      return { ...p };
-    })
+    const value = Number(e.target.value);
+    setStates(p => ({ supplementary: p.supplementary.with(2, value).with(0, value === 4 ? 2 : p.supplementary[0]) }))
   }, [setStates]);
 
   return (
@@ -54,11 +48,7 @@ function ArtifactSet() {
   const [source] = useStore(store => store.supplementary[2]);
 
   const changeSet = useCallback((event: SelectChangeEvent<unknown>) => {
-    setStates(prev => {
-      const temp = { ...prev };
-      temp.supplementary[0] = event.target.value as number;
-      return temp;
-    });
+    setStates(prev => ({ supplementary: prev.supplementary.with(0, Number(event.target.value)) }));
   }, [setStates]);
 
   return (
@@ -73,15 +63,11 @@ function ArtifactSet() {
 }
 
 function InitialAffixCount() {
-  const [misc, setStates] = useStore(store => store.supplementary[1]);
+  const [misc, setStore] = useStore(store => store.supplementary[1]);
 
   const changeStarting = useCallback((event: SelectChangeEvent<unknown>) => {
-    setStates(prev => {
-      var temp = { ...prev };
-      temp.supplementary[1] = event.target.value as number;
-      return temp;
-    });
-  }, [setStates]);
+    setStore(prev => ({ supplementary: prev.supplementary.with(1, Number(event.target.value)) }))
+  }, [setStore]);
 
   return (
     <FormControl size="small" fullWidth>
@@ -102,20 +88,12 @@ function ResinPerDay() {
 
   const updateRpD = useCallback((e: number) => {
     const target = [180, 240, 300, 360, 420, 480, 540].reduce((p, c) => (Math.abs(c - e) <= Math.abs(p - e)) && c || p, 180);
-    setStore(p => {
-      var t = { ...p };
-      t.supplementary[3] = target;
-      return t;
-    });
+    setStore(p => ({ supplementary: p.supplementary.with(3, target) }));
     return target;
   }, [setStore]);
 
-  const updateRpDslider = useCallback((e: Event, value: number | number[]) => {
-    setStore(p => {
-      var t = { ...p };
-      t.supplementary[3] = value as number;
-      return t;
-    });
+  const updateRpDslider = useCallback((_: Event, value: number | number[]) => {
+    setStore(p => ({ supplementary: p.supplementary.with(3, Number(value)) }));
   }, [setStore]);
 
   return (

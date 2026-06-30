@@ -39,23 +39,19 @@ const menuprops = {
 
 export default function Starglitter() {
   const [check, setStore] = useStore(store => store.starglitter.enabled);
-  const updatecheck = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.starglitter.enabled = checked;
-      t.plotdataSim.changed = true;
-      return t;
-    })
+  const updatecheck = useCallback((_: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setStore(prev => ({
+      starglitter: { ...prev.starglitter, enabled: checked },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }))
   }, [setStore]);
 
   const [count] = useStore(store => store.starglitter.count);
   const updatecount = useCallback((newValue: number) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.starglitter.count = newValue;
-      t.plotdataSim.changed = true;
-      return t;
-    })
+    setStore(prev => ({
+      starglitter: { ...prev.starglitter, count: newValue },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }))
   }, [setStore]);
 
   return (
@@ -119,13 +115,11 @@ export default function Starglitter() {
 function ConstCount({ adornment, id }: { adornment: string | JSX.Element, ns: string, id: number }) {
   const [cons, setStore] = useStore(store => store.starglitter.cons[id]);
   const handleCons = useCallback((event: SelectChangeEvent<unknown>) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.starglitter.cons[id] = event.target.value as number;
-      t.plotdataSim.changed = true;
-      return t;
-    })
-  }, []);
+    setStore(prev => ({
+      starglitter: { ...prev.starglitter, cons: prev.starglitter.cons.with(id, event.target.value as number) },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }))
+  }, [setStore]);
 
   return (
     <Card elevation={4}>

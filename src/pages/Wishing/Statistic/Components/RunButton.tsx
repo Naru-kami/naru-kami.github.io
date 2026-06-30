@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import Button from '@mui/material/Button'
 import styled from '@mui/material/styles/styled';
 import green from '@mui/material/colors/green';
-import { useStore, WishingStore, readStore } from '../../Store';
+import { useStore, WishingStore } from '../../Store';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import { Typography } from '@mui/material';
 import { draw } from '../../utils';
@@ -19,7 +19,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 export type DataMessage = Omit<WishingStore, 'plotdataCalc' | 'plotdataCalc'>
 
-const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStore> | ((prev: WishingStore) => WishingStore)) => void, ydata: number[]) => {
+const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStore> | ((prev: WishingStore) => Partial<WishingStore>)) => void, ydata: number[]) => {
 
   var worker = new Worker(new URL('../Data/MainWorker.ts', import.meta.url), { type: "module" });
 
@@ -35,12 +35,13 @@ const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStor
       ydata[i] = e;
     });
 
-    setData(prev => {
-      var t = { ...prev };
-      t.plotdataCalc.x = draw(ydata, prev.weap.enabled && !prev.char.enabled && prev.mode == 'fixed' ? 1 : 0);
-      t.plotdataCalc.y = [...ydata];
-      return t;
-    });
+    setData(prev => ({
+      plotdataCalc: {
+        ...prev.plotdataCalc,
+        x: draw(ydata, prev.weap.enabled && !prev.char.enabled && prev.mode == 'fixed' ? 1 : 0),
+        y: [...ydata],
+      }
+    }));
 
     worker.terminate();
   };
@@ -48,8 +49,7 @@ const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStor
 }
 
 export default function RunButton() {
-  const [_, setStore] = useStore(store => store.plotdataCalc);
-  const store = readStore(store => store);
+  const [store, setStore] = useStore(store => store);
 
   const pop = useCallback(() => {
     var ydata: number[] = (store.mode == 'distribution' ? new Array(

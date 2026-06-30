@@ -7,7 +7,7 @@ import {
 import { Help, Close } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
-import { useStore, readStore } from "../Data/Store";
+import { useStore } from "../Data/Store";
 import { roundSigfig } from "../../Wishing/utils";
 
 const CloseButton = styled(IconButton)(({ theme }) => ({
@@ -41,15 +41,12 @@ export default function Breakdown() {
   const [unit, setStore] = useStore(store => store.unit);
   const [chances] = useStore(store => store.chances);
   const [resinPerDay] = useStore(store => store.supplementary[3]);
-  const source = readStore(store => store.supplementary[2]);
+  const [source] = useStore(store => store.supplementary[2]);
 
   const dropSource = useMemo(() => source, [chances]);
 
   const handleUnitChange = useCallback((event: SelectChangeEvent<number>) => {
-    setStore(p => {
-      p.unit = Number(event.target.value);
-      return p;
-    });
+    setStore({ unit: Number(event.target.value) });
   }, [setStore]);
 
   const resinCost = useMemo(() => [20, 20, 40, 60, 0, 0][dropSource], [chances, unit]);

@@ -1,8 +1,8 @@
-import React, { useEffect, useCallback } from 'react'
+import { useEffect, useCallback } from 'react'
 import SubIcon from '../assets/SubIcon.json';
 import { Select, MenuItem, styled, SelectChangeEvent } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
-import { ArtifactStore, useStore } from '../Data/Store';
+import { useStore } from '../Data/Store';
 
 const order = ["HP", "ATK", "DEF", "HP %", "ATK %", "DEF %", "Energy Recharge", "Elemental Mastery", "CRIT Rate", "CRIT DMG"];
 
@@ -21,23 +21,15 @@ const SvgIcon = ({ primary, secondary = undefined, c = "#FFF" }: { primary: stri
 }
 
 export default function SubDropdown({ id }: { id: number }) {
-  const [substat, setStore] = useStore((store: ArtifactStore) => store.substats[id]);
-  const [main] = useStore((store: ArtifactStore) => store.mainstats[1]);
+  const [substat, setStore] = useStore(store => store.substats[id]);
+  const [main] = useStore(store => store.mainstats[1]);
 
   const selectChange = useCallback((e: SelectChangeEvent<unknown>) => {
-    setStore((p: ArtifactStore) => {
-      var t = { ...p };
-      t.substats[id] = Number(e.target.value);
-      return t;
-    });
+    setStore(p => ({ substats: p.substats.with(id, Number(e.target.value)) }));
   }, [setStore]);
 
   const sublist = useSubList(main, substat, (newValue: number) => {
-    setStore((p: ArtifactStore) => {
-      var t = { ...p };
-      t.substats[id] = newValue;
-      return t;
-    });
+    setStore(p => ({ substats: p.substats.with(id, newValue) }));
   })
 
   return (

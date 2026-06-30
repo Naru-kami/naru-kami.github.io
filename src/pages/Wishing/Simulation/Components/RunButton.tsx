@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { Button, Card, Divider, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import { green, orange } from '@mui/material/colors';
@@ -48,7 +48,7 @@ const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStor
   });
 
   workers.forEach((worker: Worker, index) => {
-    if (!index)
+    if (!index) {
       worker.postMessage({
         char: { ...store.char },
         weap: { ...store.weap },
@@ -56,7 +56,7 @@ const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStor
         mode: store.mode,
         samplesize: (store.samplesize - store.samplesize % store.threads) / store.threads + store.samplesize % store.threads
       });
-    else
+    } else {
       worker.postMessage({
         char: { ...store.char },
         weap: { ...store.weap },
@@ -64,9 +64,8 @@ const createWorkers = (store: WishingStore, setData: (value: Partial<WishingStor
         mode: store.mode,
         samplesize: (store.samplesize - store.samplesize % store.threads) / store.threads
       });
-  });
+    }
 
-  workers.forEach((worker: Worker) => {
     worker.onmessage = (event: MessageEvent<{ progress: number | undefined, pullsResult: number[] }>) => {
       if (event.data.progress) {
         setData(prev => {
@@ -113,30 +112,27 @@ function SimulateButton() {
       (+store.char.enabled) * 7 + (+store.weap.enabled) * 5 + 1
     ).fill(0));
 
-    setStore(prev => {
-      var t = { ...prev };
-      t.plotdataSim.progress = 0;
-      if (t.plotdataSim.changed) {
-        t.plotdataSim.changed = false;
-        t.plotdataSim.x = [];
-        t.plotdataSim.y = [];
+    setStore(prev => ({
+      plotdataSim: {
+        ...prev.plotdataSim,
+        progress: 0,
+        ...prev.plotdataSim.changed ? {
+          changed: false,
+          x: [],
+          y: []
+        } : {},
       }
-      return t;
-    });
+    }));
     createWorkers(store, setStore, ydata);
   }, [store, setStore]);
 
   useEffect(() => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.plotdataSim.progress = 100;
-      return t;
-    });
-    return setStore(prev => {
-      var t = { ...prev };
-      t.plotdataSim.progress = 100;
-      return t;
-    });
+    setStore(prev => ({
+      plotdataSim: { ...prev.plotdataSim, progress: 100 }
+    }));
+    return () => setStore(prev => ({
+      plotdataSim: { ...prev.plotdataSim, progress: 100 }
+    }));
   }, [])
 
   const warn = useMemo(() => {
@@ -156,7 +152,7 @@ function SimulateButton() {
 function Threads() {
   const [threads, setStore] = useStore(store => store.threads);
   const handleThreads = useCallback((event: SelectChangeEvent<number>) => {
-    setStore({ ['threads']: event.target.value as number })
+    setStore({ threads: event.target.value as number })
   }, [setStore]);
 
   return (

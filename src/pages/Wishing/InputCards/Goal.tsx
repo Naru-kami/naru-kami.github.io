@@ -22,31 +22,23 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
 
   useEffect(() => {
     const c = clamp(_min, goal, _max);
-    setStore(prev => {
-      var t = { ...prev };
-      t[ns].goal = c;
-      return t;
-    });
+    setStore(prev => ({ [ns]: { ...prev[ns], goal: c } }));
   }, [mode, _min, _max])
 
   const handleNumber = useCallback((e: number) => {
     const c = clamp(_min, e, _max);
-    setStore(prev => {
-      var t = { ...prev };
-      t[ns].goal = c / (mode == 'fixed' && usePrimogems ? 160 : 1);
-      t.plotdataSim.changed = true;
-      return t;
-    });
+    setStore(prev => ({
+      [ns]: { ...prev[ns], goal: c / (mode == 'fixed' && usePrimogems ? 160 : 1) },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }));
     return c;
   }, [mode, setStore, usePrimogems, _min, _max]);
 
-  const handeSlider = useCallback((event: Event, value: number | number[]) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t[ns].goal = (value as number) / (mode == 'fixed' && usePrimogems ? 160 : 1);
-      t.plotdataSim.changed = true;
-      return t;
-    });
+  const handeSlider = useCallback((_: Event, value: number | number[]) => {
+    setStore(prev => ({
+      [ns]: { ...prev[ns], goal: (value as number) / (mode == 'fixed' && usePrimogems ? 160 : 1) },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }));
   }, [setStore, mode, usePrimogems]);
 
   return (

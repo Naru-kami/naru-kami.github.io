@@ -1,4 +1,3 @@
-import _ from "lodash";
 import createFastContext from "../../components/FastContext";
 import { z, ZodError } from "zod";
 
@@ -46,7 +45,7 @@ function validStore(store: unknown): WishingStore {
   return WishingStoreSchema.parse(store);
 }
 
-export const defaultWishConfig = Object.freeze({
+export const getDefaultWishConfig: () => WishingStore = () => ({
   mode: "distribution",
   char: {
     enabled: true,
@@ -80,10 +79,10 @@ export const defaultWishConfig = Object.freeze({
     x: [],
     y: []
   }
-} satisfies WishingStore);
+});
 
 const storedWish = localStorage.getItem('Wishing.Parameters');
-let WishConfig: WishingStore = _.cloneDeep(defaultWishConfig);
+let WishConfig = getDefaultWishConfig();
 
 if (storedWish) {
   try {
@@ -103,7 +102,7 @@ if (storedWish) {
   localStorage.setItem(STORE_KEY, JSON.stringify(WishConfig));
 }
 
-const { Provider, useStore, readStore } = createFastContext(WishConfig, STORE_KEY);
+const { Provider, useStore } = createFastContext(WishConfig, STORE_KEY);
 
-export { useStore, readStore };
+export { useStore };
 export default Provider;

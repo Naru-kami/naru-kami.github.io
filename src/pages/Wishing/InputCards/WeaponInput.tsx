@@ -69,17 +69,13 @@ export default function WeaponInput() {
   );
 }
 
-function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Partial<WishingStore> | ((prev: WishingStore) => WishingStore)) => void }) {
-  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.weap.enabled = checked;
-      t.plotdataSim.changed = true;
-      if (t.mode == 'fixed') {
-        t.char.enabled = false;
-      }
-      return t;
-    })
+function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Partial<WishingStore> | ((prev: WishingStore) => Partial<WishingStore>)) => void }) {
+  const handleChange = useCallback((_: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setStore(prev => ({
+      weap: { ...prev.weap, enabled: checked },
+      plotdataSim: { ...prev.plotdataSim, changed: true },
+      char: { ...prev.char, enabled: prev.mode === "fixed" ? false : prev.char.enabled }
+    }))
   }, [setStore]);
 
   return (
@@ -108,17 +104,11 @@ function ModeSwitcher() {
   const [usePrimogems] = userPrimogemSwitcher();
 
   const handleMode = useCallback((event: SelectChangeEvent<"distribution" | "fixed">) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.mode = event.target.value as ("distribution" | "fixed");
-      t.char.enabled = false;
-      t.plotdataSim.changed = true;
-      t.plotdataSim.x = [];
-      t.plotdataSim.y = [];
-      t.plotdataCalc.x = [];
-      t.plotdataCalc.y = [];
-      return t;
-    })
+    setStore(prev => ({
+      mode: event.target.value as ("distribution" | "fixed"),
+      plotdataSim: { ...prev.plotdataSim, changed: true, x: [], y: [] },
+      plotdataCalc: { ...prev.plotdataCalc, x: [], y: [] },
+    }))
   }, [setStore]);
 
   return (
@@ -137,5 +127,4 @@ function ModeSwitcher() {
       </Select>
     </FormControl>
   )
-
 }

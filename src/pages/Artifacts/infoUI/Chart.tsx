@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Card } from '@mui/material';
 import Plot from 'react-plotly.js';
-import { readStore, useStore } from '../Data/Store';
+import { useStore } from '../Data/Store';
 
 const config = {
   responsive: true,
@@ -13,16 +13,12 @@ const config = {
   }
 } satisfies Partial<Plotly.Config>;
 
-type Plotdata = {
-  x: number[],
-  y: number[],
-};
 
 export default function Chart() {
   const [plotdata] = useStore(store => store.plotdata);
   const [unit] = useStore(store => store.unit);
   const [resinPerDay] = useStore(store => store.supplementary[3]);
-  const source = readStore(store => store.supplementary[2]);
+  const [source] = useStore(store => store.supplementary[2]);
 
   const dropSource = useMemo(() => source, [plotdata]);
 

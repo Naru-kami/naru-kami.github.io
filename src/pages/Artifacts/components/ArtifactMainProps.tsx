@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Select, MenuItem, InputLabel, FormControl, Box, Typography, styled, SelectChangeEvent } from '@mui/material';
 import SubIcon from '../assets/SubIcon.json';
 import MainIcon from '../assets/MainIcon.json';
@@ -84,12 +84,7 @@ export default function ArtifactMainProps() {
         break;
       }
     };
-    setStore((prev: ArtifactStore) => {
-      var newVal = { ...prev };
-      newVal.mainstats[0] = event.target.value as number;
-      newVal.mainstats[1] = temp;
-      return newVal;
-    });
+    setStore({ mainstats: [event.target.value as number, temp] });
   }, [setStore]);
 
   const changeMain = useCallback((event: SelectChangeEvent<unknown>) => {
@@ -110,11 +105,7 @@ export default function ArtifactMainProps() {
         break;
       }
     };
-    setStore((prev: ArtifactStore) => {
-      var temp = { ...prev };
-      temp.mainstats[1] = event.target.value as number;
-      return temp;
-    });
+    setStore(prev => ({ mainstats: prev.mainstats.with(1, Number(event.target.value)) }));
   }, [maintype, setStore]);
 
   return (

@@ -15,22 +15,18 @@ export default function Pity({ max, ns }: { max: number, ns: "char" | "weap" }) 
   const [count, setStore] = useStore((store: WishingStore) => store[ns].pity);
   const handleNumber = useCallback((e: number) => {
     const c = clamp(0, e, max);
-    setStore(prev => {
-      var t = { ...prev };
-      t[ns].pity = c;
-      t.plotdataSim.changed = true;
-      return t;
-    });
+    setStore(prev => ({
+      [ns]: { ...prev[ns], pity: c },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }));
     return c;
   }, [max, setStore]);
 
   const handeSlider = useCallback((event: Event, value: number | number[]) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t[ns].pity = value as number;
-      t.plotdataSim.changed = true;
-      return t;
-    });
+    setStore(prev => ({
+      [ns]: { ...prev[ns], pity: value as number },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }));
   }, [setStore]);
 
   return (

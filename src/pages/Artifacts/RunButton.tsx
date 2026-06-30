@@ -3,7 +3,7 @@ import { Button, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles';
 import { green } from '@mui/material/colors';
 import CalculateIcon from '@mui/icons-material/Calculate';
-import { useStore, readStore, ArtifactStore } from './Data/Store';
+import { useStore, ArtifactStore } from './Data/Store';
 
 const RunButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(green[700]),
@@ -14,7 +14,7 @@ const RunButton = styled(Button)(({ theme }) => ({
   height: '40px'
 }));
 
-function createWorkers(store: ArtifactStore, setData: (value: Partial<ArtifactStore> | ((prev: ArtifactStore) => ArtifactStore)) => void) {
+function createWorkers(store: ArtifactStore, setData: (value: Partial<ArtifactStore> | ((prev: ArtifactStore) => Partial<ArtifactStore>)) => void) {
   const worker = new Worker(new URL("./Data/MainWorker.ts", import.meta.url), { type: "module" });
 
   worker.postMessage({
@@ -39,12 +39,11 @@ function createWorkers(store: ArtifactStore, setData: (value: Partial<ArtifactSt
 }
 
 export default function Artichance() {
-  const [_, setStore] = useStore(store => store.plotdata);
-  const states = readStore(store => store);
+  const [store, setStore] = useStore(store => store);
 
   const calc = useCallback(() => {
-    createWorkers(states, setStore);
-  }, [states, setStore]);
+    createWorkers(store, setStore);
+  }, [store, setStore]);
 
   return (
     <RunButton variant="contained" onClick={calc} sx={{ pl: 1 }}>

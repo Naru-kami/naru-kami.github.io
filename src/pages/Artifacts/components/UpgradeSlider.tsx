@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect, useRef } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Card, Slider, styled } from "@mui/material";
 import NumberInput from "../../../components/NumberInput";
 import { ArtifactStore, useStore } from "../Data/Store";
@@ -12,8 +12,8 @@ const StyledCard = styled(Card)(() => ({
 }));
 
 export default function UpgradeSlider({ id }: { id: number }) {
-  const [storeSlider, setStore] = useStore((store: ArtifactStore) => store.substatBounds[id]);
-  const [starter] = useStore((store: ArtifactStore) => store.supplementary[1]);
+  const [storeSlider, setStore] = useStore(store => store.substatBounds[id]);
+  const [starter] = useStore(store => store.supplementary[1]);
 
   return (
     <NumberSlider id={id} onChange={setStore} value={storeSlider} starter={starter} />
@@ -50,7 +50,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
   }, [setlowerVal, setupperVal]);
 
   const commitSliderVals = useCallback((event: Event | React.SyntheticEvent<Element, Event>, newValue: number | number[]) => {
-    onChange((prev: ArtifactStore) => {
+    onChange(prev => {
       var t = { ...prev };
       t.substatBounds[id][0] = (newValue as number[])[0];
       t.substatBounds[id][1] = (newValue as number[])[1];
@@ -61,7 +61,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
   const updatelowerVal = useCallback((e: number) => {
     const c = clamp(0, e, upperVal);
     setlowerVal(c);
-    onChange((prev: ArtifactStore) => {
+    onChange(prev => {
       var t = { ...prev };
       t.substatBounds[id][0] = c;
       return t;
@@ -71,7 +71,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
   const updateupperVal = useCallback((e: number) => {
     const c = clamp(lowerVal, e, MaxVal);
     setupperVal(c);
-    onChange((prev: ArtifactStore) => {
+    onChange(prev => {
       var t = { ...prev };
       t.substatBounds[id][1] = c;
       return t;

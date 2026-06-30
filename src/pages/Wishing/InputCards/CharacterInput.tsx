@@ -74,17 +74,13 @@ export default function Input() {
   )
 }
 
-function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Partial<WishingStore> | ((prev: WishingStore) => WishingStore)) => void }) {
+function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Partial<WishingStore> | ((prev: WishingStore) => Partial<WishingStore>)) => void }) {
   const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.char.enabled = checked;
-      t.plotdataSim.changed = true;
-      if (t.mode == 'fixed') {
-        t.weap.enabled = false;
-      }
-      return t;
-    })
+    setStore(prev => ({
+      char: { ...prev.char, enabled: checked },
+      plotdataSim: { ...prev.plotdataSim, changed: true },
+      weap: { ...prev.weap, enabled: prev.mode === "fixed" ? false : prev.weap.enabled }
+    }))
   }, [setStore]);
 
   return (
@@ -113,17 +109,12 @@ function ModeSwitcher() {
   const [usePrimogems] = userPrimogemSwitcher();
 
   const handleMode = useCallback((event: SelectChangeEvent<"distribution" | "fixed">) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.mode = event.target.value as ("distribution" | "fixed");
-      t.weap.enabled = false;
-      t.plotdataSim.changed = true;
-      t.plotdataSim.x = [];
-      t.plotdataSim.y = [];
-      t.plotdataCalc.x = [];
-      t.plotdataCalc.y = [];
-      return t;
-    })
+    setStore(prev => ({
+      mode: event.target.value as ("distribution" | "fixed"),
+      weap: { ...prev.weap, enabled: false },
+      plotdataSim: { ...prev.plotdataSim, changed: true, x: [], y: [] },
+      plotdataCalc: { ...prev.plotdataCalc, x: [], y: [] }
+    }))
   }, [setStore]);
 
   return (
@@ -157,20 +148,18 @@ function CapturingRadiance() {
 
   const handleNumber = useCallback((e: number) => {
     const c = clamp(0, e, 3);
-    setStore(prev => {
-      prev.char.radiance = c;
-      prev.plotdataSim.changed = true;
-      return { ...prev }
-    });
+    setStore(prev => ({
+      char: { ...prev.char, radiance: c },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }));
     return c;
   }, [setStore]);
 
-  const handleSlider = useCallback((event: Event, value: number | number[]) => {
-    setStore(prev => {
-      prev.char.radiance = value as number;
-      prev.plotdataSim.changed = true;
-      return { ...prev };
-    })
+  const handleSlider = useCallback((_: Event, value: number | number[]) => {
+    setStore(prev => ({
+      char: { ...prev.char, radiance: value as number },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }))
   }, [setStore]);
 
   return (

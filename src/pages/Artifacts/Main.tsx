@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { Box, Card, Grid, Skeleton, Typography } from '@mui/material';
+import { Card, Grid, Skeleton, Typography } from '@mui/material';
 import Provider from './Data/Store';
 
 const ArtifactMainProps = lazy(() => import('./components/ArtifactMainProps'));

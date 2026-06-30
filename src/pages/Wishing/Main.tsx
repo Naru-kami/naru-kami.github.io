@@ -1,10 +1,10 @@
 import React, { lazy, Suspense, useState } from 'react'
 import { Tabs, Box, Tab, Typography, Skeleton, Card, styled } from '@mui/material';
 import Provider from './Store';
-import Simulation from './Simulation/Simulation';
 import { SwitcherProvider } from './InputCards/CurrencySwitcher';
 
 const Calculation = lazy(() => import('./Statistic/Calculation'));
+const Simulation = lazy(() => import('./Simulation/Simulation'));
 
 type TabPanelProps = {
   children?: React.ReactNode;
@@ -12,9 +12,7 @@ type TabPanelProps = {
   value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index } = props;
-
+function TabPanel({ children, value, index }: TabPanelProps) {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       {value === index && <>{children}</>}
@@ -54,14 +52,14 @@ export default function Main() {
               <StyledTab label={<Typography fontWeight={500}> Simulation </Typography>} />
             </StyledTabs>
           </Box>
-          <TabPanel value={value} index={0}>
-            <Suspense fallback={<Skeleton variant="rounded" sx={{ height: "80vh", width: '100%', backgroundColor: '#FFFFFF21', m: 2 }} />}>
+          <Suspense fallback={<Skeleton variant="rounded" sx={{ height: "80vh", width: '100%', backgroundColor: '#FFFFFF21', m: 2 }} />}>
+            <TabPanel value={value} index={0}>
               <Calculation />
-            </Suspense>
-          </TabPanel>
-          <TabPanel value={value} index={1}>
-            <Simulation />
-          </TabPanel>
+            </TabPanel>
+            <TabPanel value={value} index={1}>
+              <Simulation />
+            </TabPanel>
+          </Suspense>
         </Card>
       </SwitcherProvider>
     </Provider>

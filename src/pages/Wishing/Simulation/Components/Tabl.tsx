@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { Card, styled, Typography } from '@mui/material';
 import { useStore } from '../../Store';
 import { pdfToCdf, roundSigfig } from '../../utils';
@@ -17,7 +17,7 @@ export default function Tabl() {
   const displayTrace: number[] = useMemo(() => {
     const l = +char * 7 + +weap * 5;
     var samplesize = y.reduce((p, c) => p + c, 0);
-    var _y = [...y].map(e => e / samplesize * 100);
+    var _y = y.map(e => e / samplesize * 100);
     _y.shift();
     _y = pdfToCdf(_y.reverse()).reverse();
     return (_y.length == l ? _y : new Array(l).fill(0));

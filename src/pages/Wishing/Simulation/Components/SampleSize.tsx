@@ -31,28 +31,16 @@ function SampleInterval() {
   const [sample, setStore] = useStore((store: WishingStore) => store.samplesize);
 
   const onMinus = useCallback(() => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.samplesize = Math.max(t.samplesize - 500000, 0);
-      return t;
-    });
+    setStore(prev => ({ samplesize: Math.max(prev.samplesize - 500000, 0) }));
   }, [setStore]);
 
   const onPlus = useCallback(() => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.samplesize = Math.max(t.samplesize + 500000, 0);
-      return t;
-    });
+    setStore(prev => ({ samplesize: Math.max(prev.samplesize + 500000, 0) }));
   }, [setStore]);
 
   const handleSample = useCallback((newVal: number) => {
     const c = Math.max(newVal, 0);
-    setStore(prev => {
-      var t = { ...prev };
-      t.samplesize = c;
-      return t;
-    });
+    setStore({ samplesize: c });
     return c;
   }, [setStore]);
 
@@ -102,12 +90,10 @@ function ShowSize() {
   const [mode] = useStore((store: WishingStore) => store.mode);
 
   const handleDistribution = useCallback(() => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.plotdataSim.cumulative = !t.plotdataSim.cumulative;
-      return t;
-    });
-  }, [ydata])
+    setStore(prev => ({
+      plotdataSim: { ...prev.plotdataSim, cumulative: !prev.plotdataSim.cumulative }
+    }));
+  }, [ydata, setStore]);
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 2 }}>

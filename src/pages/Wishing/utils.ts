@@ -1,3 +1,13 @@
+type TypedArray =
+  | Int8Array
+  | Uint8Array
+  | Uint8ClampedArray
+  | Int16Array
+  | Uint16Array
+  | Int32Array
+  | Uint32Array
+  | Float32Array
+  | Float64Array;
 
 export function pdfToCdf(pdf: number[]) {
   if (pdf.length == 0)
@@ -10,9 +20,9 @@ export function pdfToCdf(pdf: number[]) {
 }
 
 export function draw(y: number[], offset = 0) {
-  var x: number[] = [];
+  var x: number[] = new Array(y.length);
   for (let i = 0; i < y.length; i++)
-    x.push(i + offset);
+    x[i] = i + offset;
   return x;
 }
 

@@ -63,12 +63,13 @@ function Switcher() {
   const [cum, setStore] = useStore(store => store.plotdataCalc.cumulative);
 
   const handleDistribution = useCallback(() => {
-    setStore(prev => {
-      var t = { ...prev };
-      t.plotdataCalc.cumulative = !t.plotdataCalc.cumulative;
-      return t;
-    });
-  }, [ydata])
+    setStore(prev => ({
+      plotdataCalc: {
+        ...prev.plotdataCalc,
+        cumulative: !prev.plotdataCalc.cumulative,
+      }
+    }));
+  }, [ydata, setStore]);
 
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingInline: '8px', paddingBlock: '16px' }}>

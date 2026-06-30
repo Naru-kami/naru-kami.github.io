@@ -1,4 +1,3 @@
-import _ from "lodash";
 import createFastContext from "../../../components/FastContext";
 import { z, ZodError } from "zod";
 
@@ -35,7 +34,7 @@ function validStore(store: ArtifactStore): ArtifactStore {
   return ArtifactStoreSchema.parse(store);
 }
 
-export const defaultArtifact = Object.freeze({
+export const getDefaultArtifact: () => ArtifactStore = () => ({
   mainstats: [0, 0],
   substats: [4, 7, 8, 9],
   //      set, initial, source, resin
@@ -53,10 +52,10 @@ export const defaultArtifact = Object.freeze({
     final: 0
   },
   plotdata: { x: [], y: [] }
-} satisfies ArtifactStore);
+});
 
 const storedArtifact = localStorage.getItem('Artifact.Parameters');
-let Artifact: ArtifactStore = _.cloneDeep(defaultArtifact);
+let Artifact = getDefaultArtifact();
 
 if (storedArtifact) {
   try {
@@ -76,7 +75,7 @@ if (storedArtifact) {
   localStorage.setItem(StoreKey, JSON.stringify(Artifact));
 }
 
-const { Provider, useStore, readStore } = createFastContext(Artifact, StoreKey);
+const { Provider, useStore } = createFastContext(Artifact, StoreKey);
 
-export { useStore, readStore };
+export { useStore };
 export default Provider;

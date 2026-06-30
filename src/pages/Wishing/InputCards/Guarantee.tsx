@@ -1,17 +1,15 @@
 import React, { useCallback } from 'react'
-import { SxProps, Theme, Checkbox } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import { useStore, WishingStore } from '../Store';
 
-export default function Guarantee({ id, ns, sx }: { id?: string, sx?: SxProps<Theme>, ns: "char" | "weap" }) {
+export default function Guarantee({ id, ns }: { id?: string, ns: "char" | "weap" }) {
   const [check, setStore] = useStore((store: WishingStore) => store[ns].guaranteed);
 
-  const updatecheck = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-    setStore(prev => {
-      var t = { ...prev };
-      t[ns].guaranteed = checked;
-      t.plotdataSim.changed = true;
-      return t;
-    })
+  const updatecheck = useCallback((_: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+    setStore(prev => ({
+      [ns]: { ...prev[ns], guaranteed: checked },
+      plotdataSim: { ...prev.plotdataSim, changed: true }
+    }))
   }, [setStore]);
 
   return (
