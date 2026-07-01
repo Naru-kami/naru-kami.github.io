@@ -5,6 +5,7 @@ const StyledInput = styled(Input)(() => ({
   backgroundColor: '#3472D5',
   color: '#FFF',
   padding: '0 .5rem',
+  borderRadius: "inherit"
 }));
 
 export type NumberInputProp = Omit<InputProps, "onChange"> & {

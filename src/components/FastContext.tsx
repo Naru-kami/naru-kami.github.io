@@ -1,47 +1,36 @@
-import React, { useRef, createContext, useContext, useCallback, useSyncExternalStore } from "react";
+import React, { createContext, useContext, useSyncExternalStore } from "react";
 
 export default function createFastContext<Store>(initialState: Store, storageKey?: string) {
-  function useStoreData(): {
+  const store = { current: initialState };
+  const subscribers = new Set<() => void>();
+
+  const get = () => store.current;
+
+  const set = (value: Partial<Store> | ((prev: Store) => Partial<Store>)) => {
+    const newvalue = typeof value === 'function' ? value(store.current) : value;
+
+    storageKey && localStorage.setItem(storageKey, JSON.stringify({ ...store.current, ...newvalue }));
+    store.current = { ...store.current, ...newvalue };
+
+    subscribers.forEach(callback => callback());
+  };
+
+  const subscribe = (callback: () => void) => {
+    subscribers.add(callback);
+    return () => subscribers.delete(callback);
+  };
+
+  type UseStoreDataReturnType = {
     get: () => Store;
     set: (value: Partial<Store> | ((prev: Store) => Partial<Store>)) => void;
     subscribe: (callback: () => void) => () => void;
-  } {
-    const store = useRef(initialState);
-
-    const get = useCallback(() => store.current, []);
-
-    const subscribers = useRef(new Set<() => void>());
-
-    const set = useCallback((value: Partial<Store> | ((prev: Store) => Partial<Store>)) => {
-      const newvalue = typeof value === 'function' ? value(store.current) : value;
-
-      storageKey && localStorage.setItem(storageKey, JSON.stringify({ ...store.current, ...newvalue }));
-      store.current = { ...store.current, ...newvalue };
-
-      subscribers.current.forEach(callback => callback());
-    }, []);
-
-    const subscribe = useCallback((callback: () => void) => {
-      subscribers.current.add(callback);
-      return () => subscribers.current.delete(callback);
-    }, []);
-
-    return {
-      get,
-      set,
-      subscribe
-    };
-  }
-
-  type UseStoreDataReturnType = ReturnType<typeof useStoreData>;
+  };
 
   const StoreContext = createContext<UseStoreDataReturnType | null>(null);
 
   function Provider({ children }: { children: React.ReactNode }) {
-    const store = useStoreData();
-
     return (
-      <StoreContext.Provider value={store}>
+      <StoreContext.Provider value={{ get, set, subscribe }}>
         {children}
       </StoreContext.Provider>
     );

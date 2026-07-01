@@ -9,6 +9,7 @@ const StyledCard = styled(Card)(() => ({
   alignItems: "center",
   height: "40px",
   borderRadius: "6px",
+  overflow: "visible",
 }));
 
 export default function UpgradeSlider({ id }: { id: number }) {
@@ -87,6 +88,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
         sx={{ height: "100%" }}
       />
       <Slider
+        valueLabelDisplay={"auto"}
         value={[lowerVal, upperVal]}
         onChange={updateSlider}
         min={0}
@@ -94,7 +96,7 @@ function NumberSlider({ onChange, value, id, starter }: NumberSliderProps) {
         step={1}
         onChangeCommitted={commitSliderVals}
         marks
-        sx={{ mx: 2, color: "#3472D5" }}
+        sx={{ mx: 2, "& .MuiSlider-valueLabel": { background: "#657692" } }}
       />
       <NumberInput
         value={upperVal}

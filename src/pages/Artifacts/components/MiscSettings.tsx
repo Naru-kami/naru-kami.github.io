@@ -1,7 +1,8 @@
-import { Select, MenuItem, InputLabel, FormControl, styled, SelectChangeEvent, Card, Box, Slider, Typography, Divider, Grid } from '@mui/material';
+import { Select, MenuItem, InputLabel, FormControl, styled, SelectChangeEvent, Card, Typography, Divider, Grid } from '@mui/material';
 import { useStore } from '../Data/Store';
 import { useCallback, useId } from 'react';
 import NumberInput from '../../../components/NumberInput';
+import Slider from '../../../components/Slider';
 
 const StyledSelect = styled(Select)(({ theme }) => ({
   color: '#FFF',
@@ -16,6 +17,7 @@ const StyledCard = styled(Card)(() => ({
   height: '40px',
   margin: 8,
   borderRadius: '4px',
+  overflow: "visible",
   background: 'hsl(230, 65%, 7%) linear-gradient(rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.09))',
 }));
 
@@ -92,7 +94,7 @@ function ResinPerDay() {
     return target;
   }, [setStore]);
 
-  const updateRpDslider = useCallback((_: Event, value: number | number[]) => {
+  const updateRpDslider = useCallback((_: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) => {
     setStore(p => ({ supplementary: p.supplementary.with(3, Number(value)) }));
   }, [setStore]);
 
@@ -111,13 +113,14 @@ function ResinPerDay() {
         </label>}
       />
       <Slider
+        valueLabelDisplay={"auto"}
         value={resinPerDay}
         onChange={updateRpDslider}
         step={60}
         min={180}
         max={540}
         marks
-        sx={{ m: "auto 1rem" }}
+        sx={{ m: "auto 1rem", "& .MuiSlider-valueLabel": { background: "#657692" } }}
         getAriaLabel={() => 'Resin Per Day Slider'} />
     </StyledCard>
   )

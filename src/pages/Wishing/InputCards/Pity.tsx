@@ -1,14 +1,16 @@
 import { useCallback } from 'react'
 import NumberInput from '../../../components/NumberInput';
-import { Slider, Card, styled } from '@mui/material';
+import { Card, styled } from '@mui/material';
 import { useStore, WishingStore } from '../Store';
 import { clamp } from '../utils';
+import Slider from '../../../components/Slider';
 
 const StyledCard = styled(Card)(() => ({
   display: "flex",
   alignItems: "center",
   height: "40px",
   borderRadius: "6px",
+  overflow: "visible",
 }));
 
 export default function Pity({ max, ns }: { max: number, ns: "char" | "weap" }) {
@@ -22,7 +24,7 @@ export default function Pity({ max, ns }: { max: number, ns: "char" | "weap" }) 
     return c;
   }, [max, setStore]);
 
-  const handeSlider = useCallback((event: Event, value: number | number[]) => {
+  const handeSlider = useCallback((_: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) => {
     setStore(prev => ({
       [ns]: { ...prev[ns], pity: value as number },
       plotdataSim: { ...prev.plotdataSim, changed: true }
@@ -50,10 +52,11 @@ export default function Pity({ max, ns }: { max: number, ns: "char" | "weap" }) 
         }}
       />
       <Slider
+        valueLabelDisplay={"auto"}
         max={max}
         value={count}
         onChange={handeSlider}
-        sx={{ mx: 2 }}
+        sx={{ mx: 2, "& .MuiSlider-valueLabel": { background: "#657692" } }}
       />
     </StyledCard>
   );

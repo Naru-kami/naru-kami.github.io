@@ -86,19 +86,18 @@ let WishConfig = getDefaultWishConfig();
 
 if (storedWish) {
   try {
-    console.log("Try to parse stored values.");
+    console.info("Try to parse stored values.");
     WishConfig = validStore(JSON.parse(storedWish));
-    console.log("Successful parsing.");
+    console.info("Successful parsing.");
   } catch (e) {
     if (e instanceof ZodError) {
-      e.issues.forEach(issue => console.error(issue.message));
+      console.error(`Parsing failed. Resetting to default values. ${e.issues.map(issue => issue.message).join("\n")}`);
     }
 
-    console.error(`Stored invalid object. Resetting to default values.`);
     localStorage.setItem(STORE_KEY, JSON.stringify(WishConfig));
   }
 } else {
-  console.log("No stored values found. Using default values.");
+  console.info("No stored values found. Using default values.");
   localStorage.setItem(STORE_KEY, JSON.stringify(WishConfig));
 }
 

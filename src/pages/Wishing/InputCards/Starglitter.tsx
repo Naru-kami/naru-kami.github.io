@@ -119,7 +119,7 @@ function ConstCount({ adornment, id }: { adornment: string | JSX.Element, ns: st
       starglitter: { ...prev.starglitter, cons: prev.starglitter.cons.with(id, event.target.value as number) },
       plotdataSim: { ...prev.plotdataSim, changed: true }
     }))
-  }, [setStore]);
+  }, [setStore, id]);
 
   return (
     <Card elevation={4}>

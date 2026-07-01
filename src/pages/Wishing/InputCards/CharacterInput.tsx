@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Grid, Card, Typography, styled, ListItemButton, Switch, SelectChangeEvent, FormControl, Select, MenuItem, Slider, Tooltip, Link, Divider } from '@mui/material';
+import { Grid, Card, Typography, styled, ListItemButton, Switch, SelectChangeEvent, FormControl, Select, MenuItem, Tooltip, Link, Divider } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { yellow } from '@mui/material/colors'
 import Goal from './Goal';
@@ -10,6 +10,7 @@ import { useStore, WishingStore } from '../Store';
 import NumberInput from '../../../components/NumberInput';
 import { clamp } from '../utils';
 import { userPrimogemSwitcher } from './CurrencySwitcher';
+import Slider from '../../../components/Slider';
 
 const StyledListItemButton = styled(ListItemButton)(() => ({
   display: "flex",
@@ -75,7 +76,7 @@ export default function Input() {
 }
 
 function Enabler({ enabled, setStore }: { enabled: boolean, setStore: (value: Partial<WishingStore> | ((prev: WishingStore) => Partial<WishingStore>)) => void }) {
-  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+  const handleChange = useCallback((_: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
     setStore(prev => ({
       char: { ...prev.char, enabled: checked },
       plotdataSim: { ...prev.plotdataSim, changed: true },
@@ -141,6 +142,7 @@ const StyledCard = styled(Card)(() => ({
   height: "40px",
   width: '100%',
   borderRadius: "6px",
+  overflow: "visible",
 }));
 
 function CapturingRadiance() {
@@ -155,7 +157,7 @@ function CapturingRadiance() {
     return c;
   }, [setStore]);
 
-  const handleSlider = useCallback((_: Event, value: number | number[]) => {
+  const handleSlider = useCallback((_: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) => {
     setStore(prev => ({
       char: { ...prev.char, radiance: value as number },
       plotdataSim: { ...prev.plotdataSim, changed: true }
@@ -190,10 +192,11 @@ function CapturingRadiance() {
         </>}
       />
       <Slider
+        valueLabelDisplay={"auto"}
         max={3} marks
         value={radiance}
         onChange={handleSlider}
-        sx={{ mx: 2 }}
+        sx={{ mx: 2, "& .MuiSlider-valueLabel": { background: "#657692" } }}
       />
     </StyledCard>
   )

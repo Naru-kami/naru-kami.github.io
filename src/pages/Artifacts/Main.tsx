@@ -58,7 +58,7 @@ export default function Main() {
               </Card>
             </Grid>
             <Grid item xs={12} sx={{ mt: 2 }}>
-              <Card elevation={2} sx={{ p: 1 }}>
+              <Card elevation={2} sx={{ p: 1, overflow: "visible" }}>
                 <Suspense fallback={<Skeleton variant="rounded" sx={{ height: '136px', bgcolor: '#FFFFFF21' }} />}>
                   <MiscSettings />
                 </Suspense>

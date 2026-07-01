@@ -1,20 +1,22 @@
 import { useMemo, useCallback, useEffect, useId } from 'react';
 import NumberInput from '../../../components/NumberInput';
-import { Slider, Card, styled } from '@mui/material';
-import { useStore, WishingStore } from '../Store';
+import { Card, styled } from '@mui/material';
+import { useStore } from '../Store';
 import { clamp } from '../utils';
 import { userPrimogemSwitcher } from './CurrencySwitcher';
+import Slider from '../../../components/Slider';
 
 const StyledCard = styled(Card)(() => ({
   display: "flex",
   alignItems: "center",
   height: "40px",
   borderRadius: "6px",
+  overflow: "visible",
 }));
 
 export default function Goal({ adornment, max, ns }: { adornment: string, max: number, ns: "char" | "weap" }) {
-  const [goal, setStore] = useStore((store: WishingStore) => store[ns].goal);
-  const [mode] = useStore((store: WishingStore) => store.mode);
+  const [goal, setStore] = useStore(store => store[ns].goal);
+  const [mode] = useStore(store => store.mode);
   const [usePrimogems] = userPrimogemSwitcher();
   const id = useId();
   const _max = useMemo(() => mode == 'fixed' ? (usePrimogems ? 160 : 1) * (ns == 'char' ? (2 * 90 * (max + 1)) : (2 * 77 * max)) : max, [mode, usePrimogems, ns, max]);
@@ -34,7 +36,7 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
     return c;
   }, [mode, setStore, usePrimogems, _min, _max]);
 
-  const handeSlider = useCallback((_: Event, value: number | number[]) => {
+  const handeSlider = useCallback((_: Event | React.SyntheticEvent<Element, Event>, value: number | number[]) => {
     setStore(prev => ({
       [ns]: { ...prev[ns], goal: (value as number) / (mode == 'fixed' && usePrimogems ? 160 : 1) },
       plotdataSim: { ...prev.plotdataSim, changed: true }
@@ -67,12 +69,13 @@ export default function Goal({ adornment, max, ns }: { adornment: string, max: n
         }}
       />
       <Slider
+        valueLabelDisplay={"auto"}
         max={_max} min={_min}
         step={mode == 'fixed' && usePrimogems ? 160 : 1}
         marks={mode == 'distribution'}
         value={goal * (mode == 'fixed' && usePrimogems ? 160 : 1)}
         onChange={handeSlider}
-        sx={{ mx: 2 }}
+        sx={{ mx: 2, "& .MuiSlider-valueLabel": { background: "#657692" } }}
       />
     </StyledCard>
   )

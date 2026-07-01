@@ -13,7 +13,6 @@ export default function Tabl() {
   const [y] = useStore(store => store.plotdataCalc.y);
   const [char] = useStore(store => store.char.enabled);
   const [weap] = useStore(store => store.weap.enabled);
-  console.log(y)
 
   const displayTrace: number[] = useMemo(() => {
     const l = +char * 7 + +weap * 5;

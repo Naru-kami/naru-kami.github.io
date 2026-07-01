@@ -5,7 +5,6 @@ import fftjs from 'fft.js';
 self.onmessage = function (e: MessageEvent<DataMessage>) {
   const { char, weap, mode } = e.data;
 
-  const t = performance.now();
   if (mode == 'distribution') {
     if (char.enabled && weap.enabled) {
       const result = getCombined(char.goal, char.pity, char.guaranteed, char.radiance, weap.goal, weap.pity, weap.guaranteed);
@@ -26,7 +25,6 @@ self.onmessage = function (e: MessageEvent<DataMessage>) {
       postMessage({ pullsResult: result });
     }
   }
-  console.log(`${performance.now() - t} ms`);
   self.close();
 }
 

@@ -59,19 +59,18 @@ let Artifact = getDefaultArtifact();
 
 if (storedArtifact) {
   try {
-    console.log("Parsing stored values.");
+    console.info("Parsing stored values.");
     Artifact = validStore(JSON.parse(storedArtifact));
-    console.log("Successful parsing.");
+    console.info("Successful parsing.");
   } catch (e) {
     if (e instanceof ZodError) {
-      e.issues.forEach(issue => console.error(issue.message));
+      console.error(`Parsing failed. Resetting to default values. ${e.issues.map(issue => issue.message).join("\n")}`);
     }
 
-    console.log(`${e}. Resetting to default values.`);
     localStorage.setItem(StoreKey, JSON.stringify(Artifact));
   }
 } else {
-  console.log("No stored values found. Using default values.");
+  console.info("No stored values found. Using default values.");
   localStorage.setItem(StoreKey, JSON.stringify(Artifact));
 }
 
