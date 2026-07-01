@@ -70,7 +70,7 @@ export const getDefaultWishConfig: () => WishingStore = () => ({
   plotdataSim: {
     changed: false,
     cumulative: false,
-    progress: 0,
+    progress: 100,
     x: [],
     y: []
   },

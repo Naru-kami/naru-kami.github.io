@@ -1,24 +1,8 @@
-import React, { lazy, Suspense, useState } from 'react'
+import { Suspense } from 'react'
 import { Tabs, Box, Tab, Typography, Skeleton, Card, styled } from '@mui/material';
 import Provider from './Store';
 import { SwitcherProvider } from './InputCards/CurrencySwitcher';
-
-const Calculation = lazy(() => import('./Statistic/Calculation'));
-const Simulation = lazy(() => import('./Simulation/Simulation'));
-
-type TabPanelProps = {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function TabPanel({ children, value, index }: TabPanelProps) {
-  return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      {value === index && <>{children}</>}
-    </Box>
-  );
-}
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({
   isolation: "isolate",
@@ -28,15 +12,16 @@ const StyledTabs = styled(Tabs)(({ theme }) => ({
   }
 }))
 
-const StyledTab = styled(Tab)(() => ({
+const tabsx = {
   paddingInline: '1rem',
   borderRadius: "6px 6px 0 0",
   '&:hover': { backgroundColor: '#ffffff0c' },
   transition: 'background-color 200ms cubic-bezier(0.4, 0, 0.2, 1)'
-}))
+}
 
 export default function Main() {
-  const [value, setValue] = useState(0);
+  const location = useLocation();
+  const pathname = location.pathname.split('/')[2];
 
   return (
     <Provider>
@@ -44,21 +29,28 @@ export default function Main() {
         <Card elevation={1} sx={{ p: 1, m: 1, minWidth: 360 }}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
             <StyledTabs
-              value={value} centered
-              onChange={(e, v) => setValue(v)}
+              value={pathname?.includes("Simulation") ? "Simulation" : "Calculation"}
+              centered
               TabIndicatorProps={{ sx: { boxShadow: "0px 0px 35px 15px rgba(48, 122, 195, .4)", borderRadius: 1, zIndex: -1 } }}
             >
-              <StyledTab label={<Typography fontWeight={500}> Calculation </Typography>} />
-              <StyledTab label={<Typography fontWeight={500}> Simulation </Typography>} />
+              <Tab
+                label={<Typography fontWeight={500}> Calculation </Typography>}
+                component={Link}
+                to="Calculation"
+                value="Calculation"
+                sx={tabsx}
+              />
+              <Tab
+                label={<Typography fontWeight={500}> Simulation </Typography>}
+                component={Link}
+                to="Simulation"
+                value="Simulation"
+                sx={tabsx}
+              />
             </StyledTabs>
           </Box>
           <Suspense fallback={<Skeleton variant="rounded" sx={{ height: "80vh", width: '100%', backgroundColor: '#FFFFFF21', m: 2 }} />}>
-            <TabPanel value={value} index={0}>
-              <Calculation />
-            </TabPanel>
-            <TabPanel value={value} index={1}>
-              <Simulation />
-            </TabPanel>
+            <Outlet />
           </Suspense>
         </Card>
       </SwitcherProvider>

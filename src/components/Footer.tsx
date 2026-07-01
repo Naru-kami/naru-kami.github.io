@@ -19,7 +19,7 @@ export default function Footer() {
       <Typography fontSize={12}>
         Made with <Link href="https://react.dev/">React</Link> and <Link href="https://mui.com/">MUI</Link>. Build with <Link href="https://vite.dev/">Vite</Link>.
         Last Update: <Link href="https://github.com/Naru-kami/naru-kami.github.io">{
-          new Intl.DateTimeFormat(undefined, { day: '2-digit', month: "short", year: "numeric" }).format(new Date(1782866419611))
+          new Intl.DateTimeFormat(undefined, { day: '2-digit', month: "short", year: "numeric" }).format(new Date(1782926432160))
         }</Link>
       </Typography>
     </Card>

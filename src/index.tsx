@@ -9,6 +9,8 @@ import Footer from './components/Footer';
 
 const Artifacts = lazy(() => import('./pages/Artifacts/Main'));
 const Wishing = lazy(() => import('./pages/Wishing/Main'));
+const Calculation = lazy(() => import('./pages/Wishing/Statistic/Calculation'));
+const Simulation = lazy(() => import('./pages/Wishing/Simulation/Simulation'));
 
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
@@ -64,10 +66,15 @@ document.addEventListener('DOMContentLoaded', function (event) {
               <Navbar />
               <Suspense fallback={null}>
                 <Routes>
-                  <Route path='/' element={<Home />} />
-                  <Route path='/Wishing' element={<Wishing />} />
+                  <Route index element={<Home />} />
+                  <Route path='/Wishing' element={<Wishing />} >
+                    <Route index element={<Navigate to="Calculation" replace />} />
+                    <Route path="Calculation" element={<Calculation />} />
+                    <Route path="Simulation" element={<Simulation />} />
+                    <Route path='*' element={<Navigate to='/' replace />} />
+                  </Route>
                   <Route path='/Artifacts' element={<Artifacts />} />
-                  <Route path='*' element={<Navigate to='/' />} />
+                  <Route path='*' element={<Navigate to='/' replace />} />
                 </Routes>
               </Suspense>
               <Box flexGrow={1}></Box>
